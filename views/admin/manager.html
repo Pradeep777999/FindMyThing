@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Manager Panel - FindMyThing</title>
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/navbar.css">
+
+<style>
+
+/* ================= GLOBAL ================= */
+
+body{
+font-family: Arial, sans-serif;
+background:#f4f7fb;
+margin:0;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 20px;
+background:#2c3e50;
+color:white;
+flex-wrap:wrap;
+}
+
+.navbar h2{
+margin:5px 0;
+}
+
+.nav-links a{
+color:white;
+margin:0 10px;
+text-decoration:none;
+font-weight:500;
+}
+
+.nav-links a:hover{
+text-decoration:underline;
+}
+
+/* ================= TITLE ================= */
+
+h1{
+text-align:center;
+margin:20px 0;
+}
+
+/* ================= TABLE ================= */
+
+.table-container{
+width:95%;
+margin:20px auto;
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+th{
+background:#34495e;
+color:white;
+padding:12px;
+position:sticky;
+top:0;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #eee;
+text-align:center;
+}
+
+tr:hover{
+background:#f9f9f9;
+}
+
+/* ================= BUTTON ================= */
+
+.collect-btn{
+background:#27ae60;
+color:white;
+border:none;
+padding:6px 12px;
+border-radius:6px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.collect-btn:hover{
+background:#1e8449;
+}
+
+/* ================= IMAGE ================= */
+
+.table-img{
+width:60px;
+border-radius:6px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.table-img:hover{
+transform:scale(1.1);
+}
+
+/* ================= EMAIL ================= */
+
+.email-link{
+color:#2980b9;
+text-decoration:none;
+}
+
+.email-link:hover{
+text-decoration:underline;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+.modal img{
+max-width:85%;
+max-height:85%;
+border-radius:10px;
+}
+
+/* ================= GOOGLE ================= */
+
+#google_translate_element{
+margin-right:10px;
+}
+
+.goog-te-combo{
+padding:5px;
+border-radius:5px;
+border:none;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+.navbar{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.nav-links{
+margin-top:10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar" id="mainNavbar"></nav>
+
+<h1>Manage & Verify Items</h1>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+<tr id="tableHead">
+<!-- dynamic -->
+</tr>
+</thead>
+
+<tbody id="itemsTable"></tbody>
+
+</table>
+
+</div>
+
+<div id="imageModal" class="modal" onclick="closeImage()">
+<img id="modalImage">
+</div>
+
+<script>
+
+/* ================= HELPERS ================= */
+
+function safe(val){
+return val ? val : "N/A";
+}
+
+/* ================= LOAD ITEMS ================= */
+
+async function loadItems(){
+
+try{
+
+const res = await fetch("/api/items");
+const data = await res.json();
+
+const showHandover = data.some(item => item.handedBy || item.handedTo);
+
+/* HEADER */
+
+document.getElementById("tableHead").innerHTML = showHandover ? `
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Original Location</th>
+<th>Submit Location</th>
+<th>Date</th>
+<th>Submitted By</th>
+<th>Email</th>
+<th>Handed By</th>
+<th>Handed To</th>
+<th>Image</th>
+<th>Action</th>
+` : `
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Original Location</th>
+<th>Submit Location</th>
+<th>Date</th>
+<th>Submitted By</th>
+<th>Email</th>
+<th>Image</th>
+<th>Action</th>
+`;
+
+/* ROWS */
+
+let html = "";
+
+data.forEach(item=>{
+
+const originalLocation = item.lostLocation || item.foundLocation;
+
+const imageHTML = item.image
+? `<img class="table-img" src="/uploads/${item.image}" onclick="showImage('/uploads/${item.image}')">`
+: "No Image";
+
+const handoverHTML = showHandover ? `
+<td>${safe(item.handedBy)}</td>
+<td>${safe(item.handedTo)}</td>
+` : "";
+
+html += `
+<tr>
+<td>${safe(item.name)}</td>
+<td>${safe(item.type)}</td>
+<td>${safe(item.description)}</td>
+<td>${safe(originalLocation)}</td>
+<td>${safe(item.location)}</td>
+<td>${safe(item.dateLost || item.dateFound)}</td>
+<td>${safe(item.userName)}</td>
+<td>
+<a class="email-link" href="mailto:${safe(item.userEmail)}">
+${safe(item.userEmail)}
+</a>
+</td>
+${handoverHTML}
+<td>${imageHTML}</td>
+<td>
+<form action="/mark-collected" method="POST"
+onsubmit="return confirm('Confirm item collection?')">
+<input type="hidden" name="itemId" value="${item._id}">
+<button class="collect-btn">Collected</button>
+</form>
+</td>
+</tr>
+`;
+
+});
+
+document.getElementById("itemsTable").innerHTML = html;
+
+}catch(err){
+console.error("Error loading items:", err);
+}
+
+}
+
+/* ================= IMAGE MODAL ================= */
+
+function showImage(src){
+document.getElementById("imageModal").style.display = "flex";
+document.getElementById("modalImage").src = src;
+}
+
+function closeImage(){
+document.getElementById("imageModal").style.display = "none";
+}
+
+/* ================= INIT ================= */
+
+loadItems();
+
+</script>
+
+<script src="/js/navbar.js"></script>
+<script src="/js/translate.js"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reset Password - FindMyThing</title>
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/navbar.css">
+
+<style>
+
+/* ================= GLOBAL ================= */
+
+body{
+font-family: Arial, sans-serif;
+background:#f4f7fb;
+margin:0;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 20px;
+background:#2c3e50;
+color:white;
+flex-wrap:wrap;
+}
+
+.navbar h2{
+margin:5px 0;
+}
+
+.nav-links a{
+color:white;
+margin:0 10px;
+text-decoration:none;
+}
+
+.nav-links a:hover{
+text-decoration:underline;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+width:100%;
+max-width:400px;
+margin:50px auto;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+text-align:center;
+}
+
+/* ================= INPUT ================= */
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:6px;
+outline:none;
+}
+
+input:focus{
+border-color:#2c3e50;
+}
+
+/* ================= BUTTON ================= */
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#2c3e50;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1a252f;
+}
+
+/* ================= MESSAGE ================= */
+
+#msg{
+margin-top:10px;
+font-size:14px;
+}
+
+/* ================= HIDDEN ================= */
+
+.hidden{
+display:none;
+}
+
+/* ================= GOOGLE ================= */
+
+#google_translate_element{
+margin-right:10px;
+}
+
+.goog-te-combo{
+padding:5px;
+border-radius:5px;
+border:none;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+.navbar{
+flex-direction:column;
+align-items:flex-start;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar" id="mainNavbar"></nav>
+
+<!-- RESET BOX -->
+
+<div class="container">
+
+<h2>Reset Password</h2>
+
+<!-- STEP 1 -->
+<input type="email" id="email" placeholder="Enter your email">
+<button onclick="sendOTP()">Send OTP</button>
+
+<!-- STEP 2 -->
+<div id="otpSection" class="hidden">
+<input type="text" id="otp" placeholder="Enter OTP">
+<button onclick="verifyOTP()">Verify OTP</button>
+</div>
+
+<!-- STEP 3 -->
+<div id="passwordSection" class="hidden">
+<input type="password" id="password" placeholder="New Password">
+<input type="password" id="confirmPassword" placeholder="Confirm Password">
+<button onclick="resetPassword()">Reset Password</button>
+</div>
+
+<p id="msg"></p>
+
+<br>
+<a href="/login.html">⬅ Back to Login</a>
+
+</div>
+
+<script>
+
+let otpVerified = false;
+
+/* ================= SEND OTP ================= */
+
+async function sendOTP(){
+
+const email = document.getElementById("email").value.trim();
+
+if(!email.includes("@")){
+return showMsg("Enter valid email", "red");
+}
+
+const res = await fetch("/send-otp",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({ email })
+});
+
+const text = await res.text();
+
+showMsg(text, "green");
+
+/* SHOW OTP SECTION */
+document.getElementById("otpSection").classList.remove("hidden");
+
+}
+
+/* ================= VERIFY OTP ================= */
+
+async function verifyOTP(){
+
+const email = document.getElementById("email").value;
+const otp = document.getElementById("otp").value;
+
+const res = await fetch("/verify-otp",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({ email, otp })
+});
+
+const text = await res.text();
+
+if(text === "OTP verified"){
+otpVerified = true;
+showMsg("OTP Verified ✅", "green");
+
+/* SHOW PASSWORD SECTION */
+document.getElementById("passwordSection").classList.remove("hidden");
+
+}else{
+showMsg(text, "red");
+}
+
+}
+
+/* ================= RESET PASSWORD ================= */
+
+async function resetPassword(){
+
+if(!otpVerified){
+return showMsg("Verify OTP first", "red");
+}
+
+const email = document.getElementById("email").value;
+const pass = document.getElementById("password").value;
+const confirm = document.getElementById("confirmPassword").value;
+
+/* VALIDATION */
+
+if(pass.length < 6){
+return showMsg("Password must be at least 6 characters", "red");
+}
+
+if(pass !== confirm){
+return showMsg("Passwords do not match", "red");
+}
+
+const res = await fetch("/reset-password",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({ email, password:pass, confirmPassword:confirm })
+});
+
+const text = await res.text();
+
+showMsg(text, "green");
+
+/* REDIRECT AFTER SUCCESS */
+
+if(text.toLowerCase().includes("success")){
+setTimeout(()=>{
+window.location.href = "/login.html";
+},2000);
+}
+
+}
+
+/* ================= MESSAGE ================= */
+
+function showMsg(msg, color){
+const el = document.getElementById("msg");
+el.innerText = msg;
+el.style.color = color;
+}
+
+</script>
+
+<script src="/js/navbar.js"></script>
+<script src="/js/translate.js"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

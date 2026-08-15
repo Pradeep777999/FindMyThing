@@ -1,0 +1,31 @@
+const express = require('express');
+const router = express.Router();
+const userController = require('../controllers/userController');
+const { requireLoginView, requireManagerView, requireAdminView } = require('../middleware/auth');
+
+// Views routing
+router.get("/", userController.serveIndex);
+router.get("/index.html", userController.serveIndex);
+
+router.get("/login.html", userController.serveLogin);
+router.get("/register.html", userController.serveRegister);
+router.get("/login-otp.html", userController.serveLoginOtp);
+router.get("/reset.html", userController.serveReset);
+
+router.get("/collected.html", userController.serveCollected);
+router.get("/items.html", userController.serveItems);
+
+// Protected user views
+router.get("/my-items.html", requireLoginView, userController.serveMyItems);
+router.get("/report-lost.html", requireLoginView, userController.serveReportLost);
+router.get("/report-found.html", requireLoginView, userController.serveReportFound);
+
+// Protected admin/manager views
+router.get("/admin.html", requireAdminView, userController.serveAdmin);
+router.get("/analytics.html", requireManagerView, userController.serveAnalytics);
+router.get("/manager.html", requireManagerView, userController.serveManager);
+
+// API session endpoint
+router.get("/api/user", userController.getCurrentUser);
+
+module.exports = router;

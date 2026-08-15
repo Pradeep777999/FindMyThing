@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — MITS FindMyThing Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #1a2744;
+  --navy2:  #243058;
+  --gold:   #c9a84c;
+  --gold2:  #e8c97a;
+  --cream:  #fdf9f3;
+  --muted:  #6b7280;
+  --border: #dde3ed;
+  --red:    #c0392b;
+  --green:  #1a6b3a;
+  --white:  #ffffff;
+  --shadow: 0 8px 40px rgba(26,39,68,0.13);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--navy);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Background ── */
+.bg-canvas { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.bg-canvas::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 70% at 90% 80%, rgba(26,39,68,0.05) 0%, transparent 60%);
+}
+.geo { position: absolute; border: 1px solid rgba(201,168,76,0.16); border-radius: 2px; animation: geoFloat linear infinite; }
+.geo:nth-child(1) { width:60px;  height:60px;  top:6%;    left:4%;   animation-duration:18s; opacity:0.4; }
+.geo:nth-child(2) { width:90px;  height:90px;  top:16%;   right:5%;  animation-duration:24s; animation-delay:-4s; opacity:0.28; }
+.geo:nth-child(3) { width:40px;  height:40px;  bottom:20%;left:7%;   animation-duration:14s; animation-delay:-8s; opacity:0.35; }
+.geo:nth-child(4) { width:120px; height:120px; bottom:6%; right:3%;  animation-duration:30s; animation-delay:-12s; opacity:0.2; }
+.geo.circle { border-radius:50%; border-color:rgba(26,39,68,0.09); }
+.geo:nth-child(5) { width:160px; height:160px; top:40%; right:1%; animation-duration:36s; animation-delay:-6s; border-radius:50%; opacity:0.16; }
+.particle { position: absolute; width: 4px; height: 4px; background: var(--gold); border-radius: 50%; opacity: 0; animation: particleRise linear infinite; }
+.particle:nth-child(6) { left:15%; animation-duration:8s; animation-delay:0s; width:3px; height:3px; }
+.particle:nth-child(7) { left:65%; animation-duration:9s; animation-delay:-6s; width:3px; height:3px; }
+.particle:nth-child(8) { left:82%; animation-duration:13s; animation-delay:-2s; width:4px; height:4px; }
+@keyframes geoFloat {
+  0%   { transform: rotate(0deg) translateY(0px); }
+  33%  { transform: rotate(120deg) translateY(-14px); }
+  66%  { transform: rotate(240deg) translateY(6px); }
+  100% { transform: rotate(360deg) translateY(0px); }
+}
+@keyframes particleRise {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.5; }
+  90%  { opacity: 0.25; }
+  100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   LEFT PANEL — fully visible, no scroll needed
+   Key: justify-content:flex-start, overflow:hidden,
+   compact spacing, margin-top:auto on footer
+═══════════════════════════════════════════════ */
+.left-panel {
+  position: fixed; top: 0; left: 0;
+  width: 320px; height: 100vh; z-index: 1;
+  display: flex; flex-direction: column;
+  justify-content: flex-start;   /* top-aligned so nothing gets hidden above */
+  align-items: flex-start;
+  padding: 26px 30px 20px;       /* tight but comfortable */
+  background: linear-gradient(150deg, var(--navy) 0%, #0f1d3a 100%);
+  border-right: 1px solid rgba(201,168,76,0.14);
+  overflow: hidden;              /* no scrollbar, content must fit */
+}
+.left-panel::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='rgba(201,168,76,0.09)'/%3E%3C/svg%3E") repeat;
+}
+.left-panel::after {
+  content: ''; position: absolute; top: -20%; left: 22%;
+  width: 1.5px; height: 160%;
+  background: linear-gradient(180deg, transparent, rgba(201,168,76,0.2), transparent);
+  transform: rotate(-18deg);
+  animation: beamPulse 7s ease-in-out infinite;
+}
+@keyframes beamPulse { 0%,100%{opacity:.25} 50%{opacity:.85} }
+
+/* Badge */
+.badge-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px; position: relative; z-index: 1; width: 100%;
+  animation: fadeUp 0.8s ease both;
+}
+.badge-icon {
+  width: 42px; height: 42px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; box-shadow: 0 3px 14px rgba(201,168,76,0.38);
+  animation: badgePop 0.6s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes badgePop { from{transform:scale(.5);opacity:0} to{transform:scale(1);opacity:1} }
+.inst-name {
+  font-family: 'Playfair Display', serif; color: white;
+  font-size: 12.5px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; line-height: 1.35;
+}
+.inst-sub {
+  display: block; color: var(--gold2); font-size: 9.5px;
+  letter-spacing: 0.5px; font-weight: 400; margin-top: 2px;
+  font-family: 'DM Sans', sans-serif; text-transform: none; line-height: 1.45;
+}
+
+/* Rule */
+.panel-rule {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent);
+  margin-bottom: 13px; position: relative; z-index: 1;
+}
+
+/* Title */
+.panel-title {
+  font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700;
+  color: white; line-height: 1.25; margin-bottom: 8px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.panel-title em { color: var(--gold2); font-style: normal; }
+
+/* Desc */
+.panel-desc {
+  font-size: 11px; color: rgba(255,255,255,0.52); line-height: 1.7;
+  margin-bottom: 14px; position: relative; z-index: 1;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+/* Perks */
+.perks {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 14px; position: relative; z-index: 1; width: 100%;
+  animation: fadeUp 0.8s 0.4s ease both;
+}
+.perk-item { display: flex; align-items: flex-start; gap: 8px; }
+.perk-icon {
+  width: 22px; height: 22px; flex-shrink: 0; border-radius: 6px;
+  background: rgba(201,168,76,0.13); border: 1px solid rgba(201,168,76,0.22);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; margin-top: 1px;
+}
+.perk-text { font-size: 11px; color: rgba(255,255,255,0.57); line-height: 1.5; }
+.perk-text strong { color: rgba(255,255,255,0.88); font-weight: 500; }
+
+/* Already chip */
+.already-chip {
+  width: 100%; position: relative; z-index: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 9px; padding: 10px 12px;
+  animation: fadeUp 0.8s 0.5s ease both;
+}
+.already-chip p { font-size: 10.5px; color: rgba(255,255,255,0.45); margin-bottom: 7px; }
+.already-chip a {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--gold2); font-size: 11.5px; font-weight: 500; text-decoration: none;
+  padding: 6px 11px; border-radius: 6px;
+  border: 1px solid rgba(201,168,76,0.28); background: rgba(201,168,76,0.08);
+  transition: all 0.2s;
+}
+.already-chip a:hover { background: rgba(201,168,76,0.18); border-color: rgba(201,168,76,0.5); }
+
+/* Footer pushed to very bottom */
+.panel-footer {
+  margin-top: auto; padding-top: 10px;
+  font-size: 9.5px; color: rgba(255,255,255,0.16);
+  letter-spacing: 0.7px; position: relative; z-index: 1; width: 100%;
+}
+
+/* ── Right wrap ── */
+.right-wrap {
+  margin-left: 320px;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  position: relative; z-index: 2;
+}
+
+/* Topbar */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 15px 40px; border-bottom: 1px solid var(--border);
+  background: rgba(253,249,243,0.97);
+  position: sticky; top: 0; z-index: 10;
+  animation: fadeUp 0.6s ease both;
+}
+.brand { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); }
+.brand span { color: var(--gold); }
+.nav-links { display: flex; gap: 4px; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; transition: all 0.2s; }
+.nav-links a:hover { background: rgba(26,39,68,0.07); color: var(--navy); }
+.nav-links a.active { background: var(--navy); color: white; }
+#google_translate_element { display: none; }
+
+/* Main */
+.main-area {
+  flex: 1; display: flex; align-items: flex-start; justify-content: center;
+  padding: 36px 40px 56px;
+}
+
+/* Card */
+.reg-card {
+  width: 100%; max-width: 500px;
+  background: var(--white); border-radius: 20px;
+  box-shadow: var(--shadow); border: 1px solid rgba(26,39,68,0.07);
+  overflow: hidden;
+  animation: cardEntrance 0.7s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(26px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.card-accent { height: 4px; background: linear-gradient(90deg, var(--navy), var(--navy2) 40%, var(--gold) 100%); }
+
+.card-header { padding: 26px 30px 0; display: flex; align-items: flex-start; gap: 14px; }
+.header-icon {
+  width: 46px; height: 46px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; box-shadow: 0 4px 14px rgba(26,39,68,0.22);
+}
+.card-title { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.card-sub { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+.progress-steps { display: flex; align-items: center; padding: 18px 30px 0; }
+.prog-step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.prog-step.active { color: var(--navy); font-weight: 600; }
+.prog-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background 0.3s; }
+.prog-step.active .prog-dot { background: var(--gold); }
+.prog-line { flex: 1; height: 1px; background: var(--border); margin: 0 6px; }
+
+.card-body { padding: 20px 30px 8px; }
+
+.field { margin-bottom: 15px; position: relative; animation: fadeUp 0.5s ease both; }
+.field:nth-child(1){animation-delay:.05s} .field:nth-child(2){animation-delay:.1s}
+.field:nth-child(3){animation-delay:.15s} .field:nth-child(4){animation-delay:.2s}
+.field:nth-child(5){animation-delay:.25s}
+
+.field-label {
+  display: block; font-size: 11.5px; font-weight: 600;
+  color: var(--navy); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.field-label .req { color: var(--red); margin-left: 2px; }
+
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%; padding: 11px 14px 11px 42px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  color: var(--navy); background: #fafbfd;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+input:focus { border-color: var(--navy); background: var(--white); box-shadow: 0 0 0 4px rgba(26,39,68,0.07); }
+input::placeholder { color: #b0b8c9; font-size: 13.5px; }
+input.valid   { border-color: #2e7d52; background: rgba(30,107,58,0.03); }
+input.invalid { border-color: var(--red); background: rgba(192,57,43,0.03); }
+input.valid:focus   { box-shadow: 0 0 0 4px rgba(30,107,58,0.08); }
+input.invalid:focus { box-shadow: 0 0 0 4px rgba(192,57,43,0.07); }
+
+.input-wrap { position: relative; }
+.input-wrap .input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b0b8c9;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: color 0.2s;
+  z-index: 5;
+}
+.input-wrap input:focus + .input-icon,
+.input-wrap input:focus ~ .input-icon {
+  color: var(--navy);
+}
+.input-suffix {
+  position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+  font-size: 15px; pointer-events: none; opacity: 0; transition: opacity 0.2s;
+  z-index: 5;
+}
+.input-suffix.show { opacity: 1; }
+.pw-eye {
+  position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-size: 15px; color: var(--muted); width: auto; height: auto; transition: color 0.2s;
+  z-index: 6;
+}
+.pw-eye:hover { color: var(--navy); }
+
+.field-hint { font-size: 11.5px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+.field-hint.error { color: var(--red); display: none; }
+.field-hint.error.show { display: block; animation: fadeUp 0.2s ease both; }
+.field-hint.ok { color: var(--green); display: none; }
+.field-hint.ok.show { display: block; }
+
+.strength-wrap { margin-top: 7px; }
+.strength-bars { display: flex; gap: 4px; margin-bottom: 4px; }
+.strength-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+.strength-label { font-size: 11px; color: var(--muted); transition: color 0.3s; }
+
+.section-div { display: flex; align-items: center; gap: 12px; margin: 18px 0 14px; }
+.div-line { flex: 1; height: 1px; background: var(--border); }
+.div-text { font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+.alert { padding: 11px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 14px; display: none; align-items: center; gap: 9px; line-height: 1.5; }
+.alert.error   { background: #fdf2f2; border: 1px solid #f5c6c6; color: #8b1a1a; }
+.alert.success { background: #f0faf4; border: 1px solid #a7d9b8; color: #1a5c35; }
+.alert.show    { display: flex; animation: fadeUp 0.25s ease both; }
+.alert-icon    { font-size: 15px; flex-shrink: 0; }
+
+.terms-row {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 12px 14px; border-radius: 10px;
+  background: rgba(26,39,68,0.03); border: 1px solid var(--border); margin-bottom: 14px;
+}
+.terms-row input[type="checkbox"] {
+  width: 16px; height: 16px; min-width: 16px; padding: 0;
+  border-radius: 4px; margin-top: 1px; cursor: pointer; accent-color: var(--navy);
+}
+.terms-text { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.terms-text a { color: var(--gold); text-decoration: none; font-weight: 500; }
+.terms-text a:hover { text-decoration: underline; }
+
+.btn-primary {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  color: white; border: none; border-radius: 11px;
+  font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 600;
+  letter-spacing: 0.4px; cursor: pointer; transition: all 0.25s;
+  position: relative; overflow: hidden;
+  box-shadow: 0 5px 20px rgba(26,39,68,0.28);
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+}
+.btn-primary::before {
+  content: ''; position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+.btn-primary:hover::before { left: 100%; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,39,68,0.36); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.card-footer { padding: 16px 30px 22px; border-top: 1px solid var(--border); text-align: center; }
+.card-footer p { font-size: 13px; color: var(--muted); }
+.card-footer a { color: var(--gold); font-weight: 500; text-decoration: none; }
+.card-footer a:hover { text-decoration: underline; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+.topbar .brand-logo-container {
+  display: none;
+}
+.topbar .hamburger-menu {
+  display: none;
+}
+.mobile-hero {
+  display: none;
+}
+.mobile-card-header {
+  display: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .left-panel { display: none; }
+  
+  .right-wrap {
+    margin-left: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #faf8f5 !important;
+  }
+  
+  .topbar {
+    height: 56px;
+    padding: 0 16px;
+    background: #faf8f5 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topbar .nav-links {
+    display: none !important;
+  }
+  .topbar .brand {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .topbar .brand-logo-container {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 6px;
+  }
+  .topbar .hamburger-menu {
+    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Mobile Hero Banner - TOP SECTION */
+  .mobile-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 20%, #1e3a60 0%, #0d1b2a 100%);
+    height: 32vh;
+    padding: 8px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--gold);
+    border-radius: 0 0 28px 28px;
+    flex-shrink: 0;
+  }
+  .mobile-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 15% 20%, rgba(201,168,76,0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(255,255,255,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .m-hero-shield {
+    margin-bottom: 4px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .m-hero-shield svg {
+    width: 38px;
+    height: 38px;
+  }
+  .m-hero-mits {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+    margin-bottom: 1px;
+    text-transform: uppercase;
+  }
+  .m-hero-subtitle {
+    color: var(--gold2);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    max-width: 240px;
+    margin: 0 auto;
+    line-height: 1.2;
+  }
+  .m-hero-sub2 {
+    display: none;
+  }
+  .m-hero-title {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 19px;
+    font-weight: 700;
+    margin-top: 6px;
+    margin-bottom: 1px;
+  }
+  .m-hero-title span {
+    color: var(--gold2);
+  }
+  .m-hero-tagline {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
+  }
+  .m-hero-illustration {
+    width: clamp(48px, 10vh, 58px);
+    margin: 2px auto;
+    position: relative;
+    z-index: 2;
+    animation: floatAnim 4s ease-in-out infinite;
+  }
+  @keyframes floatAnim {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-2px); }
+  }
+  .m-hero-illustration img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+  }
+  .m-hero-perks {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 360px;
+    margin-top: 4px;
+  }
+  .m-perk {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 3px 6px;
+    flex: 1;
+    min-width: 0;
+  }
+  .m-perk-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background: rgba(201, 168, 76, 0.15);
+    border: 1px solid rgba(201, 168, 76, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+  .m-perk-text {
+    text-align: left;
+    min-width: 0;
+  }
+  .m-perk-title {
+    display: none;
+  }
+  .m-perk-desc {
+    color: white;
+    font-size: 9px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Form Card Overlay - BOTTOM SECTION */
+  .main-area {
+    flex: 1;
+    padding: 0 16px 12px;
+    margin-top: -6px;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: stretch;
+  }
+  .reg-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 22px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 12px 16px;
+    overflow: hidden;
+    justify-content: space-between;
+  }
+  .card-accent, .card-header, .progress-steps {
+    display: none !important;
+  }
+
+  /* Mobile Card Header */
+  .mobile-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 16px 0;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .m-card-badge {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 36px;
+    background: #0d1b2a;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(13,27,42,0.12);
+  }
+  .m-card-badge svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(17px, 4vw, 20px);
+    font-weight: 700;
+    color: #0d1b2a;
+    margin-bottom: 2px;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .m-card-sub {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .m-card-divider {
+    width: 60px;
+    height: 1px;
+    background: #f3e5c0;
+    position: relative;
+    margin-bottom: 4px;
+  }
+  .m-divider-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+
+  .card-body {
+    flex: 1;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  form#registerForm {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+    height: 100%;
+  }
+
+  .field {
+    margin-bottom: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0d1b2a;
+    letter-spacing: 0.3px;
+    margin-bottom: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Form Elements */
+  input[type="text"], input[type="email"], input[type="password"] {
+    height: 38px;
+    padding: 8px 12px 8px 36px;
+    border-radius: 12px;
+    font-size: 13px;
+    background: #fafbfd;
+    border-color: #e2e8f3;
+  }
+  .input-wrap .input-icon {
+    left: 12px;
+    width: 16px;
+    height: 16px;
+  }
+  .input-wrap input {
+    padding-left: 36px !important;
+    padding-right: 36px !important;
+  }
+  .input-wrap input:focus {
+    background: white;
+    border-color: #0d1b2a;
+  }
+  .pw-eye {
+    right: 12px;
+    font-size: 14px;
+  }
+  .input-suffix {
+    right: 12px;
+    font-size: 14px;
+  }
+
+  /* Compact Terms Checkbox Section */
+  .terms-row {
+    background: #fdfbf5;
+    border: 1px solid #f6ecce;
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-bottom: 0;
+    gap: 8px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .terms-row input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    margin-top: 2px;
+  }
+  .terms-text {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .terms-text a {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* Hide redundant descriptive elements */
+  .section-div {
+    display: none !important;
+  }
+  .field-hint:not(.error):not(.ok) {
+    display: none !important;
+  }
+  .field-hint.error {
+    font-size: 9.5px !important;
+    margin-top: 1px !important;
+    line-height: 1.1 !important;
+    color: var(--red);
+    display: none;
+  }
+  .field-hint.error.show {
+    display: block;
+  }
+  .field-hint.ok {
+    font-size: 9.5px !important;
+    margin-top: 1px !important;
+    line-height: 1.1 !important;
+    display: none;
+  }
+  .field-hint.ok.show {
+    display: block;
+  }
+
+  /* Redesigned Button */
+  .btn-primary {
+    background: linear-gradient(135deg, #162447 0%, #1f4068 100%);
+    border-radius: 14px;
+    padding: 10px;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(13,27,42,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-cap-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Footer Section */
+  .card-footer {
+    border-top: none;
+    padding: 4px 16px 8px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .card-footer p {
+    font-size: 12px;
+    margin: 0;
+  }
+  .card-footer a {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* Hide background elements to keep layout clean */
+  .bg-canvas {
+    display: none !important;
+  }
+  body {
+    background-color: #faf7f0 !important;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Extremely light glow effects */
+  body::before {
+    content: '';
+    position: absolute;
+    width: 100px; height: 100px;
+    background: rgba(201,168,76,0.04);
+    border-radius: 50%;
+    filter: blur(30px);
+    top: 50%; right: -20px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Disable dot grid backgrounds to keep aesthetic Stripe-like clean */
+  .main-area::before, .main-area::after {
+    display: none !important;
+  }
+  @media (max-height: 640px) {
+    .mobile-hero {
+      height: 15vh !important;
+    }
+    .m-hero-shield {
+      display: none !important;
+    }
+    .m-hero-illustration {
+      display: none !important;
+    }
+    .m-hero-perks {
+      display: none !important;
+    }
+    .m-hero-mits {
+      font-size: 13px !important;
+    }
+    .m-hero-title {
+      font-size: 15px !important;
+      margin-top: 2px !important;
+    }
+    .m-hero-tagline {
+      font-size: 9px !important;
+      margin-bottom: 2px !important;
+    }
+    .mobile-card-header {
+      padding-top: 10px !important;
+    }
+    .m-card-badge {
+      display: none !important;
+    }
+    .m-card-sub {
+      display: none !important;
+    }
+    .m-card-title {
+      font-size: 15px !important;
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+      height: 32px !important;
+      font-size: 12px !important;
+      padding-left: 32px !important;
+    }
+    .input-wrap .input-icon {
+      width: 14px !important;
+      height: 14px !important;
+      left: 10px !important;
+    }
+    .field-label {
+      font-size: 9px !important;
+      margin-bottom: 1px !important;
+    }
+    .terms-row {
+      padding: 6px 10px !important;
+    }
+    .terms-text {
+      font-size: 9.5px !important;
+    }
+    .btn-primary {
+      height: 36px !important;
+      font-size: 13px !important;
+      border-radius: 10px !important;
+    }
+    .card-footer {
+      padding: 2px 10px 4px !important;
+    }
+    .card-footer p {
+      font-size: 11px !important;
+    }
+    .main-area {
+      margin-top: -10px !important;
+      padding-bottom: 6px !important;
+    }
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-canvas">
+  <div class="geo"></div><div class="geo"></div>
+  <div class="geo"></div><div class="geo"></div>
+  <div class="geo circle"></div>
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+</div>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+
+  <div class="badge-row">
+    <div class="badge-icon">🎓</div>
+    <div>
+      <div class="inst-name">MITS
+        <span class="inst-sub">Madanapalle Institute of Technology &amp; Science</span>
+        <span class="inst-sub">Deemed to be University · Est. 1998</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-rule"></div>
+
+  <h2 class="panel-title">Join the<br><em>FindMyThing</em><br>community</h2>
+
+  <p class="panel-desc">
+    Create your portal account and become part of the campus-wide lost &amp; found network that helps students recover their belongings every day.
+  </p>
+
+  <div class="perks">
+    <div class="perk-item">
+      <div class="perk-icon">🔍</div>
+      <div class="perk-text"><strong>Report Lost Items</strong> — File reports and get notified the moment a match is found.</div>
+    </div>
+    <div class="perk-item">
+      <div class="perk-icon">🤝</div>
+      <div class="perk-text"><strong>Help Others</strong> — Log found items and reunite them with fellow students.</div>
+    </div>
+    <div class="perk-item">
+      <div class="perk-icon">🔒</div>
+      <div class="perk-text"><strong>Confidential &amp; Secure</strong> — Your data is encrypted and never shared publicly.</div>
+    </div>
+    <div class="perk-item">
+      <div class="perk-icon">📬</div>
+      <div class="perk-text"><strong>OTP-Verified Access</strong> — Every login is protected with a one-time passcode.</div>
+    </div>
+  </div>
+
+  <div class="already-chip">
+    <p>Already have an account?</p>
+    <a href="/login.html">🔐 Sign in to your account</a>
+  </div>
+
+  <div class="panel-footer">MITS · FindMyThing Portal · Academic Year 2024–25</div>
+
+</div>
+
+<!-- RIGHT WRAP -->
+<div class="right-wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-logo-container">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <rect x="2" y="2" width="20" height="20" rx="6" fill="#f5c045" />
+          <path d="M12 6L4 10L12 14L20 10L12 6Z" fill="#1a2744"/>
+          <path d="M8 12.5V16C8 17.5 9.8 18 12 18C14.2 18 16 17.5 16 16V12.5" stroke="#1a2744" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <path d="M20 10V14.5" stroke="#1a2744" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <circle cx="20" cy="14.5" r="1" fill="#1a2744"/>
+        </svg>
+      </span>
+      Find<span>My</span>Thing
+    </div>
+    <div id="google_translate_element"></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/login.html">Login</a>
+      <a href="/register.html" class="active">Register</a>
+    </div>
+    <button class="hamburger-menu" aria-label="Toggle Navigation">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <line x1="4" y1="6" x2="20" y2="6" stroke="#1a2744" stroke-width="2" stroke-linecap="round"/>
+        <line x1="4" y1="12" x2="20" y2="12" stroke="#1a2744" stroke-width="2" stroke-linecap="round"/>
+        <line x1="4" y1="18" x2="20" y2="18" stroke="#1a2744" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- MOBILE HERO CURVED BANNER -->
+  <div class="mobile-hero">
+    <div class="m-hero-shield">
+      <svg viewBox="0 0 60 60" width="60" height="60">
+        <defs>
+          <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e8c97a"/>
+            <stop offset="100%" stop-color="#c9a84c"/>
+          </linearGradient>
+        </defs>
+        <path d="M30 6 C42 6, 50 10, 50 24 C50 38, 38 48, 30 52 C22 48, 10 38, 10 24 C10 10, 18 6, 30 6 Z" fill="none" stroke="url(#shieldGrad)" stroke-width="2.5"/>
+        <path d="M30 8 C40.5 8, 48 11.5, 48 24 C48 36.5, 37 46, 30 50 C23 46, 12 36.5, 12 24 C12 11.5, 19.5 8, 30 8 Z" fill="rgba(201,168,76,0.15)"/>
+        <path d="M30 16L18 22L30 28L42 22L30 16Z" fill="url(#shieldGrad)"/>
+        <path d="M24 25.5V30C24 31.5, 26.7 32, 30 32C33.3 32, 36 31.5, 36 30V25.5" stroke="url(#shieldGrad)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <path d="M42 22V27" stroke="url(#shieldGrad)" stroke-width="1.5"/>
+        <path d="M22 36H30V44H22Z" fill="none" stroke="url(#shieldGrad)" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M38 36H30V44H38Z" fill="none" stroke="url(#shieldGrad)" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M24 39H28M24 41H28M32 39H36M32 41H36" stroke="url(#shieldGrad)" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="m-hero-mits">MITS</div>
+    <div class="m-hero-subtitle">Madanapalle Institute of Technology & Science</div>
+    <div class="m-hero-sub2">Deemed to be University • Est. 1998</div>
+    
+    <h1 class="m-hero-title">Join <span>FindMyThing</span></h1>
+    <p class="m-hero-tagline">Campus Lost & Found Portal</p>
+    
+    <div class="m-hero-illustration">
+      <img src="/images/hero_illustration.png" alt="Portal Illustration">
+    </div>
+    
+    <div class="m-hero-perks">
+      <div class="m-perk">
+        <div class="m-perk-icon search">🔍</div>
+        <div class="m-perk-text">
+          <div class="m-perk-title">Recover</div>
+          <div class="m-perk-desc">Lost Items</div>
+        </div>
+      </div>
+      <div class="m-perk">
+        <div class="m-perk-icon secure">🛡️</div>
+        <div class="m-perk-text">
+          <div class="m-perk-title">Secure</div>
+          <div class="m-perk-desc">Registration</div>
+        </div>
+      </div>
+      <div class="m-perk">
+        <div class="m-perk-icon otp">⚡</div>
+        <div class="m-perk-text">
+          <div class="m-perk-title">OTP</div>
+          <div class="m-perk-desc">Verified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="reg-card">
+
+      <!-- MOBILE CARD HEADER -->
+      <div class="mobile-card-header">
+        <div class="m-card-badge">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="white"/>
+          </svg>
+        </div>
+        <h2 class="m-card-title">Create Your Account</h2>
+        <p class="m-card-sub">Register using your MITS Email</p>
+        <div class="m-card-divider">
+          <span class="m-divider-dot"></span>
+        </div>
+      </div>
+
+      <div class="card-accent"></div>
+
+      <div class="card-header">
+        <div class="header-icon">✏️</div>
+        <div>
+          <div class="card-title">Create your account</div>
+          <p class="card-sub">Use your college email (@mits.ac.in) to register.</p>
+        </div>
+      </div>
+
+      <div class="progress-steps">
+        <div class="prog-step active"><div class="prog-dot"></div> Account details</div>
+        <div class="prog-line"></div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="alert" id="alertBox">
+          <span class="alert-icon" id="alertIcon"></span>
+          <span id="alertText"></span>
+        </div>
+
+        <form id="registerForm" action="/register" method="POST" novalidate>
+
+          <div class="field">
+            <label class="field-label" for="name">Full Name <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+                </svg>
+              </span>
+              <input type="text" id="name" name="name" placeholder="e.g. Ravi Kumar Sharma" required autocomplete="name">
+              <span class="input-suffix" id="name-ok">✅</span>
+            </div>
+            <div class="field-hint error" id="name-err">Please enter your full name.</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="email">MITS Email Address <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/>
+                </svg>
+              </span>
+              <input type="email" id="email" name="email" placeholder="rollno@mits.ac.in" required autocomplete="email">
+              <span class="input-suffix" id="email-ok">✅</span>
+            </div>
+            <div class="field-hint">Use your college email (@mits.ac.in).</div>
+            <div class="field-hint error" id="email-err">Use a valid college email (@mits.ac.in).</div>
+          </div>
+
+          <div class="section-div">
+            <div class="div-line"></div>
+            <span class="div-text">🔑 Set Password</span>
+            <div class="div-line"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="password">Password <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="currentColor"/>
+                </svg>
+              </span>
+              <input type="password" id="password" name="password" placeholder="Minimum 6 characters" required autocomplete="new-password">
+              <button type="button" class="pw-eye" onclick="togglePw('password')" title="Show/hide">👁</button>
+            </div>
+            <div class="strength-wrap" id="strengthWrap" style="display:none;">
+              <div class="strength-bars">
+                <div class="strength-bar" id="sb1"></div>
+                <div class="strength-bar" id="sb2"></div>
+                <div class="strength-bar" id="sb3"></div>
+                <div class="strength-bar" id="sb4"></div>
+              </div>
+              <div class="strength-label" id="strengthLabel">Strength: —</div>
+            </div>
+            <div class="field-hint error" id="pw-err">Password must be at least 6 characters.</div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="confirmPassword">Confirm Password <span class="req">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="currentColor"/>
+                </svg>
+              </span>
+              <input type="password" id="confirmPassword" placeholder="Re-enter password" required autocomplete="new-password">
+              <button type="button" class="pw-eye" onclick="togglePw('confirmPassword')" title="Show/hide">👁</button>
+            </div>
+            <div class="field-hint error" id="cpw-err">Passwords do not match.</div>
+            <div class="field-hint ok"    id="cpw-ok">✓ Passwords match.</div>
+          </div>
+
+          <div class="section-div">
+            <div class="div-line"></div>
+            <span class="div-text">📋 Declaration</span>
+            <div class="div-line"></div>
+          </div>
+
+          <div class="terms-row">
+            <input type="checkbox" id="terms" required>
+            <div class="terms-text">
+              I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>
+              of the MITS FindMyThing Portal. I confirm that I am a registered student or staff member of MITS.
+            </div>
+          </div>
+          <div class="field-hint error" id="terms-err" style="margin-bottom:12px;">You must agree to the terms before registering.</div>
+
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <svg class="btn-cap-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-right:4px; vertical-align:middle;">
+              <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+            </svg> Create My Account
+          </button>
+
+        </form>
+      </div>
+
+      <div class="card-footer">
+        <p>Already have an account? <a href="/login.html">Sign In</a> &nbsp;•&nbsp; <a href="/">Back Home</a></p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showAlert(msg, type) {
+  var box = document.getElementById('alertBox');
+  document.getElementById('alertIcon').textContent = type === 'error' ? '⚠️' : '✅';
+  document.getElementById('alertText').textContent = msg;
+  box.className = 'alert ' + type + ' show';
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function clearAlert() { document.getElementById('alertBox').className = 'alert'; }
+function showErr(id, s) { var el=document.getElementById(id); if(el) el.classList.toggle('show',s); }
+function showOk(id, s)  { var el=document.getElementById(id); if(el) el.classList.toggle('show',s); }
+function setSuffix(id, s) { var el=document.getElementById(id); if(el) el.classList.toggle('show',s); }
+function setValidity(id, v) {
+  var el=document.getElementById(id); if(!el) return;
+  el.classList.toggle('valid',v); el.classList.toggle('invalid',!v);
+}
+function togglePw(id) { var f=document.getElementById(id); f.type=f.type==='password'?'text':'password'; }
+
+document.getElementById('name').addEventListener('blur', function() {
+  var ok=this.value.trim().length>=2;
+  setValidity('name',ok); setSuffix('name-ok',ok); showErr('name-err',!ok&&this.value.length>0);
+});
+
+document.getElementById('email').addEventListener('input', function() {
+  var v=this.value.trim().toLowerCase(), ok=v.endsWith('@mits.ac.in');
+  if(v.length>5){ setValidity('email',ok); setSuffix('email-ok',ok); showErr('email-err',!ok); }
+});
+document.getElementById('email').addEventListener('blur', function() {
+  var v=this.value.trim().toLowerCase(), ok=v.endsWith('@mits.ac.in');
+  if(v.length>0){ setValidity('email',ok); setSuffix('email-ok',ok); showErr('email-err',!ok); }
+});
+
+document.getElementById('password').addEventListener('input', function() {
+  var pw=this.value, sw=document.getElementById('strengthWrap');
+  if(!pw){ sw.style.display='none'; return; }
+  sw.style.display='block';
+  var s=0;
+  if(pw.length>=6) s++;
+  if(pw.length>=10) s++;
+  if(/[A-Z]/.test(pw)&&/[a-z]/.test(pw)) s++;
+  if(/[0-9]/.test(pw)&&/[^A-Za-z0-9]/.test(pw)) s++;
+  var c=['#e74c3c','#e67e22','#f1c40f','#27ae60'], l=['Weak','Fair','Good','Strong'];
+  ['sb1','sb2','sb3','sb4'].forEach(function(id,i){
+    document.getElementById(id).style.background=i<s?c[s-1]:'var(--border)';
+  });
+  var lbl=document.getElementById('strengthLabel');
+  lbl.textContent='Strength: '+(l[s-1]||'Weak'); lbl.style.color=c[s-1]||c[0];
+  showErr('pw-err',pw.length>0&&pw.length<6); setValidity('password',pw.length>=6); checkConfirm();
+});
+
+function checkConfirm(){
+  var pw=document.getElementById('password').value, cpw=document.getElementById('confirmPassword').value;
+  if(!cpw){ showErr('cpw-err',false); showOk('cpw-ok',false); return; }
+  var m=pw===cpw; setValidity('confirmPassword',m); showErr('cpw-err',!m); showOk('cpw-ok',m);
+}
+document.getElementById('confirmPassword').addEventListener('input',checkConfirm);
+
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+  clearAlert();
+  var name=document.getElementById('name').value.trim();
+  var email=document.getElementById('email').value.trim().toLowerCase();
+  var pass=document.getElementById('password').value;
+  var confirm=document.getElementById('confirmPassword').value;
+  var terms=document.getElementById('terms').checked;
+  if(name.length<2){ e.preventDefault(); setValidity('name',false); showErr('name-err',true); return showAlert('Please enter your full name.','error'); }
+  if(!email.endsWith('@mits.ac.in')){ e.preventDefault(); setValidity('email',false); showErr('email-err',true); return showAlert('Use a valid college email (@mits.ac.in).','error'); }
+  if(pass.length<6){ e.preventDefault(); setValidity('password',false); showErr('pw-err',true); return showAlert('Password must be at least 6 characters long.','error'); }
+  if(pass!==confirm){ e.preventDefault(); setValidity('confirmPassword',false); showErr('cpw-err',true); return showAlert('Passwords do not match.','error'); }
+  if(!terms){ e.preventDefault(); showErr('terms-err',true); return showAlert('You must agree to the Terms of Use to register.','error'); }
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.innerHTML='<span style="font-size:15px;">⏳</span> Creating account…';
+});
+</script>
+
+<script src="/js/translate.js"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

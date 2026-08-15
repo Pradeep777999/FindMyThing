@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify OTP — MITS FindMyThing Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #1a2744;
+  --navy2:  #243058;
+  --gold:   #c9a84c;
+  --gold2:  #e8c97a;
+  --cream:  #fdf9f3;
+  --muted:  #6b7280;
+  --border: #dde3ed;
+  --red:    #c0392b;
+  --green:  #1a6b3a;
+  --white:  #ffffff;
+  --shadow: 0 8px 40px rgba(26,39,68,0.13);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--navy);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Background ── */
+.bg-canvas { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.bg-canvas::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 70% at 90% 80%, rgba(26,39,68,0.05) 0%, transparent 60%);
+}
+.geo { position: absolute; border: 1px solid rgba(201,168,76,0.16); border-radius: 2px; animation: geoFloat linear infinite; }
+.geo:nth-child(1) { width:70px;  height:70px;  top:8%;    left:4%;   animation-duration:18s; opacity:0.45; }
+.geo:nth-child(2) { width:110px; height:110px; top:18%;   right:5%;  animation-duration:24s; animation-delay:-4s; opacity:0.3; }
+.geo:nth-child(3) { width:45px;  height:45px;  bottom:22%;left:7%;   animation-duration:14s; animation-delay:-8s; opacity:0.4; }
+.geo:nth-child(4) { width:140px; height:140px; bottom:8%; right:3%;  animation-duration:30s; animation-delay:-12s;opacity:0.22; }
+.geo.circle       { border-radius:50%; border-color:rgba(26,39,68,0.09); }
+.geo:nth-child(5) { width:180px; height:180px; top:40%;   right:1%;  animation-duration:36s; animation-delay:-6s; border-radius:50%; opacity:0.18; }
+@keyframes geoFloat {
+  0%   { transform: rotate(0deg) translateY(0px); }
+  33%  { transform: rotate(120deg) translateY(-16px); }
+  66%  { transform: rotate(240deg) translateY(7px); }
+  100% { transform: rotate(360deg) translateY(0px); }
+}
+
+/* ── Left panel ── */
+.left-panel {
+  position: fixed; top: 0; left: 0;
+  width: 340px; height: 100vh; z-index: 1;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 56px 40px;
+  background: linear-gradient(150deg, var(--navy) 0%, #0f1d3a 100%);
+  border-right: 1px solid rgba(201,168,76,0.14);
+  overflow-y: auto;
+}
+.left-panel::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='rgba(201,168,76,0.09)'/%3E%3C/svg%3E") repeat;
+}
+
+.badge-row { display: flex; align-items: center; gap: 13px; margin-bottom: 32px; animation: fadeUp 0.8s ease both; }
+.badge-icon {
+  width: 52px; height: 52px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.38);
+}
+.inst-name { font-family: 'Playfair Display', serif; color: white; font-size: 14px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; line-height: 1.4; }
+.inst-name span { display: block; color: var(--gold2); font-size: 10px; letter-spacing: 2.5px; font-weight: 400; margin-top: 3px; font-family: 'DM Sans', sans-serif; }
+
+.gold-bar { width: 42px; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 24px; animation: fadeUp 0.8s 0.1s ease both; }
+
+.panel-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: white; line-height: 1.3; margin-bottom: 14px; animation: fadeUp 0.8s 0.2s ease both; }
+.panel-title em { color: var(--gold2); font-style: normal; }
+.panel-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 36px; animation: fadeUp 0.8s 0.3s ease both; }
+
+.info-items { display: flex; flex-direction: column; gap: 16px; animation: fadeUp 0.8s 0.4s ease both; }
+.info-item { display: flex; align-items: flex-start; gap: 13px; }
+.info-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px solid var(--gold); color: var(--gold2);
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.info-text { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.55; }
+.info-text strong { color: rgba(255,255,255,0.92); font-weight: 500; display: block; margin-bottom: 2px; }
+
+.security-chip {
+  margin-top: 28px;
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 10px; padding: 12px 14px;
+  animation: fadeUp 0.8s 0.5s ease both;
+}
+.lock-icon { font-size: 18px; flex-shrink: 0; }
+.security-text { font-size: 12px; color: rgba(255,220,150,0.85); line-height: 1.5; }
+.security-text strong { display: block; color: var(--gold2); font-weight: 600; margin-bottom: 2px; font-size: 12.5px; }
+
+.panel-footer { position: absolute; bottom: 28px; left: 40px; font-size: 10.5px; color: rgba(255,255,255,0.18); letter-spacing: 1px; }
+
+/* ── Right wrap ── */
+.right-wrap {
+  margin-left: 340px;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  position: relative; z-index: 2;
+}
+
+/* ── Topbar ── */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 44px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(253,249,243,0.96);
+  animation: fadeUp 0.6s ease both;
+}
+.brand { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); }
+.brand span { color: var(--gold); }
+.nav-links { display: flex; gap: 4px; }
+.nav-links a {
+  color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500;
+  padding: 7px 14px; border-radius: 8px; transition: all 0.2s;
+}
+.nav-links a:hover { background: rgba(26,39,68,0.07); color: var(--navy); }
+#google_translate_element { display: none; }
+
+/* ── Main area ── */
+.main-area {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 44px;
+}
+
+/* ── Auth card ── */
+.auth-card {
+  width: 100%; max-width: 460px;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(26,39,68,0.07);
+  overflow: hidden;
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+
+/* ── Card top accent ── */
+.card-accent {
+  height: 4px;
+  background: linear-gradient(90deg, var(--navy), var(--navy2) 40%, var(--gold) 100%);
+}
+
+/* ── Card header ── */
+.card-header {
+  padding: 28px 32px 0;
+  display: flex; align-items: flex-start; gap: 16px;
+}
+.header-icon {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 4px 14px rgba(26,39,68,0.22);
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; color: var(--navy);
+  margin-bottom: 4px;
+}
+.card-sub { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── Card body ── */
+.card-body { padding: 24px 32px 28px; }
+
+/* ── Step breadcrumb ── */
+.step-trail {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 22px;
+}
+.step-trail-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.step-trail-item.done { color: var(--green); font-weight: 500; }
+.step-trail-item.active { color: var(--navy); font-weight: 600; }
+.trail-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.trail-arrow { color: var(--border); font-size: 14px; }
+
+/* ── Email chip ── */
+.email-chip {
+  display: flex; align-items: center; gap: 9px;
+  background: rgba(26,39,68,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+  margin-bottom: 22px;
+}
+.chip-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; animation: pulse 2s ease infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.75); }
+}
+.chip-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.chip-email { font-size: 13.5px; color: var(--navy); font-weight: 500; }
+
+/* ── OTP input row ── */
+.otp-label {
+  font-size: 11.5px; font-weight: 600; color: var(--navy);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  text-align: center; margin-bottom: 14px;
+}
+.otp-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 6px; }
+.otp-box {
+  width: 54px; height: 60px;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 700; text-align: center;
+  color: var(--navy); background: #fafbfd;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -webkit-appearance: none; -moz-appearance: textfield; appearance: none;
+}
+.otp-box:focus {
+  border-color: var(--navy); background: var(--white);
+  box-shadow: 0 0 0 4px rgba(26,39,68,0.07);
+}
+.otp-box.filled {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.05);
+  color: var(--navy);
+}
+.otp-box.error-box {
+  border-color: var(--red);
+  background: rgba(192,57,43,0.04);
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-6px); }
+  40%     { transform: translateX(6px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
+}
+
+/* ── Timer row ── */
+.timer-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 14px 0 20px;
+}
+.timer-text { font-size: 12.5px; color: var(--muted); }
+.timer-text strong { color: var(--navy); font-weight: 600; font-size: 13px; }
+.timer-text.expired strong { color: var(--red); }
+.resend-btn {
+  font-size: 12.5px; font-weight: 500;
+  background: none; border: none; padding: 0; width: auto; height: auto;
+  cursor: not-allowed; color: var(--muted);
+  transition: color 0.2s;
+}
+.resend-btn.active { color: var(--gold); cursor: pointer; }
+.resend-btn.active:hover { text-decoration: underline; }
+
+/* ── Progress bar ── */
+.timer-bar-wrap {
+  height: 3px; background: var(--border); border-radius: 2px;
+  margin-bottom: 20px; overflow: hidden;
+}
+.timer-bar {
+  height: 100%; background: var(--gold);
+  border-radius: 2px; transition: width 1s linear, background 0.3s;
+}
+
+/* ── Alert ── */
+.alert {
+  padding: 11px 14px; border-radius: 10px;
+  font-size: 13px; margin-bottom: 16px;
+  display: none; align-items: center; gap: 9px; line-height: 1.5;
+}
+.alert.error   { background: #fdf2f2; border: 1px solid #f5c6c6; color: #8b1a1a; }
+.alert.success { background: #f0faf4; border: 1px solid #a7d9b8; color: #1a5c35; }
+.alert.show    { display: flex; animation: fadeUp 0.25s ease both; }
+.alert-icon    { font-size: 15px; flex-shrink: 0; }
+
+/* ── Submit button ── */
+.btn-primary {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  color: white; border: none; border-radius: 11px;
+  font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 600;
+  letter-spacing: 0.4px; cursor: pointer;
+  transition: all 0.25s; position: relative; overflow: hidden;
+  box-shadow: 0 5px 20px rgba(26,39,68,0.28);
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+}
+.btn-primary::before {
+  content: ''; position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+.btn-primary:hover::before { left: 100%; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,39,68,0.36); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── Ghost button ── */
+.btn-ghost {
+  width: 100%; padding: 11px; margin-top: 10px;
+  background: transparent; color: var(--muted);
+  border: 1.5px solid var(--border); border-radius: 11px;
+  font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-ghost:hover { border-color: var(--navy); color: var(--navy); background: rgba(26,39,68,0.04); }
+
+/* ── Card footer ── */
+.card-footer {
+  padding: 0 32px 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  text-align: center; padding-top: 18px;
+}
+.card-footer p { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+.card-footer a { color: var(--gold); text-decoration: none; font-weight: 500; }
+.card-footer a:hover { text-decoration: underline; }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .left-panel { display: none; }
+  .right-wrap { margin-left: 0; }
+  .topbar { padding: 14px 20px; }
+  .main-area { padding: 32px 20px; }
+}
+@media (max-width: 480px) {
+  .otp-box { width: 44px; height: 52px; font-size: 20px; border-radius: 10px; }
+  .card-header { padding: 22px 22px 0; }
+  .card-body { padding: 20px 22px 24px; }
+  .card-footer { padding: 16px 22px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-canvas">
+  <div class="geo"></div>
+  <div class="geo"></div>
+  <div class="geo"></div>
+  <div class="geo"></div>
+  <div class="geo circle"></div>
+</div>
+
+<!-- Left panel -->
+<div class="left-panel">
+  <div class="badge-row">
+    <div class="badge-icon">🎓</div>
+    <div>
+      <div class="inst-name">MITS
+        <span>Madanapalle Institute of Technology &amp; Science</span>
+        <span>Deemed to be University</span>
+      </div>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
+  <h2 class="panel-title">One step<br>away from<br><em>access</em></h2>
+  <p class="panel-desc">
+    A one-time passcode was sent to your registered email. Enter it to securely verify your identity and access the portal.
+  </p>
+  <div class="info-items">
+    <div class="info-item">
+      <div class="info-num">1</div>
+      <div class="info-text"><strong>Check your inbox</strong>Look for an email from the MITS FindMyThing system.</div>
+    </div>
+    <div class="info-item">
+      <div class="info-num">2</div>
+      <div class="info-text"><strong>Enter the 6-digit code</strong>Type or paste the OTP into the boxes on the right.</div>
+    </div>
+    <div class="info-item">
+      <div class="info-num">3</div>
+      <div class="info-text"><strong>Verify and access</strong>Click Verify to complete your secure login.</div>
+    </div>
+  </div>
+  <div class="security-chip">
+    <span class="lock-icon">🔒</span>
+    <div class="security-text">
+      <strong>Session secured</strong>
+      OTPs expire in 2 minutes and are single-use only. Never share your OTP with anyone.
+    </div>
+  </div>
+  <div class="panel-footer">MITS · FindMyThing Portal · Academic Year 2024–25</div>
+</div>
+
+<!-- Right wrap -->
+<div class="right-wrap">
+
+  <div class="topbar">
+    <div class="brand">Find<span>My</span>Thing</div>
+    <div id="google_translate_element"></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/login.html">← Back to Login</a>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="auth-card">
+
+      <div class="card-accent"></div>
+
+      <div class="card-header">
+        <div class="header-icon">📬</div>
+        <div class="header-text">
+          <div class="card-title">Verify your OTP</div>
+          <p class="card-sub">Enter the 6-digit code sent to your email address below.</p>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Step trail -->
+        <div class="step-trail">
+          <div class="step-trail-item done"><div class="trail-dot"></div> Credentials verified</div>
+          <span class="trail-arrow">›</span>
+          <div class="step-trail-item active"><div class="trail-dot"></div> Enter OTP</div>
+        </div>
+
+        <!-- Email chip -->
+        <div class="email-chip">
+          <div class="chip-dot"></div>
+          <div>
+            <div class="chip-label">OTP sent to</div>
+            <div class="chip-email" id="chip-email">—</div>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div class="alert" id="msg-box">
+          <span class="alert-icon" id="msg-icon"></span>
+          <span id="msg-text"></span>
+        </div>
+
+        <!-- OTP form -->
+        <form id="otpForm" action="/verify-login-otp" method="POST" novalidate>
+          <input type="hidden" name="email" id="email-hidden">
+
+          <div class="otp-label">Enter 6-digit code</div>
+
+          <div class="otp-row" id="otpBoxes">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+          </div>
+          <input type="hidden" name="otp" id="otp-combined">
+
+          <!-- Timer bar -->
+          <div class="timer-bar-wrap">
+            <div class="timer-bar" id="timer-bar" style="width:100%"></div>
+          </div>
+
+          <!-- Timer row -->
+          <div class="timer-row">
+            <span class="timer-text" id="timer-label">Expires in <strong id="countdown">2:00</strong></span>
+            <button type="button" class="resend-btn" id="resendBtn" onclick="resendOTP()">Resend OTP</button>
+          </div>
+
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <span style="font-size:16px;">✅</span> Verify &amp; Sign In
+          </button>
+
+        </form>
+
+        <a href="/login.html" class="btn-ghost">
+          <span style="font-size:15px;">←</span> Back to Login
+        </a>
+
+      </div>
+
+      <div class="card-footer">
+        <p>
+          Didn't receive the code? Check your spam folder or
+          <a href="#" onclick="resendOTP(); return false;">resend OTP</a>
+          after the timer expires.<br>
+          Wrong email? <a href="/login.html">Go back and re-enter</a>.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+var TOTAL_SECS = 120;
+var _secs = TOTAL_SECS;
+var _timer = null;
+var _email = '';
+
+/* ── Read email from URL ── */
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var em = params.get('email') || '';
+  _email = em;
+  document.getElementById('email-hidden').value = em;
+  document.getElementById('chip-email').textContent = em || 'your registered email';
+  startTimer();
+
+  var err = params.get('error');
+  if (err === 'unverified') {
+    showMsg('Please verify your email before logging in.', 'error');
+  }
+})();
+
+/* ── Alert helpers ── */
+function showMsg(msg, type) {
+  var box  = document.getElementById('msg-box');
+  var icon = document.getElementById('msg-icon');
+  var text = document.getElementById('msg-text');
+  icon.textContent = type === 'error' ? '⚠️' : '✅';
+  text.textContent = msg;
+  box.className = 'alert ' + type + ' show';
+}
+function clearMsg() {
+  document.getElementById('msg-box').className = 'alert';
+}
+
+/* ── OTP boxes ── */
+var boxes = Array.from(document.querySelectorAll('.otp-box'));
+
+boxes.forEach(function (box, i) {
+  box.addEventListener('input', function () {
+    var val = this.value.replace(/[^0-9]/g, '');
+    this.value = val;
+    this.classList.toggle('filled', !!val);
+    this.classList.remove('error-box');
+    if (val && i < boxes.length - 1) boxes[i + 1].focus();
+    syncCombined();
+  });
+
+  box.addEventListener('keydown', function (e) {
+    if (e.key === 'Backspace' && !this.value && i > 0) {
+      boxes[i - 1].value = '';
+      boxes[i - 1].classList.remove('filled');
+      boxes[i - 1].focus();
+      syncCombined();
+    }
+    if (e.key === 'ArrowLeft'  && i > 0)              boxes[i - 1].focus();
+    if (e.key === 'ArrowRight' && i < boxes.length-1) boxes[i + 1].focus();
+  });
+
+  box.addEventListener('paste', function (e) {
+    e.preventDefault();
+    var data = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+    data.split('').forEach(function (ch, idx) {
+      if (boxes[idx]) { boxes[idx].value = ch; boxes[idx].classList.add('filled'); }
+    });
+    syncCombined();
+    var next = boxes[Math.min(data.length, boxes.length - 1)];
+    if (next) next.focus();
+  });
+});
+
+function syncCombined() {
+  document.getElementById('otp-combined').value = boxes.map(function (b) { return b.value; }).join('');
+}
+
+function markBoxesError() {
+  boxes.forEach(function (b) { b.classList.add('error-box'); b.classList.remove('filled'); });
+}
+
+function clearBoxes() {
+  boxes.forEach(function (b) { b.value = ''; b.classList.remove('filled', 'error-box'); });
+  document.getElementById('otp-combined').value = '';
+}
+
+/* ── Form submit ── */
+document.getElementById('otpForm').addEventListener('submit', function (e) {
+  clearMsg();
+  var combined = document.getElementById('otp-combined').value;
+  if (combined.length < 6) {
+    e.preventDefault();
+    showMsg('Please enter all 6 digits of the OTP.', 'error');
+    markBoxesError();
+    boxes[combined.length] ? boxes[combined.length].focus() : boxes[0].focus();
+    return;
+  }
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="font-size:15px;">⏳</span> Verifying…';
+});
+
+/* ── Countdown timer ── */
+function startTimer() {
+  clearInterval(_timer);
+  _secs = TOTAL_SECS;
+  var rb = document.getElementById('resendBtn');
+  rb.classList.remove('active'); rb.disabled = true; rb.textContent = 'Resend OTP';
+  document.getElementById('timer-label').className = 'timer-text';
+  tick();
+  _timer = setInterval(tick, 1000);
+}
+
+function tick() {
+  var m   = Math.floor(_secs / 60);
+  var s   = _secs % 60;
+  var pct = Math.round((_secs / TOTAL_SECS) * 100);
+
+  document.getElementById('countdown').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+
+  var bar = document.getElementById('timer-bar');
+  bar.style.width = pct + '%';
+  bar.style.background = _secs <= 20 ? '#c0392b' : '#c9a84c';
+
+  if (_secs <= 0) {
+    clearInterval(_timer);
+    document.getElementById('countdown').textContent = '0:00';
+    document.getElementById('timer-bar').style.width = '0%';
+    document.getElementById('timer-label').className = 'timer-text expired';
+    var rb = document.getElementById('resendBtn');
+    rb.classList.add('active'); rb.disabled = false; rb.textContent = 'Resend OTP';
+    return;
+  }
+  _secs--;
+}
+
+/* ── Resend OTP ── */
+async function resendOTP() {
+  clearMsg();
+  if (!_email) return showMsg('Email address not found. Please go back to login.', 'error');
+
+  var rb = document.getElementById('resendBtn');
+  rb.classList.remove('active'); rb.textContent = 'Sending…'; rb.disabled = true;
+
+  try {
+    var res  = await fetch('/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: _email })
+    });
+    var text = await res.text();
+    showMsg(text || 'OTP sent successfully. Please check your inbox.', 'success');
+    clearBoxes();
+    startTimer();
+    boxes[0].focus();
+  } catch (err) {
+    showMsg('Failed to resend OTP. Please check your connection and try again.', 'error');
+    rb.classList.add('active'); rb.disabled = false; rb.textContent = 'Resend OTP';
+  }
+}
+</script>
+
+<script src="/js/translate.js"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

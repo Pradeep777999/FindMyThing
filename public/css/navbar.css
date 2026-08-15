@@ -1,0 +1,993 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ==========================================
+   ANVESHANA (FindMyThing) NAVIGATION STYLES
+   ========================================== */
+
+:root {
+  --nav-navy:       #0d1b2a;
+  --nav-navy-mid:   #162535;
+  --nav-navy-light: #1f3147;
+  --nav-gold:       #c9a84c;
+  --nav-gold-light: #e6c97a;
+  --nav-white:      #ffffff;
+  --nav-white-muted:rgba(255, 255, 255, 0.75);
+  --nav-border:     rgba(201, 168, 76, 0.28);
+  --nav-glass:      rgba(13, 27, 42, 0.85);
+  --nav-shadow:     0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Base Reset & Core Styles for Navbar */
+#mainNavbar.navbar {
+  all: unset; /* Prevent bootstrap or other styles from interfering */
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: var(--nav-navy);
+  border-bottom: 1px solid var(--nav-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 95px;
+  box-shadow: var(--nav-shadow);
+  transition: all 0.3s ease;
+}
+
+#mainNavbar * {
+  box-sizing: border-box;
+}
+
+/* Shimmer animation on bottom border */
+#mainNavbar.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--nav-gold) 30%, var(--nav-gold-light) 50%, var(--nav-gold) 70%, transparent 100%);
+  background-size: 200% 100%;
+  animation: navShimmerLine 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes navShimmerLine {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* LEFT BRAND SECTION */
+#mainNavbar .nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#mainNavbar .nav-brand a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+#mainNavbar .mits-logo {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: var(--nav-white);
+  padding: 2px;
+  border: 1px solid var(--nav-border);
+  transition: transform 0.3s ease;
+}
+
+#mainNavbar .nav-brand a:hover .mits-logo {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+#mainNavbar .nav-brand-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#mainNavbar .nav-brand-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--nav-white);
+  line-height: 1.1;
+}
+
+#mainNavbar .nav-brand-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: var(--nav-gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* CENTER BANNER SECTION */
+#mainNavbar .nav-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  height: 100%;
+  padding: 0 20px;
+}
+
+#mainNavbar .mits-banner-img {
+  height: 60px;
+  width: auto;
+  max-width: 480px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+/* RIGHT NAVIGATION LINKS */
+#mainNavbar .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+#mainNavbar .nav-links a {
+  color: var(--nav-white-muted);
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+#mainNavbar .nav-links a:hover {
+  color: var(--nav-gold-light);
+  border-color: rgba(201, 168, 76, 0.3);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+#mainNavbar .nav-links a.active {
+  color: var(--nav-gold-light);
+  border-color: var(--nav-gold);
+  background: rgba(201, 168, 76, 0.12);
+}
+
+#mainNavbar .nav-links a.btn-primary {
+  background: var(--nav-gold);
+  color: var(--nav-navy);
+  font-weight: 600;
+  border-color: var(--nav-gold);
+}
+
+#mainNavbar .nav-links a.btn-primary:hover {
+  background: var(--nav-gold-light);
+  border-color: var(--nav-gold-light);
+  color: var(--nav-navy);
+  transform: translateY(-1px);
+}
+
+#mainNavbar #welcomeUser {
+  color: var(--nav-gold-light);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+/* Role badge inside navbar (specific to my-items page etc) */
+#mainNavbar .nav-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid var(--nav-border);
+  color: var(--nav-gold-light);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 10px;
+}
+
+#mainNavbar .nav-role-badge .rbadge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nav-gold);
+  box-shadow: 0 0 8px var(--nav-gold);
+  animation: pulseRoleDot 2s infinite;
+}
+
+@keyframes pulseRoleDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(201, 168, 76, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(201, 168, 76, 0); }
+}
+
+/* Google Translate styling inside header */
+#mainNavbar #google_translate_element {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  display: flex;
+  align-items: center;
+  height: 32px;
+}
+
+/* Override Google defaults */
+.goog-logo-link, .goog-te-gadget span { display: none !important; }
+.goog-te-gadget { color: transparent !important; font-size: 0 !important; }
+.goog-te-combo {
+  background: transparent !important;
+  color: var(--nav-white) !important;
+  border: none !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.goog-te-combo option {
+  background: var(--nav-navy) !important;
+  color: var(--nav-white) !important;
+}
+
+/* MOBILE HEADER TRIGGER */
+#mainNavbar .hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--nav-gold-light);
+  font-size: 26px;
+  cursor: pointer;
+  padding: 8px;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+  z-index: 10;
+}
+
+#mainNavbar .hamburger-btn:hover {
+  background: rgba(201, 168, 76, 0.1);
+}
+
+#mainNavbar .hamburger-btn:focus-visible {
+  outline: 2px solid var(--nav-gold);
+  outline-offset: 2px;
+}
+
+
+/* ==========================================
+   MOBILE SIDE DRAWER & OVERLAY
+   ========================================== */
+
+#drawerOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1999;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#drawerOverlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#mobileDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: 0;
+  width: 82vw;
+  max-width: 320px;
+  min-width: 260px;
+  height: 100vh;
+  z-index: 2000;
+  background: #ffffff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.30s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: 'Poppins', sans-serif !important;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#mobileDrawer.active {
+  transform: translateX(0);
+}
+
+/* Redesigned Header */
+.m-drawer-header {
+  height: 120px;
+  background: linear-gradient(185deg, #162447 0%, #1f4068 100%);
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 16px 20px;
+  flex-shrink: 0;
+  color: white;
+  box-shadow: 0 4px 15px rgba(22, 36, 71, 0.15);
+}
+
+.m-header-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2.5px solid rgba(244, 201, 93, 0.65);
+  background: white;
+  padding: 2px;
+  margin-bottom: 4px;
+}
+
+.m-header-title {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+
+.m-header-subtitle {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 10px;
+  color: #f4c95d;
+  opacity: 0.95;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.drawer-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s, transform 0.3s ease;
+  z-index: 10;
+}
+
+.drawer-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.drawer-close-btn:hover svg {
+  transform: rotate(90deg);
+}
+
+/* Redesigned Body */
+.drawer-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* Profile Section */
+.m-profile-section {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.m-profile-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.m-profile-avatar.guest {
+  background: #f1f5f9;
+  border: 1.5px solid #e2e8f0;
+}
+
+.m-profile-avatar.user {
+  background: linear-gradient(135deg, #162447 0%, #1f4068 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 4px 10px rgba(22, 36, 71, 0.15);
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.m-avatar-initials {
+  font-family: 'Poppins', sans-serif;
+}
+
+.m-online-indicator {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 10px;
+  height: 10px;
+  background: #4caf50;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.35);
+  animation: pulseOnline 2s infinite;
+}
+
+@keyframes pulseOnline {
+  0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.m-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.m-profile-welcome {
+  font-size: 10.5px;
+  color: #718096;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.m-profile-name {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.m-profile-email {
+  font-size: 11px;
+  color: #718096;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.m-profile-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.m-profile-btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-profile-btn.login {
+  background: #f1f5f9;
+  color: #162447;
+  border: 1.2px solid #e2e8f0;
+}
+
+.m-profile-btn.login:hover {
+  background: #e2e8f0;
+}
+
+.m-profile-btn.register {
+  background: #f4c95d;
+  color: #162447;
+}
+
+.m-profile-btn.register:hover {
+  background: #e5bc4b;
+}
+
+/* Redesigned Menu List Card */
+.m-menu-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 8px;
+  margin: 0 12px 20px;
+  border: 1.5px solid rgba(0,0,0,0.035);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.015);
+}
+
+.drawer-link {
+  height: 50px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 14px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: #1e293b !important;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 4px solid transparent !important;
+  border-right: none !important;
+  margin-bottom: 2px;
+  position: relative;
+}
+
+.drawer-link:hover {
+  background: rgba(244, 201, 93, 0.12) !important;
+  color: #162447 !important;
+  transform: translateY(-2px);
+}
+
+.drawer-link.active {
+  background: #162447 !important;
+  color: #ffffff !important;
+  border-left: 4px solid #f4c95d !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(22, 36, 71, 0.15);
+}
+
+.drawer-link:active {
+  transform: scale(0.97);
+  background: rgba(22, 36, 71, 0.05);
+}
+
+.drawer-link .icon {
+  font-size: 20px !important;
+  width: 22px !important;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f4c95d;
+  transition: transform 0.2s ease;
+}
+
+.drawer-link:hover .icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.drawer-link.active .icon {
+  color: #f4c95d;
+}
+
+/* Custom Dark Toggle switch style */
+.m-dark-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.m-toggle-switch {
+  width: 42px;
+  height: 22px;
+  background: #cbd5e1;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.m-toggle-switch.active {
+  background: #f4c95d;
+}
+
+.m-toggle-knob {
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.m-toggle-switch.active .m-toggle-knob {
+  left: 23px;
+}
+
+/* Google Translate target container inside link */
+.m-lang-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.m-translate-target {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.goog-te-combo {
+  background: transparent !important;
+  color: #1e293b !important;
+  border: none !important;
+  outline: none !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  text-align: right !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+}
+
+.goog-te-gadget {
+  margin: 0 !important;
+}
+
+/* Redesigned Bottom Footer */
+.m-drawer-bottom {
+  margin-top: auto;
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: #fafafc;
+  border-top: 1px solid rgba(0,0,0,0.04);
+  flex-shrink: 0;
+}
+
+.m-bottom-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.m-version {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.m-bottom-logo {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.6;
+}
+
+.m-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.m-bottom-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.m-bottom-links a:hover {
+  color: #162447;
+}
+
+.m-dot {
+  color: #cbd5e1;
+}
+
+/* Scroll prevention on body */
+body.drawer-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+/* ── Dark Theme Variables & Overrides ── */
+body.dark-theme {
+  background-color: #0b132b !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .navbar {
+  background: #090e1e !important;
+  border-color: rgba(244, 201, 93, 0.15) !important;
+}
+
+body.dark-theme #mobileDrawer {
+  background: #0f172a;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .m-drawer-header {
+  background: linear-gradient(185deg, #090e1e 0%, #0f172a 100%);
+  border-bottom: 1.5px solid rgba(244, 201, 93, 0.15);
+}
+
+body.dark-theme .m-profile-section {
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+
+body.dark-theme .m-profile-name {
+  color: #f8fafc;
+}
+
+body.dark-theme .m-profile-welcome,
+body.dark-theme .m-profile-email {
+  color: #94a3b8;
+}
+
+body.dark-theme .m-profile-avatar.guest {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-theme .m-profile-btn.login {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+body.dark-theme .m-profile-btn.login:hover {
+  background: #334155;
+}
+
+body.dark-theme .m-menu-card {
+  background: #1e293b;
+  border-color: rgba(255,255,255,0.03);
+}
+
+body.dark-theme .drawer-link {
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .drawer-link:hover {
+  background: rgba(244, 201, 93, 0.08) !important;
+  color: #f4c95d !important;
+}
+
+body.dark-theme .drawer-link.active {
+  background: #f4c95d !important;
+  color: #162447 !important;
+  border-left-color: #ffffff !important;
+}
+
+body.dark-theme .drawer-link.active .icon {
+  color: #162447 !important;
+}
+
+body.dark-theme .m-drawer-bottom {
+  background: #0f172a;
+  border-top-color: rgba(255,255,255,0.06);
+}
+
+body.dark-theme .m-bottom-links a:hover {
+  color: #f4c95d;
+}
+
+body.dark-theme .goog-te-combo {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .goog-te-combo option {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .reg-card {
+  background: #0f172a !important;
+  border-color: rgba(255,255,255,0.05) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+}
+
+body.dark-theme input {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+body.dark-theme input:focus {
+  border-color: #f4c95d !important;
+}
+
+body.dark-theme .field-label {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .div-text,
+body.dark-theme .m-card-title {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .m-card-sub,
+body.dark-theme .field-hint {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .terms-row {
+  background: #131b2e !important;
+  border-color: rgba(244, 201, 93, 0.1) !important;
+}
+
+body.dark-theme .terms-text {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .card-footer p {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .btn-primary {
+  background: #f4c95d !important;
+  color: #162447 !important;
+}
+
+
+/* ==========================================
+   RESPONSIVE DESIGN BREAKPOINTS
+   ========================================== */
+
+/* Laptop (992px to 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  #mainNavbar.navbar {
+    padding: 0 24px;
+    height: 90px;
+  }
+  #mainNavbar .mits-banner-img {
+    max-width: 420px;
+  }
+  #mainNavbar .nav-links {
+    gap: 4px;
+  }
+  #mainNavbar .nav-links a {
+    padding: 6px 10px;
+    font-size: 12.5px;
+  }
+}
+
+/* Below Laptop View (Mobile/Tablet < 992px) */
+@media (max-width: 991px) {
+  #mainNavbar.navbar {
+    height: 75px; /* Mobile height */
+    padding: 0 16px;
+    justify-content: center; /* Center content (MITS Banner) */
+  }
+
+  /* Hamburger Left-Aligned */
+  #mainNavbar .hamburger-btn {
+    display: flex;
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Hide Desktop links */
+  #mainNavbar .nav-links {
+    display: none;
+  }
+
+  /* Centered Banner always */
+  #mainNavbar .nav-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    padding: 0;
+    max-width: 320px;
+  }
+
+  #mainNavbar .mits-banner-img {
+    height: 48px;
+    max-width: 320px;
+  }
+
+  /* Show Logo Icon only, hide brand text, aligned next to hamburger */
+  #mainNavbar .nav-brand {
+    position: absolute;
+    left: 72px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  #mainNavbar .nav-brand-text-container {
+    display: none !important; /* Hide long text */
+  }
+
+  #mainNavbar .mits-logo {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Tablet (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  #mainNavbar .nav-center {
+    max-width: 320px;
+  }
+  #mainNavbar .mits-banner-img {
+    max-width: 320px;
+  }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 767px) {
+  #mainNavbar .nav-center {
+    max-width: 240px;
+  }
+  #mainNavbar .mits-banner-img {
+    height: 42px;
+    max-width: 240px;
+  }
+  /* On small screens, logo image may overlap, let's keep logo icon hidden on very small screens or make it fit */
+  #mainNavbar .mits-logo {
+    width: 34px;
+    height: 34px;
+  }
+  #mainNavbar .nav-brand {
+    left: 64px;
+  }
+}
+
+/* Small Mobile (< 480px) */
+@media (max-width: 479px) {
+  #mainNavbar .nav-center {
+    max-width: 190px;
+  }
+  #mainNavbar .mits-banner-img {
+    height: 36px;
+    max-width: 190px;
+  }
+  /* Hide logo icon to save critical space on extremely narrow screens (<480px) */
+  #mainNavbar .nav-brand {
+    display: none;
+  }
+}
