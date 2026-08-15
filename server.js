@@ -81,16 +81,14 @@ app.use(userRoutes); // Fallback router serving index and static pages
 // Global Error Handler Middleware
 app.use(errorHandler);
 
-// Connect to MongoDB Database and start server
+// Connect to MongoDB Database
 connectDB().then(() => {
   // Run migration backfill for existing DB items
   setTimeout(runStartupMigration, 1000);
-
-  // Start the Express server
-  app.listen(PORT, () => {
-    console.log(`Server running in ${isProduction ? "production" : "development"} mode on port ${PORT}`);
-  });
 });
+
+// Export Express app for Vercel
+module.exports = app;
 
 /* ================= AUTO DELETE OLD COLLECTED (30 days limit) ================= */
 setInterval(async () => {
