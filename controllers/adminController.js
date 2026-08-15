@@ -54,35 +54,111 @@ async function deleteCollected(req, res) {
   }
 }
 
-// Delete Record and associated file
+const User = require('../models/User');
+
+// Delete Record and associated file (supports both active Items and Collected records)
 async function clearRecord(req, res) {
   try {
     const { record_id } = req.params;
-    const record = await Collected.findById(record_id);
+    let record = await Item.findById(record_id);
+    let isItem = true;
+
+    if (!record) {
+      record = await Collected.findById(record_id);
+      isItem = false;
+    }
+
     if (!record) {
       return res.status(404).json({
+        success: false,
         message: "Record not found"
       });
     }
 
-    const imagePath = path.join(__dirname, "../public/uploads", record.image);
-    try {
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
+    if (record.image) {
+      const imagePath = path.join(__dirname, "../public/uploads", record.image);
+      try {
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      } catch (err) {
+        console.log("Image not found or already deleted:", err.message);
       }
-    } catch (err) {
-      console.log("Image not found or already deleted:", err.message);
     }
 
-    await Collected.findByIdAndDelete(record_id);
+    if (isItem) {
+      await Item.findByIdAndDelete(record_id);
+    } else {
+      await Collected.findByIdAndDelete(record_id);
+    }
+
     res.json({
+      success: true,
       message: "Deleted successfully"
     });
   } catch (err) {
     console.error("Clear Record Error:", err);
     res.status(500).json({
+      success: false,
       message: "Server error"
     });
+  }
+}
+
+// Delete Active Item POST (from Admin view)
+async function deleteItem(req, res) {
+  try {
+    const itemId = req.body.itemId || req.body.id;
+    const record = await Item.findById(itemId);
+    if (record && record.image) {
+      const imagePath = path.join(__dirname, "../public/uploads", record.image);
+      try {
+        if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+      } catch (e) {}
+    }
+    await Item.findByIdAndDelete(itemId);
+    res.redirect("/admin.html");
+  } catch (err) {
+    console.error("Delete Item Error:", err);
+    res.status(500).send("Failed to delete item");
+  }
+}
+
+// Get All Users API (Admin only)
+async function getUsers(req, res) {
+  try {
+    const users = await User.find({}, { password: 0 }).sort({ createdAt: -1 });
+    res.json(users);
+  } catch (err) {
+    console.error("Get Users Error:", err);
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+}
+
+// Delete User POST (Admin only)
+async function deleteUser(req, res) {
+  try {
+    const userId = req.body.itemId || req.body.userId || req.body.id;
+    await User.findByIdAndDelete(userId);
+    res.redirect("/admin.html");
+  } catch (err) {
+    console.error("Delete User Error:", err);
+    res.status(500).send("Failed to delete user");
+  }
+}
+
+// Update User Role POST (Admin only)
+async function updateRole(req, res) {
+  try {
+    const { userId, role } = req.body;
+    if (!["user", "manager", "admin"].includes(role)) {
+      return res.status(400).json({ success: false, message: "Invalid role specified" });
+    }
+    await User.findByIdAndUpdate(userId, { role });
+    res.json({ success: true, message: "Role updated successfully" });
+  } catch (err) {
+    console.error("Update Role Error:", err);
+    res.status(500).json({ success: false, message: "Failed to update role" });
   }
 }
 
@@ -379,6 +455,10 @@ async function getAnalytics(req, res) {
 module.exports = {
   markCollected,
   deleteCollected,
+  deleteItem,
+  getUsers,
+  deleteUser,
+  updateRole,
   clearRecord,
   getStats,
   getAnalytics

@@ -3,20 +3,24 @@ const path = require('path');
 const storage = require('../config/multer');
 
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = /jpeg|jpg|png|webp|gif/;
-  const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedExtensions.test(file.mimetype);
+  if (!file || !file.originalname) return cb(null, true);
+  
+  const ext = path.extname(file.originalname).toLowerCase().replace('.', '');
+  const allowedExtensions = ['jpeg', 'jpg', 'png', 'webp', 'gif', 'bmp', 'heic', 'heif', 'jfif', 'svg'];
+  const isImageMime = file.mimetype && file.mimetype.startsWith('image/');
+  const isAllowedExt = allowedExtensions.includes(ext);
 
-  if (extname && mimetype) {
+  if (isImageMime || isAllowedExt) {
     cb(null, true);
   } else {
-    cb(new Error("Only image files (JPG, PNG, WEBP, GIF) are allowed!"), false);
+    // Skip invalid file without aborting the report form submission
+    cb(null, false);
   }
 };
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB max
   fileFilter
 });
 

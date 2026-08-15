@@ -6,7 +6,14 @@ const { getCurrentCycle, parseUserEmail } = require('../utils/helper');
 // Submit Lost Item
 async function submitLost(req, res) {
   try {
+    if (!req.session || !req.session.userId) {
+      return res.redirect("/login.html");
+    }
+
     const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.redirect("/login.html");
+    }
 
     const item = new Item({
       name: req.body.name,
@@ -36,7 +43,15 @@ async function submitLost(req, res) {
 // Submit Found Item
 async function submitFound(req, res) {
   try {
+    if (!req.session || !req.session.userId) {
+      return res.redirect("/login.html");
+    }
+
     const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.redirect("/login.html");
+    }
+
     const details = parseUserEmail(user.email);
 
     const item = new Item({

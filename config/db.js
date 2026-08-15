@@ -1,3 +1,6 @@
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']);
+
 const mongoose = require('mongoose');
 
 async function initializeDatabase(db) {
@@ -80,9 +83,9 @@ async function initializeDatabase(db) {
 
 function connectDB() {
   const uri = process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/findmything";
-  return mongoose.connect(uri)
+  return mongoose.connect(uri, { dbName: "findmything" })
     .then(async () => {
-      console.log("MongoDB Connected");
+      console.log(`MongoDB Connected: ${mongoose.connection.name}`);
       await initializeDatabase(mongoose.connection.db);
     })
     .catch(err => {
