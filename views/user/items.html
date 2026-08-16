@@ -1,908 +1,2308 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All Items — MITS FindMyThing Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/navbar.css">
-<style>
-:root {
-  --navy:   #1a2744;
-  --navy2:  #243058;
-  --gold:   #c9a84c;
-  --gold2:  #e8c97a;
-  --cream:  #faf7f0;
-  --white:  #ffffff;
-  --muted:  #6b7280;
-  --border: #e2e8f0;
-  --lost:   #e74c3c;
-  --lost-bg:#fef2f0;
-  --found:  #2980b9;
-  --found-bg:#eef6fc;
-  --shadow: 0 4px 24px rgba(26,39,68,0.10);
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Items — MITS FindMyThing Portal</title>
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/navbar.css">
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--cream);
-  color: var(--navy);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+  <style>
+    :root {
+      --navy: #1a2744;
+      --navy2: #243058;
+      --gold: #c9a84c;
+      --gold2: #e8c97a;
+      --cream: #faf7f0;
+      --white: #ffffff;
+      --muted: #6b7280;
+      --border: #e2e8f0;
+      --lost: #e74c3c;
+      --lost-bg: #fef2f0;
+      --found: #2980b9;
+      --found-bg: #eef6fc;
+      --shadow: 0 4px 24px rgba(26, 39, 68, 0.10);
+    }
 
-/* ── Background ── */
-.bg-layer {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none; overflow: hidden;
-}
-.bg-layer::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 5% 10%,  rgba(201,168,76,0.07) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 70% at 95% 90%, rgba(26,39,68,0.05)   0%, transparent 55%);
-}
-.bg-dots {
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(201,168,76,0.11) 1px, transparent 1px);
-  background-size: 38px 38px;
-}
-.bg-ring {
-  position: absolute; border-radius: 50%;
-  border: 1px solid rgba(201,168,76,0.09);
-}
-.br1 { width:600px; height:600px; top:-200px; right:-160px; animation: spin 70s linear infinite; }
-.br2 { width:420px; height:420px; bottom:0;   left:-120px; animation: spin 90s linear infinite reverse; }
-@keyframes spin { to { transform: rotate(360deg); } }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* ── Navbar ── */
-.navbar {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(26,39,68,0.97);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(201,168,76,0.25);
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 0 36px; height: 64px;
-  animation: slideDown 0.6s ease both;
-}
-.navbar::after {
-  content: '';
-  position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 4s linear infinite;
-}
-@keyframes slideDown { from { transform:translateY(-100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
-@keyframes shimmer   { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    html {
+      scroll-behavior: smooth;
+    }
 
-.nav-brand {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px; font-weight: 700; color: var(--white);
-  display: flex; align-items: center; gap: 10px;
-}
-.nav-brand span { color: var(--gold); }
-.nav-brand-sub {
-  font-size: 11px; color: var(--gold);
-  letter-spacing: 2px; text-transform: uppercase; font-weight: 400;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-.nav-links { display: flex; gap: 4px; align-items: center; }
-.nav-links a {
-  color: rgba(255,255,255,0.72); text-decoration: none;
-  font-size: 13px; font-weight: 400;
-  padding: 7px 14px; border-radius: 7px;
-  border: 1px solid transparent; transition: all 0.2s;
-}
-.nav-links a:hover { color: var(--gold2); border-color: rgba(201,168,76,0.28); background: rgba(201,168,76,0.07); }
-.nav-links a.active { background: var(--gold); color: var(--navy); font-weight: 600; border-color: var(--gold); }
+    /* Background */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
 
-#google_translate_element { background: rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 5px; font-size: 11px; border: 1px solid rgba(201,168,76,0.2); }
-.goog-logo-link, .goog-te-gadget span { display: none !important; }
-.goog-te-gadget { color: transparent !important; }
+    .bg-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 5% 10%,
+          rgba(201, 168, 76, 0.07) 0%,
+          transparent 55%),
+        radial-gradient(ellipse 60% 70% at 95% 90%,
+          rgba(26, 39, 68, 0.05) 0%,
+          transparent 55%);
+    }
 
-/* ── Page wrapper ── */
-.page { position: relative; z-index: 1; padding: 36px 40px 60px; max-width: 1400px; margin: 0 auto; }
+    .bg-dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle,
+          rgba(201, 168, 76, 0.11) 1px,
+          transparent 1px);
+      background-size: 38px 38px;
+    }
 
-/* ── Page header ── */
-.page-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  flex-wrap: wrap; gap: 20px;
-  margin-bottom: 28px;
-  animation: fadeUp 0.6s ease both;
-}
-.page-header-left .breadcrumb {
-  font-size: 12px; color: var(--muted); margin-bottom: 8px;
-  display: flex; align-items: center; gap: 6px;
-}
-.page-header-left .breadcrumb a { color: var(--gold); text-decoration: none; }
-.page-header-left h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px; font-weight: 700; color: var(--navy);
-}
-.page-header-left p { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+    .bg-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.09);
+    }
 
-.header-stats { display: flex; gap: 12px; }
-.hstat {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 20px; text-align: center;
-  box-shadow: 0 2px 12px rgba(26,39,68,0.06);
-  min-width: 90px;
-}
-.hstat .snum { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--navy); font-weight: 700; display: block; }
-.hstat .slbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
-.hstat.lost-stat .snum { color: var(--lost); }
-.hstat.found-stat .snum { color: var(--found); }
+    .br1 {
+      width: 600px;
+      height: 600px;
+      top: -200px;
+      right: -160px;
+      animation: spin 70s linear infinite;
+    }
 
-/* ── Filters card ── */
-.filters-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 22px 26px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow);
-  animation: fadeUp 0.6s 0.1s ease both;
-}
+    .br2 {
+      width: 420px;
+      height: 420px;
+      bottom: 0;
+      left: -120px;
+      animation: spin 90s linear infinite reverse;
+    }
 
-.filters-label {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
-}
-.filters-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-.filters-row {
-  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
-}
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(26, 39, 68, 0.97);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      height: 64px;
+      animation: slideDown 0.6s ease both;
+    }
 
-.filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 160px; }
-.filter-group label { font-size: 11.5px; font-weight: 600; color: var(--navy); letter-spacing: 0.4px; text-transform: uppercase; }
+    .navbar::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+          transparent,
+          var(--gold),
+          var(--gold2),
+          var(--gold),
+          transparent);
+      background-size: 200% 100%;
+      animation: shimmer 4s linear infinite;
+    }
 
-.filter-group input,
-.filter-group select {
-  padding: 9px 13px;
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13.5px; color: var(--navy);
-  background: #f8fafc;
-  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-}
-.filter-group input:focus,
-.filter-group select:focus {
-  border-color: var(--navy);
-  background: var(--white);
-  box-shadow: 0 0 0 3px rgba(26,39,68,0.07);
-}
-.filter-group input::placeholder { color: #b0b8c9; }
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
 
-.btn-reset {
-  padding: 9px 20px;
-  background: transparent;
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px; color: var(--muted);
-  cursor: pointer; transition: all 0.2s;
-  white-space: nowrap;
-}
-.btn-reset:hover { border-color: var(--navy); color: var(--navy); background: rgba(26,39,68,0.04); }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
 
-/* Active filter pills */
-.active-filters {
-  display: flex; flex-wrap: wrap; gap: 8px;
-  margin-top: 12px;
-}
-.filter-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(201,168,76,0.1);
-  border: 1px solid rgba(201,168,76,0.3);
-  border-radius: 100px;
-  padding: 4px 12px;
-  font-size: 12px; color: #8a6b1e; font-weight: 500;
-}
-.filter-pill button {
-  background: none; border: none; cursor: pointer;
-  color: #8a6b1e; font-size: 14px; line-height: 1;
-  padding: 0; transition: color 0.2s;
-}
-.filter-pill button:hover { color: var(--lost); }
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
 
-/* ── Tab switcher ── */
-.tab-bar {
-  display: flex; gap: 0;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 5px;
-  margin-bottom: 24px;
-  box-shadow: 0 2px 12px rgba(26,39,68,0.06);
-  animation: fadeUp 0.6s 0.15s ease both;
-  width: fit-content;
-}
+      100% {
+        background-position: -200% 0;
+      }
+    }
 
-.tab-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 28px;
-  border-radius: 10px; border: none;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px; font-weight: 500;
-  cursor: pointer; transition: all 0.25s;
-  background: transparent; color: var(--muted);
-}
-.tab-btn:hover { color: var(--navy); }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.tab-btn.active-lost {
-  background: linear-gradient(135deg, var(--lost), #c0392b);
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(231,76,60,0.3);
-}
+    .nav-brand span {
+      color: var(--gold);
+    }
 
-.tab-btn.active-found {
-  background: linear-gradient(135deg, var(--found), #1a6fa8);
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(41,128,185,0.3);
-}
+    .nav-brand-sub {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
 
-.tab-btn.active-all {
-  background: linear-gradient(135deg, var(--navy), var(--navy2));
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(26,39,68,0.3);
-}
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
 
-.tab-count {
-  font-size: 11px; font-weight: 700;
-  padding: 2px 8px; border-radius: 100px;
-  background: rgba(255,255,255,0.25);
-}
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      padding: 7px 14px;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
 
-/* ── Table section ── */
-.table-section { animation: fadeUp 0.6s 0.2s ease both; }
+    .nav-links a:hover {
+      color: var(--gold2);
+      border-color: rgba(201, 168, 76, 0.28);
+      background: rgba(201, 168, 76, 0.07);
+    }
 
-.table-section-title {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 14px;
-}
+    .nav-links a.active {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 600;
+      border-color: var(--gold);
+    }
 
-.tsect-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0;
-}
-.tsect-icon.lost-icon  { background: rgba(231,76,60,0.1);  color: var(--lost); }
-.tsect-icon.found-icon { background: rgba(41,128,185,0.1); color: var(--found); }
-.tsect-icon.all-icon   { background: rgba(26,39,68,0.08);  color: var(--navy); }
+    #google_translate_element {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
 
-.tsect-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: var(--navy); }
-.tsect-sub   { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .goog-logo-link,
+    .goog-te-gadget span {
+      display: none !important;
+    }
 
-.table-card {
-  background: var(--white);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  margin-bottom: 36px;
-}
+    .goog-te-gadget {
+      color: transparent !important;
+    }
 
-.table-card.lost-card  { border-top: 3px solid var(--lost); }
-.table-card.found-card { border-top: 3px solid var(--found); }
-.table-card.all-card   { border-top: 3px solid var(--gold); }
+    /* Page */
+    .page {
+      position: relative;
+      z-index: 1;
+      padding: 36px 40px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
-.table-scroll { overflow-x: auto; }
+    /* Page Header */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
 
-table {
-  width: 100%; border-collapse: collapse;
-  font-size: 13.5px;
-}
+    .page-header-left .breadcrumb {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-thead th {
-  background: #f8fafc;
-  color: var(--navy);
-  padding: 12px 16px;
-  font-weight: 600;
-  font-size: 11.5px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-  position: sticky; top: 0; z-index: 2;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.2s;
-}
-thead th:hover { background: #f0f4f8; }
+    .page-header-left .breadcrumb a {
+      color: var(--gold);
+      text-decoration: none;
+    }
 
-thead th .sort-icon { margin-left: 5px; opacity: 0.4; font-size: 10px; }
-thead th.sorted .sort-icon { opacity: 1; color: var(--gold); }
+    .page-header-left h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy);
+    }
 
-tbody td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #f0f3f8;
-  color: var(--navy); vertical-align: middle;
-  text-align: center;
-}
-tbody tr:last-child td { border-bottom: none; }
+    .page-header-left p {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
 
-tbody tr {
-  transition: background 0.15s;
-}
-tbody tr:hover { background: #f8fafd; }
+    .header-stats {
+      display: flex;
+      gap: 12px;
+    }
 
-.empty-row td {
-  padding: 40px 20px; text-align: center;
-  color: var(--muted); font-size: 14px;
-  font-style: italic;
-}
+    .hstat {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(26, 39, 68, 0.06);
+      min-width: 90px;
+    }
 
-/* ── Badges ── */
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 12px; border-radius: 100px;
-  font-size: 11.5px; font-weight: 600; letter-spacing: 0.3px;
-}
-.badge-lost  { background: var(--lost-bg);  color: #c0392b; border: 1px solid rgba(231,76,60,0.2); }
-.badge-found { background: var(--found-bg); color: #1a6fa8; border: 1px solid rgba(41,128,185,0.2); }
+    .hstat .snum {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--navy);
+      font-weight: 700;
+      display: block;
+    }
 
-/* ── Status ── */
-.status-dot {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 500;
-}
-.sdot {
-  width: 8px; height: 8px; border-radius: 50%;
-}
-.sdot-active { background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,0.2); }
-.sdot-inactive { background: #94a3b8; }
+    .hstat .slbl {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
 
-/* ── Table image ── */
-.table-img {
-  width: 52px; height: 52px;
-  border-radius: 10px;
-  object-fit: cover;
-  cursor: pointer;
-  border: 2px solid var(--border);
-  transition: all 0.2s;
-}
-.table-img:hover { transform: scale(1.12); border-color: var(--gold); box-shadow: 0 4px 16px rgba(201,168,76,0.3); }
+    .hstat.lost-stat .snum {
+      color: var(--lost);
+    }
 
-.no-img {
-  width: 52px; height: 52px; border-radius: 10px;
-  background: #f0f3f8; border: 1px dashed var(--border);
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 20px; color: #cbd5e1;
-}
+    .hstat.found-stat .snum {
+      color: var(--found);
+    }
 
-/* ── Modal ── */
-.modal {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.88);
-  justify-content: center; align-items: center;
-  z-index: 9000; padding: 24px;
-  backdrop-filter: blur(6px);
-}
-.modal.open { display: flex; animation: modalIn 0.25s ease both; }
-@keyframes modalIn { from { opacity:0; transform:scale(0.93); } to { opacity:1; transform:scale(1); } }
+    /* Filters */
+    .filters-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 26px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
 
-.modal-inner {
-  position: relative;
-  max-width: 720px; width: 100%;
-  background: var(--white); border-radius: 20px;
-  overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-}
-.modal-img-wrap { text-align: center; background: #0a0f1a; padding: 20px; }
-.modal-img-wrap img { max-width: 100%; max-height: 480px; border-radius: 10px; object-fit: contain; display: block; margin: 0 auto; }
-.modal-info { padding: 20px 24px; }
-.modal-item-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-.modal-item-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
-.modal-close {
-  position: absolute; top: 14px; right: 16px;
-  background: rgba(0,0,0,0.5); border: none; border-radius: 50%;
-  width: 34px; height: 34px; font-size: 18px;
-  color: white; cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: background 0.2s;
-}
-.modal-close:hover { background: rgba(0,0,0,0.75); }
+    .filters-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-/* ── Empty state ── */
-.empty-state {
-  text-align: center; padding: 60px 40px;
-  display: none;
-}
-.empty-state.show { display: block; }
-.empty-state-icon { font-size: 52px; margin-bottom: 16px; opacity: 0.5; }
-.empty-state h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--navy); margin-bottom: 6px; }
-.empty-state p  { font-size: 13.5px; color: var(--muted); }
+    .filters-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
 
-/* ── Count bar ── */
-.count-bar {
-  padding: 12px 20px;
-  background: #f8fafc;
-  border-top: 1px solid var(--border);
-  font-size: 12.5px; color: var(--muted);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.count-bar strong { color: var(--navy); }
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
 
-/* ── Animations ── */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(20px); }
-  to   { opacity:1; transform:translateY(0); }
-}
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 160px;
+    }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  .page { padding: 20px 16px 40px; }
-  .navbar { padding: 0 16px; }
-  .filters-row { flex-direction: column; }
-  .header-stats { display: none; }
-  .tab-btn { padding: 9px 16px; font-size: 13px; }
-}
-</style>
+    .filter-group label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 9px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--navy);
+      background: #f8fafc;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: var(--navy);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(26, 39, 68, 0.07);
+    }
+
+    .filter-group input::placeholder {
+      color: #b0b8c9;
+    }
+
+    .btn-reset {
+      padding: 9px 20px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-reset:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+      background: rgba(26, 39, 68, 0.04);
+    }
+
+    /* Active filters */
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(201, 168, 76, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: #8a6b1e;
+      font-weight: 500;
+    }
+
+    .filter-pill button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8a6b1e;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .filter-pill button:hover {
+      color: var(--lost);
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(26, 39, 68, 0.06);
+      animation: fadeUp 0.6s 0.15s ease both;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 28px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .tab-btn:hover {
+      color: var(--navy);
+    }
+
+    .tab-btn.active-lost {
+      background: linear-gradient(135deg, var(--lost), #c0392b);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(231, 76, 60, 0.3);
+    }
+
+    .tab-btn.active-found {
+      background: linear-gradient(135deg, var(--found), #1a6fa8);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(41, 128, 185, 0.3);
+    }
+
+    .tab-btn.active-all {
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(26, 39, 68, 0.3);
+    }
+
+    .tab-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Table */
+    .table-section {
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .table-section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tsect-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .tsect-icon.lost-icon {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--lost);
+    }
+
+    .tsect-icon.found-icon {
+      background: rgba(41, 128, 185, 0.1);
+      color: var(--found);
+    }
+
+    .tsect-icon.all-icon {
+      background: rgba(26, 39, 68, 0.08);
+      color: var(--navy);
+    }
+
+    .tsect-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .tsect-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .table-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+
+    .table-card.lost-card {
+      border-top: 3px solid var(--lost);
+    }
+
+    .table-card.found-card {
+      border-top: 3px solid var(--found);
+    }
+
+    .table-card.all-card {
+      border-top: 3px solid var(--gold);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    thead th {
+      background: #f8fafc;
+      color: var(--navy);
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 11.5px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    thead th:hover {
+      background: #f0f4f8;
+    }
+
+    thead th .sort-icon {
+      margin-left: 5px;
+      opacity: 0.4;
+      font-size: 10px;
+    }
+
+    thead th.sorted .sort-icon {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f3f8;
+      color: var(--navy);
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr {
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover {
+      background: #f8fafd;
+    }
+
+    .empty-row td {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-lost {
+      background: var(--lost-bg);
+      color: #c0392b;
+      border: 1px solid rgba(231, 76, 60, 0.2);
+    }
+
+    .badge-found {
+      background: var(--found-bg);
+      color: #1a6fa8;
+      border: 1px solid rgba(41, 128, 185, 0.2);
+    }
+
+    /* Image */
+    .table-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    .table-img:hover {
+      transform: scale(1.12);
+      border-color: var(--gold);
+      box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
+    }
+
+    .no-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: #f0f3f8;
+      border: 1px dashed var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #cbd5e1;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      justify-content: center;
+      align-items: center;
+      z-index: 9000;
+      padding: 24px;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal.open {
+      display: flex;
+      animation: modalIn 0.25s ease both;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.93);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-inner {
+      position: relative;
+      max-width: 720px;
+      width: 100%;
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-img-wrap {
+      text-align: center;
+      background: #0a0f1a;
+      padding: 20px;
+    }
+
+    .modal-img-wrap img {
+      max-width: 100%;
+      max-height: 480px;
+      border-radius: 10px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .modal-info {
+      padding: 20px 24px;
+    }
+
+    .modal-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .modal-item-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.75);
+    }
+
+    /* Count */
+    .count-bar {
+      padding: 12px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      font-size: 12.5px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .count-bar strong {
+      color: var(--navy);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page {
+        padding: 20px 16px 40px;
+      }
+
+      .navbar {
+        padding: 0 16px;
+      }
+
+      .filters-row {
+        flex-direction: column;
+      }
+
+      .header-stats {
+        display: none;
+      }
+
+      .tab-btn {
+        padding: 9px 16px;
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="bg-layer">
-  <div class="bg-dots"></div>
-  <div class="bg-ring br1"></div>
-  <div class="bg-ring br2"></div>
-</div>
-
-<!-- Navbar -->
-<nav class="navbar" id="mainNavbar"></nav>
-
-<!-- Page content -->
-<div class="page">
-
-  <!-- Page header -->
-  <div class="page-header">
-    <div class="page-header-left">
-      <div class="breadcrumb">
-        <a href="/">Portal Home</a>
-        <span>›</span>
-        <span>All Items</span>
-      </div>
-      <h1>Item Registry</h1>
-      <p>Browse all lost and found items submitted to the MITS administration.</p>
-    </div>
-    <div class="header-stats">
-      <div class="hstat">
-        <span class="snum" id="stat-total">—</span>
-        <span class="slbl">Total</span>
-      </div>
-      <div class="hstat lost-stat">
-        <span class="snum" id="stat-lost">—</span>
-        <span class="slbl">Lost</span>
-      </div>
-      <div class="hstat found-stat">
-        <span class="snum" id="stat-found">—</span>
-        <span class="slbl">Found</span>
-      </div>
-    </div>
+  <div class="bg-layer">
+    <div class="bg-dots"></div>
+    <div class="bg-ring br1"></div>
+    <div class="bg-ring br2"></div>
   </div>
 
-  <!-- Filters -->
-  <div class="filters-card">
-    <div class="filters-label">Search &amp; Filter</div>
-    <div class="filters-row">
-      <div class="filter-group" style="flex:2; min-width:220px;">
-        <label>Search by Name / Description</label>
-        <input type="text" id="fSearch" placeholder="e.g. Samsung phone, black wallet...">
+  <!-- Navbar -->
+  <nav class="navbar" id="mainNavbar"></nav>
+
+  <!-- Page -->
+  <div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+
+      <div class="page-header-left">
+
+        <div class="breadcrumb">
+          <a href="/">Portal Home</a>
+          <span>›</span>
+          <span>All Items</span>
+        </div>
+
+        <h1>Item Registry</h1>
+
+        <p>
+          Browse all lost and found items submitted to the MITS administration.
+        </p>
+
       </div>
-      <div class="filter-group">
-        <label>Item Type</label>
-        <select id="fType">
-          <option value="">All Types</option>
-        </select>
+
+      <div class="header-stats">
+
+        <div class="hstat">
+          <span class="snum" id="stat-total">—</span>
+          <span class="slbl">Total</span>
+        </div>
+
+        <div class="hstat lost-stat">
+          <span class="snum" id="stat-lost">—</span>
+          <span class="slbl">Lost</span>
+        </div>
+
+        <div class="hstat found-stat">
+          <span class="snum" id="stat-found">—</span>
+          <span class="slbl">Found</span>
+        </div>
+
       </div>
-      <div class="filter-group">
-        <label>Status</label>
-        <select id="fStatus">
-          <option value="">All</option>
-          <option value="lost">Lost Items</option>
-          <option value="found">Found Items</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Date From</label>
-        <input type="date" id="fDateFrom">
-      </div>
-      <div class="filter-group">
-        <label>Date To</label>
-        <input type="date" id="fDateTo">
-      </div>
-      <div style="padding-top: 20px;">
-        <button class="btn-reset" id="btnReset">✕ Reset</button>
-      </div>
+
     </div>
-    <div class="active-filters" id="activePills"></div>
+
+    <!-- Filters -->
+    <div class="filters-card">
+
+      <div class="filters-label">
+        Search &amp; Filter
+      </div>
+
+      <div class="filters-row">
+
+        <div class="filter-group" style="flex:2; min-width:220px;">
+          <label>Search by Name / Description</label>
+          <input type="text" id="fSearch" placeholder="e.g. Samsung phone, black wallet...">
+        </div>
+
+        <div class="filter-group">
+          <label>Item Type</label>
+
+          <select id="fType">
+            <option value="">All Types</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Status</label>
+
+          <select id="fStatus">
+            <option value="">All</option>
+            <option value="lost">Lost Items</option>
+            <option value="found">Found Items</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Date From</label>
+          <input type="date" id="fDateFrom">
+        </div>
+
+        <div class="filter-group">
+          <label>Date To</label>
+          <input type="date" id="fDateTo">
+        </div>
+
+        <div style="padding-top:20px;">
+          <button class="btn-reset" id="btnReset">
+            ✕ Reset
+          </button>
+        </div>
+
+      </div>
+
+      <div class="active-filters" id="activePills"></div>
+
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+
+      <button class="tab-btn active-all" id="tabAll" onclick="setTab('all')">
+        📋 All Items
+        <span class="tab-count" id="tc-all">0</span>
+      </button>
+
+      <button class="tab-btn" id="tabLost" onclick="setTab('lost')">
+        😞 Lost Items
+        <span class="tab-count" id="tc-lost">0</span>
+      </button>
+
+      <button class="tab-btn" id="tabFound" onclick="setTab('found')">
+        😀 Found Items
+        <span class="tab-count" id="tc-found">0</span>
+      </button>
+
+    </div>
+
+    <!-- ALL -->
+    <div id="view-all">
+
+      <div class="table-section">
+
+        <div class="table-section-title">
+
+          <div class="tsect-icon all-icon">
+            📋
+          </div>
+
+          <div>
+            <div class="tsect-title">
+              All Registered Items
+            </div>
+
+            <div class="tsect-sub">
+              Lost and found items combined
+            </div>
+          </div>
+
+        </div>
+
+        <div class="table-card all-card">
+
+          <div class="table-scroll">
+
+            <table>
+
+              <thead>
+                <tr id="headAll"></tr>
+              </thead>
+
+              <tbody id="bodyAll"></tbody>
+
+            </table>
+
+          </div>
+
+          <div class="count-bar">
+
+            <span>
+              Showing
+              <strong id="countAll">0</strong>
+              items
+            </span>
+
+            <span style="font-size:11px; color:#94a3b8;">
+              Click column headers to sort
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- LOST -->
+    <div id="view-lost" style="display:none;">
+
+      <div class="table-section">
+
+        <div class="table-section-title">
+
+          <div class="tsect-icon lost-icon">
+            😞
+          </div>
+
+          <div>
+
+            <div class="tsect-title">
+              Lost Items
+            </div>
+
+            <div class="tsect-sub">
+              Items reported as missing
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="table-card lost-card">
+
+          <div class="table-scroll">
+
+            <table>
+
+              <thead>
+                <tr id="headLost"></tr>
+              </thead>
+
+              <tbody id="bodyLost"></tbody>
+
+            </table>
+
+          </div>
+
+          <div class="count-bar">
+
+            <span>
+              Showing
+              <strong id="countLost">0</strong>
+              lost items
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOUND -->
+    <div id="view-found" style="display:none;">
+
+      <div class="table-section">
+
+        <div class="table-section-title">
+
+          <div class="tsect-icon found-icon">
+            😀
+          </div>
+
+          <div>
+
+            <div class="tsect-title">
+              Found Items
+            </div>
+
+            <div class="tsect-sub">
+              Items submitted by finders
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="table-card found-card">
+
+          <div class="table-scroll">
+
+            <table>
+
+              <thead>
+                <tr id="headFound"></tr>
+              </thead>
+
+              <tbody id="bodyFound"></tbody>
+
+            </table>
+
+          </div>
+
+          <div class="count-bar">
+
+            <span>
+              Showing
+              <strong id="countFound">0</strong>
+              found items
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
-  <!-- Tab bar -->
-  <div class="tab-bar">
-    <button class="tab-btn active-all" id="tabAll" onclick="setTab('all')">
-      📋 All Items <span class="tab-count" id="tc-all">0</span>
-    </button>
-    <button class="tab-btn" id="tabLost" onclick="setTab('lost')">
-      😞 Lost Items <span class="tab-count" id="tc-lost">0</span>
-    </button>
-    <button class="tab-btn" id="tabFound" onclick="setTab('found')">
-      😀 Found Items <span class="tab-count" id="tc-found">0</span>
-    </button>
+  <!-- Image Modal -->
+  <div id="imgModal" class="modal" onclick="closeModal(event)">
+
+    <div class="modal-inner" onclick="event.stopPropagation()">
+
+      <button class="modal-close" onclick="closeModal()">
+        ✕
+      </button>
+
+      <div class="modal-img-wrap">
+
+        <img id="modalImg" src="" alt="Item image">
+
+      </div>
+
+      <div class="modal-info">
+
+        <div class="modal-item-name" id="modalName"></div>
+
+        <div class="modal-item-desc" id="modalDesc"></div>
+
+      </div>
+
+    </div>
+
   </div>
 
-  <!-- ALL view -->
-  <div id="view-all">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon all-icon">📋</div>
-        <div>
-          <div class="tsect-title">All Registered Items</div>
-          <div class="tsect-sub">Lost and found items combined</div>
-        </div>
+  <script>
+
+    // =====================================================
+    // STATE
+    // =====================================================
+
+    let allItems = [];
+    let filtered = [];
+    let currentTab = 'all';
+    let currentUserRole = '';
+    let sortCol = '';
+    let sortDir = 1;
+
+
+    // =====================================================
+    // HELPERS
+    // =====================================================
+
+    const safe = v =>
+      (v && String(v).trim())
+        ? String(v).trim()
+        : 'N/A';
+
+    const byId = id =>
+      document.getElementById(id);
+
+
+    function getDate(item) {
+      return item.dateLost || item.dateFound || '';
+    }
+
+
+    function isLost(item) {
+      return !!item.lostLocation;
+    }
+
+
+    // =====================================================
+    // IMPORTANT IMAGE FUNCTION
+    // Supports:
+    //
+    // 1. Cloudinary:
+    //    https://res.cloudinary.com/...
+    //
+    // 2. Old local images:
+    //    filename.jpg
+    //
+    // =====================================================
+
+    function getImageUrl(image) {
+
+      if (!image || !String(image).trim()) {
+        return "";
+      }
+
+      const imageValue = String(image).trim();
+
+      // New Cloudinary / external URL
+      if (
+        imageValue.startsWith("https://") ||
+        imageValue.startsWith("http://")
+      ) {
+        return imageValue;
+      }
+
+      // Old locally stored image
+      return `/uploads/${imageValue}`;
+    }
+
+
+    // =====================================================
+    // INIT
+    // =====================================================
+
+    async function init() {
+
+      try {
+
+        const [uRes, iRes] = await Promise.all([
+          fetch('/api/user'),
+          fetch('/api/items')
+        ]);
+
+        const user = await uRes.json();
+        const items = await iRes.json();
+
+        currentUserRole = user.role || '';
+
+        allItems = Array.isArray(items)
+          ? items
+          : [];
+
+        populateTypeFilter();
+
+        applyFilters();
+
+        updateStats(allItems);
+
+      } catch (e) {
+
+        console.error("Items initialization error:", e);
+
+      }
+
+    }
+
+
+    // =====================================================
+    // TYPE FILTER
+    // =====================================================
+
+    function populateTypeFilter() {
+
+      const types = [
+        ...new Set(
+          allItems
+            .map(i => i.type)
+            .filter(Boolean)
+        )
+      ].sort();
+
+      const sel = byId('fType');
+
+      types.forEach(t => {
+
+        const option = document.createElement('option');
+
+        option.value = t;
+        option.textContent = t;
+
+        sel.appendChild(option);
+
+      });
+
+    }
+
+
+    // =====================================================
+    // FILTERS
+    // =====================================================
+
+    function getFilters() {
+
+      return {
+
+        search:
+          byId('fSearch')
+            .value
+            .trim()
+            .toLowerCase(),
+
+        type:
+          byId('fType').value,
+
+        status:
+          byId('fStatus').value,
+
+        dateFrom:
+          byId('fDateFrom').value,
+
+        dateTo:
+          byId('fDateTo').value
+
+      };
+
+    }
+
+
+    function applyFilters() {
+
+      const f = getFilters();
+
+      filtered = allItems.filter(item => {
+
+        const d = getDate(item);
+
+        const txt = [
+          item.name,
+          item.type,
+          item.description,
+          item.lostLocation,
+          item.foundLocation,
+          item.location
+        ]
+          .map(v => (v || '').toLowerCase())
+          .join(' ');
+
+        if (
+          f.search &&
+          !txt.includes(f.search)
+        ) {
+          return false;
+        }
+
+        if (
+          f.type &&
+          item.type !== f.type
+        ) {
+          return false;
+        }
+
+        if (
+          f.status === 'lost' &&
+          !isLost(item)
+        ) {
+          return false;
+        }
+
+        if (
+          f.status === 'found' &&
+          isLost(item)
+        ) {
+          return false;
+        }
+
+        if (
+          f.dateFrom &&
+          d &&
+          d < f.dateFrom
+        ) {
+          return false;
+        }
+
+        if (
+          f.dateTo &&
+          d &&
+          d > f.dateTo
+        ) {
+          return false;
+        }
+
+        return true;
+
+      });
+
+      updatePills(f);
+
+      renderAll();
+
+    }
+
+
+    // =====================================================
+    // FILTER PILLS
+    // =====================================================
+
+    function updatePills(f) {
+
+      const pills = byId('activePills');
+
+      pills.innerHTML = '';
+
+      const add = (key, label) => {
+
+        const pill =
+          document.createElement('span');
+
+        pill.className = 'filter-pill';
+
+        pill.innerHTML =
+          `${label}
+       <button onclick="clearFilter('${key}')">
+         ✕
+       </button>`;
+
+        pills.appendChild(pill);
+
+      };
+
+
+      if (f.search)
+        add('fSearch', `"${f.search}"`);
+
+      if (f.type)
+        add('fType', f.type);
+
+      if (f.status)
+        add(
+          'fStatus',
+          f.status === 'lost'
+            ? 'Lost only'
+            : 'Found only'
+        );
+
+      if (f.dateFrom)
+        add(
+          'fDateFrom',
+          `From: ${f.dateFrom}`
+        );
+
+      if (f.dateTo)
+        add(
+          'fDateTo',
+          `To: ${f.dateTo}`
+        );
+
+    }
+
+
+    function clearFilter(id) {
+
+      const el = byId(id);
+
+      if (el.tagName === 'SELECT') {
+        el.selectedIndex = 0;
+      } else {
+        el.value = '';
+      }
+
+      applyFilters();
+
+    }
+
+
+    // =====================================================
+    // RESET
+    // =====================================================
+
+    byId('btnReset').addEventListener(
+      'click',
+      () => {
+
+        [
+          'fSearch',
+          'fType',
+          'fStatus',
+          'fDateFrom',
+          'fDateTo'
+        ].forEach(id => {
+
+          const el = byId(id);
+
+          if (el.tagName === 'SELECT') {
+            el.selectedIndex = 0;
+          } else {
+            el.value = '';
+          }
+
+        });
+
+        applyFilters();
+
+      }
+    );
+
+
+    // =====================================================
+    // FILTER EVENTS
+    // =====================================================
+
+    [
+      'fSearch',
+      'fType',
+      'fStatus',
+      'fDateFrom',
+      'fDateTo'
+    ].forEach(id => {
+
+      byId(id).addEventListener(
+        'input',
+        applyFilters
+      );
+
+      byId(id).addEventListener(
+        'change',
+        applyFilters
+      );
+
+    });
+
+
+    // =====================================================
+    // STATS
+    // =====================================================
+
+    function updateStats(items) {
+
+      byId('stat-total').textContent =
+        items.length;
+
+      byId('stat-lost').textContent =
+        items.filter(isLost).length;
+
+      byId('stat-found').textContent =
+        items.filter(i => !isLost(i)).length;
+
+    }
+
+
+    // =====================================================
+    // TAB
+    // =====================================================
+
+    function setTab(tab) {
+
+      currentTab = tab;
+
+      ['all', 'lost', 'found'].forEach(t => {
+
+        byId('view-' + t).style.display =
+          t === tab
+            ? 'block'
+            : 'none';
+
+        const btn =
+          byId(
+            'tab' +
+            t.charAt(0).toUpperCase() +
+            t.slice(1)
+          );
+
+        btn.className = 'tab-btn';
+
+        if (t === tab) {
+          btn.classList.add(
+            'active-' + t
+          );
+        }
+
+      });
+
+    }
+
+
+    // =====================================================
+    // ADMIN
+    // =====================================================
+
+    const isAdmin = () =>
+      ['admin', 'manager']
+        .includes(currentUserRole);
+
+
+    // =====================================================
+    // COLUMNS
+    // =====================================================
+
+    function buildCols(mode) {
+
+      const base = [
+        'name',
+        'type',
+        'description',
+        'location',
+        'date',
+        'status'
+      ];
+
+      const admin =
+        isAdmin()
+          ? [
+            'submittedBy',
+            'email',
+            'contact'
+          ]
+          : [];
+
+      const handover = [
+        'handedBy',
+        'handedTo'
+      ];
+
+      const img = [
+        'image'
+      ];
+
+      if (mode === 'lost')
+        return [
+          ...base,
+          ...admin,
+          ...handover,
+          ...img
+        ];
+
+      if (mode === 'found')
+        return [
+          ...base,
+          ...admin,
+          ...handover,
+          ...img
+        ];
+
+      return [
+        ...base,
+        ...admin,
+        ...handover,
+        ...img
+      ];
+
+    }
+
+
+    const colMeta = {
+
+      name: {
+        label: 'Item Name',
+        sort: true
+      },
+
+      type: {
+        label: 'Type',
+        sort: true
+      },
+
+      description: {
+        label: 'Description',
+        sort: false
+      },
+
+      location: {
+        label: 'Location Found/Lost',
+        sort: false
+      },
+
+      date: {
+        label: 'Date',
+        sort: true
+      },
+
+      status: {
+        label: 'Status',
+        sort: true
+      },
+
+      submittedBy: {
+        label: 'Submitted By',
+        sort: true
+      },
+
+      email: {
+        label: 'Email',
+        sort: false
+      },
+
+      contact: {
+        label: 'Contact',
+        sort: false
+      },
+
+      handedBy: {
+        label: 'Handed By',
+        sort: false
+      },
+
+      handedTo: {
+        label: 'Handed To',
+        sort: false
+      },
+
+      image: {
+        label: 'Image',
+        sort: false
+      }
+
+    };
+
+
+    // =====================================================
+    // TABLE HEAD
+    // =====================================================
+
+    function buildHead(trEl, mode) {
+
+      const cols = buildCols(mode);
+
+      trEl.innerHTML =
+        cols
+          .map(c => {
+
+            const m = colMeta[c];
+
+            const sorted =
+              sortCol === c;
+
+            const icon =
+              sorted
+                ? (
+                  sortDir === 1
+                    ? '▲'
+                    : '▼'
+                )
+                : '↕';
+
+            return `
+          <th
+            data-col="${c}"
+            class="${sorted ? 'sorted' : ''}"
+            onclick="sortBy('${c}','${mode}')"
+            style="${m.sort ? '' : 'cursor:default'}"
+          >
+            ${m.label}
+
+            ${m.sort
+                ? `<span class="sort-icon">${icon}</span>`
+                : ''
+              }
+
+          </th>
+        `;
+
+          })
+          .join('');
+
+    }
+
+
+    // =====================================================
+    // SORT
+    // =====================================================
+
+    function sortBy(col, mode) {
+
+      if (!colMeta[col].sort)
+        return;
+
+      if (sortCol === col) {
+
+        sortDir *= -1;
+
+      } else {
+
+        sortCol = col;
+        sortDir = 1;
+
+      }
+
+      renderAll();
+
+    }
+
+
+    function sorted(items) {
+
+      if (!sortCol)
+        return items;
+
+      return [...items].sort(
+        (a, b) => {
+
+          let va = '';
+          let vb = '';
+
+          if (sortCol === 'name') {
+            va = a.name || '';
+            vb = b.name || '';
+          }
+
+          if (sortCol === 'type') {
+            va = a.type || '';
+            vb = b.type || '';
+          }
+
+          if (sortCol === 'date') {
+            va = getDate(a);
+            vb = getDate(b);
+          }
+
+          if (sortCol === 'status') {
+            va = isLost(a) ? 'l' : 'f';
+            vb = isLost(b) ? 'l' : 'f';
+          }
+
+          if (sortCol === 'submittedBy') {
+            va = a.userName || '';
+            vb = b.userName || '';
+          }
+
+          return va < vb
+            ? -sortDir
+            : va > vb
+              ? sortDir
+              : 0;
+
+        }
+      );
+
+    }
+
+
+    // =====================================================
+    // IMAGE ESCAPING
+    // =====================================================
+
+    function escapeHtml(value) {
+
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+    }
+
+
+    function escapeJs(value) {
+
+      return String(value || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/\r/g, '')
+        .replace(/\n/g, '\\n');
+
+    }
+
+
+    // =====================================================
+    // ROW BUILDER
+    // =====================================================
+
+    function buildRow(item) {
+
+      const lost =
+        isLost(item);
+
+      const loc =
+        safe(
+          item.lostLocation ||
+          item.foundLocation
+        );
+
+      const date =
+        safe(
+          getDate(item)
+        );
+
+
+      // IMPORTANT:
+      // This now handles both:
+      //
+      // Cloudinary:
+      // https://res.cloudinary.com/...
+      //
+      // Old local:
+      // filename.jpg
+
+      const imageUrl =
+        getImageUrl(item.image);
+
+
+      let imgHTML;
+
+
+      if (imageUrl) {
+
+        const safeImageUrl =
+          escapeHtml(imageUrl);
+
+        const jsImageUrl =
+          escapeJs(imageUrl);
+
+        const jsName =
+          escapeJs(safe(item.name));
+
+        const jsDescription =
+          escapeJs(safe(item.description));
+
+
+        imgHTML = `
+      <img
+        class="table-img"
+        src="${safeImageUrl}"
+        alt="${escapeHtml(safe(item.name))}"
+        loading="lazy"
+
+        onerror="
+          this.style.display='none';
+          this.nextElementSibling.style.display='inline-flex';
+        "
+
+        onclick="
+          openModal(
+            '${jsImageUrl}',
+            '${jsName}',
+            '${jsDescription}'
+          )
+        "
+      >
+
+      <div
+        class="no-img"
+        style="display:none;"
+      >
+        📷
       </div>
-      <div class="table-card all-card">
-        <div class="table-scroll">
-          <table>
-            <thead><tr id="headAll"></tr></thead>
-            <tbody id="bodyAll"></tbody>
-          </table>
+    `;
+
+      } else {
+
+        imgHTML =
+          `<div class="no-img">📷</div>`;
+
+      }
+
+
+      const badge =
+        lost
+
+          ? `
+        <span class="badge badge-lost">
+          ● Lost
+        </span>
+      `
+
+          : `
+        <span class="badge badge-found">
+          ● Found
+        </span>
+      `;
+
+
+      const adminCols =
+        isAdmin()
+
+          ? `
+        <td>
+          ${safe(item.userName)}
+        </td>
+
+        <td>
+          ${item.userEmail
+
+            ? `
+                <a
+                  href="mailto:${escapeHtml(item.userEmail)}"
+                  style="
+                    color:var(--gold);
+                    text-decoration:none;
+                  "
+                >
+                  ${escapeHtml(item.userEmail)}
+                </a>
+              `
+
+            : 'N/A'
+          }
+        </td>
+
+        <td>
+          ${safe(item.contact)}
+        </td>
+      `
+
+          : '';
+
+
+      return `
+    <tr>
+
+      <td>
+        <strong style="font-weight:600;">
+          ${escapeHtml(safe(item.name))}
+        </strong>
+      </td>
+
+      <td>
+        ${escapeHtml(safe(item.type))}
+      </td>
+
+      <td
+        style="
+          max-width:200px;
+          text-align:left;
+          white-space:normal;
+          font-size:12.5px;
+          color:var(--muted);
+        "
+      >
+        ${escapeHtml(safe(item.description))}
+      </td>
+
+      <td style="font-size:12.5px;">
+        ${escapeHtml(loc)}
+      </td>
+
+      <td style="white-space:nowrap;">
+        ${escapeHtml(date)}
+      </td>
+
+      <td>
+        ${badge}
+      </td>
+
+      ${adminCols}
+
+      <td>
+        ${escapeHtml(safe(item.handedBy))}
+      </td>
+
+      <td>
+        ${escapeHtml(safe(item.handedTo))}
+      </td>
+
+      <td>
+        ${imgHTML}
+      </td>
+
+    </tr>
+  `;
+
+    }
+
+
+    // =====================================================
+    // RENDER
+    // =====================================================
+
+    function renderAll() {
+
+      const lostItems =
+        sorted(
+          filtered.filter(isLost)
+        );
+
+      const foundItems =
+        sorted(
+          filtered.filter(
+            i => !isLost(i)
+          )
+        );
+
+      const allSorted =
+        sorted(filtered);
+
+
+      // Tab counts
+
+      byId('tc-all').textContent =
+        filtered.length;
+
+      byId('tc-lost').textContent =
+        lostItems.length;
+
+      byId('tc-found').textContent =
+        foundItems.length;
+
+
+      // All
+
+      buildHead(
+        byId('headAll'),
+        'all'
+      );
+
+      byId('bodyAll').innerHTML =
+        allSorted.length
+
+          ? allSorted
+            .map(buildRow)
+            .join('')
+
+          : emptyRow(
+            'No items match your filters.'
+          );
+
+
+      byId('countAll').textContent =
+        allSorted.length;
+
+
+      // Lost
+
+      buildHead(
+        byId('headLost'),
+        'lost'
+      );
+
+      byId('bodyLost').innerHTML =
+        lostItems.length
+
+          ? lostItems
+            .map(buildRow)
+            .join('')
+
+          : emptyRow(
+            'No lost items match your filters.'
+          );
+
+
+      byId('countLost').textContent =
+        lostItems.length;
+
+
+      // Found
+
+      buildHead(
+        byId('headFound'),
+        'found'
+      );
+
+      byId('bodyFound').innerHTML =
+        foundItems.length
+
+          ? foundItems
+            .map(buildRow)
+            .join('')
+
+          : emptyRow(
+            'No found items match your filters.'
+          );
+
+
+      byId('countFound').textContent =
+        foundItems.length;
+
+    }
+
+
+    // =====================================================
+    // EMPTY ROW
+    // =====================================================
+
+    function emptyRow(msg) {
+
+      return `
+    <tr class="empty-row">
+
+      <td colspan="20">
+
+        <div
+          style="
+            font-size:32px;
+            margin-bottom:12px;
+          "
+        >
+          🔍
         </div>
-        <div class="count-bar">
-          <span>Showing <strong id="countAll">0</strong> items</span>
-          <span style="font-size:11px; color:#94a3b8;">Click column headers to sort</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- LOST view -->
-  <div id="view-lost" style="display:none;">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon lost-icon">😞</div>
-        <div>
-          <div class="tsect-title">Lost Items</div>
-          <div class="tsect-sub">Items reported as missing</div>
-        </div>
-      </div>
-      <div class="table-card lost-card">
-        <div class="table-scroll">
-          <table>
-            <thead><tr id="headLost"></tr></thead>
-            <tbody id="bodyLost"></tbody>
-          </table>
-        </div>
-        <div class="count-bar">
-          <span>Showing <strong id="countLost">0</strong> lost items</span>
-        </div>
-      </div>
-    </div>
-  </div>
+        ${msg}
 
-  <!-- FOUND view -->
-  <div id="view-found" style="display:none;">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon found-icon">😀</div>
-        <div>
-          <div class="tsect-title">Found Items</div>
-          <div class="tsect-sub">Items submitted by finders</div>
-        </div>
-      </div>
-      <div class="table-card found-card">
-        <div class="table-scroll">
-          <table>
-            <thead><tr id="headFound"></tr></thead>
-            <tbody id="bodyFound"></tbody>
-          </table>
-        </div>
-        <div class="count-bar">
-          <span>Showing <strong id="countFound">0</strong> found items</span>
-        </div>
-      </div>
-    </div>
-  </div>
+      </td>
 
-</div><!-- /page -->
+    </tr>
+  `;
 
-<!-- Image modal -->
-<div id="imgModal" class="modal" onclick="closeModal(event)">
-  <div class="modal-inner" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-img-wrap">
-      <img id="modalImg" src="" alt="Item image">
-    </div>
-    <div class="modal-info">
-      <div class="modal-item-name" id="modalName"></div>
-      <div class="modal-item-desc" id="modalDesc"></div>
-    </div>
-  </div>
-</div>
+    }
 
-<script>
-// ── State ──────────────────────────────────────────
-let allItems   = [];
-let filtered   = [];
-let currentTab = 'all';
-let currentUserRole = '';
-let sortCol    = '';
-let sortDir    = 1;
 
-// ── Helpers ────────────────────────────────────────
-const safe = v => (v && String(v).trim()) ? String(v).trim() : 'N/A';
-const byId = id => document.getElementById(id);
+    // =====================================================
+    // IMAGE MODAL
+    // =====================================================
 
-function getDate(item){ return item.dateLost || item.dateFound || ''; }
-function isLost(item){ return !!item.lostLocation; }
+    function openModal(
+      src,
+      name,
+      desc
+    ) {
 
-// ── Init ───────────────────────────────────────────
-async function init(){
-  try{
-    const [uRes, iRes] = await Promise.all([fetch('/api/user'), fetch('/api/items')]);
-    const user  = await uRes.json();
-    const items = await iRes.json();
-    currentUserRole = user.role || '';
-    allItems = items;
-    populateTypeFilter();
-    applyFilters();
-    updateStats(items);
-  } catch(e){ console.error(e); }
-}
+      byId('modalImg').src =
+        src;
 
-// ── Type filter populate ───────────────────────────
-function populateTypeFilter(){
-  const types = [...new Set(allItems.map(i => i.type).filter(Boolean))].sort();
-  const sel = byId('fType');
-  types.forEach(t => {
-    const o = document.createElement('option');
-    o.value = t; o.textContent = t;
-    sel.appendChild(o);
-  });
-}
+      byId('modalName').textContent =
+        name;
 
-// ── Filters ────────────────────────────────────────
-function getFilters(){
-  return {
-    search:   byId('fSearch').value.trim().toLowerCase(),
-    type:     byId('fType').value,
-    status:   byId('fStatus').value,
-    dateFrom: byId('fDateFrom').value,
-    dateTo:   byId('fDateTo').value,
-  };
-}
+      byId('modalDesc').textContent =
+        desc;
 
-function applyFilters(){
-  const f = getFilters();
-  filtered = allItems.filter(item => {
-    const d = getDate(item);
-    const txt = [item.name, item.type, item.description, item.lostLocation, item.foundLocation, item.location].map(v => (v || '').toLowerCase()).join(' ');
-    if(f.search   && !txt.includes(f.search))       return false;
-    if(f.type     && item.type !== f.type)           return false;
-    if(f.status   === 'lost'  && !isLost(item))     return false;
-    if(f.status   === 'found' && isLost(item))      return false;
-    if(f.dateFrom && d && d < f.dateFrom)           return false;
-    if(f.dateTo   && d && d > f.dateTo)             return false;
-    return true;
-  });
-  updatePills(f);
-  renderAll();
-}
+      byId('imgModal')
+        .classList
+        .add('open');
 
-function updatePills(f){
-  const pills = byId('activePills');
-  pills.innerHTML = '';
-  const add = (key, label) => {
-    const pill = document.createElement('span');
-    pill.className = 'filter-pill';
-    pill.innerHTML = `${label} <button onclick="clearFilter('${key}')">✕</button>`;
-    pills.appendChild(pill);
-  };
-  if(f.search)   add('fSearch',   `"${f.search}"`);
-  if(f.type)     add('fType',     f.type);
-  if(f.status)   add('fStatus',   f.status === 'lost' ? 'Lost only' : 'Found only');
-  if(f.dateFrom) add('fDateFrom', `From: ${f.dateFrom}`);
-  if(f.dateTo)   add('fDateTo',   `To: ${f.dateTo}`);
-}
+      document.body.style.overflow =
+        'hidden';
 
-function clearFilter(id){
-  const el = byId(id);
-  if(el.tagName === 'SELECT') el.selectedIndex = 0;
-  else el.value = '';
-  applyFilters();
-}
+    }
 
-byId('btnReset').addEventListener('click', () => {
-  ['fSearch','fType','fStatus','fDateFrom','fDateTo'].forEach(id => {
-    const el = byId(id);
-    if(el.tagName === 'SELECT') el.selectedIndex = 0;
-    else el.value = '';
-  });
-  applyFilters();
-});
 
-['fSearch','fType','fStatus','fDateFrom','fDateTo'].forEach(id => {
-  byId(id).addEventListener('input', applyFilters);
-  byId(id).addEventListener('change', applyFilters);
-});
+    function closeModal(e) {
 
-// ── Stats ──────────────────────────────────────────
-function updateStats(items){
-  byId('stat-total').textContent = items.length;
-  byId('stat-lost').textContent  = items.filter(isLost).length;
-  byId('stat-found').textContent = items.filter(i => !isLost(i)).length;
-}
+      if (
+        !e ||
+        e.target === byId('imgModal')
+      ) {
 
-// ── Tab ────────────────────────────────────────────
-function setTab(tab){
-  currentTab = tab;
-  ['all','lost','found'].forEach(t => {
-    byId('view-'+t).style.display   = t === tab ? 'block' : 'none';
-    const btn = byId('tab'+t.charAt(0).toUpperCase()+t.slice(1));
-    btn.className = 'tab-btn';
-    if(t === tab) btn.classList.add('active-'+t);
-  });
-}
+        byId('imgModal')
+          .classList
+          .remove('open');
 
-// ── Header build ───────────────────────────────────
-const isAdmin = () => ['admin','manager'].includes(currentUserRole);
+        document.body.style.overflow =
+          '';
 
-function buildCols(mode){
-  const base = ['name','type','description','location','date','status'];
-  const admin = isAdmin() ? ['submittedBy','email','contact'] : [];
-  const handover = ['handedBy','handedTo'];
-  const img = ['image'];
-  if(mode === 'lost')  return [...base, ...admin, ...handover, ...img];
-  if(mode === 'found') return [...base, ...admin, ...handover, ...img];
-  return [...base, ...admin, ...handover, ...img];
-}
+      }
 
-const colMeta = {
-  name:        { label: 'Item Name',      sort: true },
-  type:        { label: 'Type',           sort: true },
-  description: { label: 'Description',    sort: false },
-  location:    { label: 'Location Found/Lost', sort: false },
-  date:        { label: 'Date',           sort: true },
-  status:      { label: 'Status',         sort: true },
-  submittedBy: { label: 'Submitted By',   sort: true },
-  email:       { label: 'Email',          sort: false },
-  contact:     { label: 'Contact',        sort: false },
-  handedBy:    { label: 'Handed By',      sort: false },
-  handedTo:    { label: 'Handed To',      sort: false },
-  image:       { label: 'Image',          sort: false },
-};
+    }
 
-function buildHead(trEl, mode){
-  const cols = buildCols(mode);
-  trEl.innerHTML = cols.map(c => {
-    const m = colMeta[c];
-    const sorted = sortCol === c;
-    const icon = sorted ? (sortDir === 1 ? '▲' : '▼') : '↕';
-    return `<th data-col="${c}" class="${sorted?'sorted':''}" onclick="sortBy('${c}','${mode}')" style="${m.sort?'':'cursor:default'}">
-      ${m.label}${m.sort ? `<span class="sort-icon">${icon}</span>` : ''}
-    </th>`;
-  }).join('');
-}
 
-// ── Sort ───────────────────────────────────────────
-function sortBy(col, mode){
-  if(!colMeta[col].sort) return;
-  if(sortCol === col) sortDir *= -1;
-  else { sortCol = col; sortDir = 1; }
-  renderAll();
-}
+    // =====================================================
+    // ESC KEY
+    // =====================================================
 
-function sorted(items){
-  if(!sortCol) return items;
-  return [...items].sort((a, b) => {
-    let va='', vb='';
-    if(sortCol==='name')        { va=a.name||'';        vb=b.name||''; }
-    if(sortCol==='type')        { va=a.type||'';        vb=b.type||''; }
-    if(sortCol==='date')        { va=getDate(a);        vb=getDate(b); }
-    if(sortCol==='status')      { va=isLost(a)?'l':'f'; vb=isLost(b)?'l':'f'; }
-    if(sortCol==='submittedBy') { va=a.userName||'';    vb=b.userName||''; }
-    return va < vb ? -sortDir : va > vb ? sortDir : 0;
-  });
-}
+    document.addEventListener(
+      'keydown',
+      e => {
 
-// ── Row builder ────────────────────────────────────
-function buildRow(item){
-  const lost = isLost(item);
-  const loc  = safe(item.lostLocation || item.foundLocation);
-  const date = safe(getDate(item));
-  const imgHTML = item.image
-    ? `<img class="table-img" src="/uploads/${item.image}" alt="${safe(item.name)}"
-         onclick="openModal('/uploads/${item.image}','${safe(item.name)}','${safe(item.description).replace(/'/g,"\\'")}')">`
-    : `<div class="no-img">📷</div>`;
+        if (e.key === 'Escape') {
+          closeModal();
+        }
 
-  const badge = lost
-    ? `<span class="badge badge-lost">● Lost</span>`
-    : `<span class="badge badge-found">● Found</span>`;
+      }
+    );
 
-  const adminCols = isAdmin() ? `
-    <td>${safe(item.userName)}</td>
-    <td>${item.userEmail ? `<a href="mailto:${item.userEmail}" style="color:var(--gold);text-decoration:none;">${item.userEmail}</a>` : 'N/A'}</td>
-    <td>${safe(item.contact)}</td>` : '';
 
-  return `<tr>
-    <td><strong style="font-weight:600;">${safe(item.name)}</strong></td>
-    <td>${safe(item.type)}</td>
-    <td style="max-width:200px; text-align:left; white-space:normal; font-size:12.5px; color:var(--muted);">${safe(item.description)}</td>
-    <td style="font-size:12.5px;">${loc}</td>
-    <td style="white-space:nowrap;">${date}</td>
-    <td>${badge}</td>
-    ${adminCols}
-    <td>${safe(item.handedBy)}</td>
-    <td>${safe(item.handedTo)}</td>
-    <td>${imgHTML}</td>
-  </tr>`;
-}
+    // =====================================================
+    // START
+    // =====================================================
 
-// ── Render all views ───────────────────────────────
-function renderAll(){
-  const lostItems  = sorted(filtered.filter(isLost));
-  const foundItems = sorted(filtered.filter(i => !isLost(i)));
-  const allSorted  = sorted(filtered);
+    init();
 
-  // Update tab counts
-  byId('tc-all').textContent   = filtered.length;
-  byId('tc-lost').textContent  = lostItems.length;
-  byId('tc-found').textContent = foundItems.length;
+  </script>
 
-  // All table
-  buildHead(byId('headAll'), 'all');
-  byId('bodyAll').innerHTML   = allSorted.length  ? allSorted.map(buildRow).join('') : emptyRow('No items match your filters.');
-  byId('countAll').textContent   = allSorted.length;
+  <script src="/js/navbar.js"></script>
 
-  // Lost table
-  buildHead(byId('headLost'), 'lost');
-  byId('bodyLost').innerHTML  = lostItems.length  ? lostItems.map(buildRow).join('')  : emptyRow('No lost items match your filters.');
-  byId('countLost').textContent  = lostItems.length;
+  <script src="/js/translate.js"></script>
 
-  // Found table
-  buildHead(byId('headFound'), 'found');
-  byId('bodyFound').innerHTML = foundItems.length ? foundItems.map(buildRow).join('') : emptyRow('No found items match your filters.');
-  byId('countFound').textContent = foundItems.length;
-}
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-function emptyRow(msg){
-  return `<tr class="empty-row"><td colspan="20">
-    <div style="font-size:32px;margin-bottom:12px;">🔍</div>
-    ${msg}
-  </td></tr>`;
-}
-
-// ── Modal ──────────────────────────────────────────
-function openModal(src, name, desc){
-  byId('modalImg').src   = src;
-  byId('modalName').textContent = name;
-  byId('modalDesc').textContent = desc;
-  byId('imgModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal(e){
-  if(!e || e.target === byId('imgModal')){
-    byId('imgModal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-}
-
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
-
-// ── Start ──────────────────────────────────────────
-init();
-</script>
-
-<script src="/js/navbar.js"></script>
-<script src="/js/translate.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
+
 </html>
