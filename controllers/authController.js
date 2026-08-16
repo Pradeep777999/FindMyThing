@@ -1,303 +1,555 @@
-const User = require('../models/User');
-const { sendEmail } = require('../utils/helper');
-const { otpStore } = require('../utils/constants');
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
-// Register POST
+const User = require("../models/User");
+const { sendEmail } = require("../utils/helper");
+
+// ======================================================
+// Helper: Save session reliably on Vercel
+// ======================================================
+function saveSession(req) {
+  return new Promise((resolve, reject) => {
+    req.session.save((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+// ======================================================
+// Generate OTP
+// ======================================================
+function generateOtp() {
+  return Math.floor(100000 + Math.random() * 900000);
+}
+
+// ======================================================
+// Hash OTP
+// ======================================================
+function hashOtp(otp) {
+  return crypto
+    .createHash("sha256")
+    .update(String(otp))
+    .digest("hex");
+}
+
+// ======================================================
+// REGISTER
+// ======================================================
 async function register(req, res) {
   try {
-    const exist = await User.findOne({ email: req.body.email });
+    const { name, email, password } = req.body;
+
+    const exist = await User.findOne({ email });
+
     if (exist) {
       return res.send("Email already exists");
     }
 
     const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
+      name,
+      email,
+      password,
       role: "user",
       is_verified: false
     });
 
     await user.save();
 
-    // Generate random 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    const crypto = require('crypto');
-    const hashedOtp = crypto.createHash('sha256').update(String(otp)).digest('hex');
+    // Generate OTP
+    const otp = generateOtp();
+    const hashedOtp = hashOtp(otp);
 
-    otpStore[req.body.email] = {
+    // Store OTP in MongoDB-backed session
+    req.session.registrationOtp = {
+      email,
       otp: hashedOtp,
-      rawOtp: otp,
       type: "register",
       expires: Date.now() + 5 * 60 * 1000,
       attempts: 0
     };
 
-    // Send OTP to user's college email
+    await saveSession(req);
+
+    // Send OTP
     await sendEmail(
-      req.body.email,
+      email,
       "Registration Verification - FindMyThing",
       `
       <h2>Welcome to FindMyThing</h2>
-      <p>Thank you for registering. Please verify your email using the following OTP code:</p>
-      <h1 style="letter-spacing: 2px; color: #1a2744;">${otp}</h1>
+
+      <p>
+        Thank you for registering.
+        Please verify your email using the OTP below:
+      </p>
+
+      <h1 style="letter-spacing: 2px; color: #1a2744;">
+        ${otp}
+      </h1>
+
       <p>Valid for 5 minutes.</p>
       `
     );
 
-    // Redirect to OTP verification page
-    res.redirect(`/login-otp.html?email=${req.body.email}`);
+    // Redirect to OTP page
+    return res.redirect(
+      `/login-otp.html?email=${encodeURIComponent(email)}`
+    );
+
   } catch (err) {
     console.error("Register Error:", err);
-    res.status(500).send("Register failed");
+    return res.status(500).send("Register failed");
   }
 }
 
-// Login POST
+// ======================================================
+// LOGIN
+// ======================================================
 async function login(req, res) {
   try {
     const { email, password, role } = req.body;
-    
-    // Check if request expects JSON response
-    const isJson = req.xhr || 
-                   (req.headers['accept'] && req.headers['accept'].includes('application/json')) ||
-                   (req.headers['content-type'] && req.headers['content-type'].includes('application/json'));
+
+    const isJson =
+      req.xhr ||
+      (req.headers["accept"] &&
+        req.headers["accept"].includes("application/json")) ||
+      (req.headers["content-type"] &&
+        req.headers["content-type"].includes("application/json"));
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      const isPasswordInvalid = !password || password.length < 6;
-      const errMsg = isPasswordInvalid 
-        ? "Invalid email or password. Please try again."
-        : "Please enter a valid email address.";
-      
+      const errMsg = "Invalid email or password. Please try again.";
+
       if (isJson) {
         return res.status(401).json({ error: errMsg });
       }
+
       return res.status(401).send(errMsg);
     }
 
     const isMatch = await user.comparePassword(password);
+
     if (!isMatch) {
       const errMsg = "Incorrect password. Please try again.";
+
       if (isJson) {
         return res.status(401).json({ error: errMsg });
       }
+
       return res.status(401).send(errMsg);
     }
 
-    // Auto-upgrade legacy plaintext passwords to bcrypt hash
-    if (user.password && !user.password.startsWith('$2a$') && !user.password.startsWith('$2b$') && !user.password.startsWith('$2y$')) {
-      user.password = password; // Will be hashed by pre-save hook
+    // Auto-upgrade old plaintext password
+    if (
+      user.password &&
+      !user.password.startsWith("$2a$") &&
+      !user.password.startsWith("$2b$") &&
+      !user.password.startsWith("$2y$")
+    ) {
+      user.password = password;
       await user.save();
     }
 
     if (user.role !== role) {
       const errMsg = "Invalid credentials";
+
       if (isJson) {
         return res.status(401).json({ error: errMsg });
       }
+
       return res.status(401).send(errMsg);
     }
 
-    // Helper to send either JSON or standard redirect
     const sendRedirect = (url) => {
       if (isJson) {
-        return res.json({ success: true, redirect: url });
+        return res.json({
+          success: true,
+          redirect: url
+        });
       }
+
       return res.redirect(url);
     };
 
-    // Predefined Admin and Manager Accounts bypass OTP
+    // ==================================================
+    // ADMIN / MANAGER - NO OTP
+    // ==================================================
     if (role === "admin" || role === "manager") {
+
       req.session.userId = user._id;
       req.session.role = user.role;
+
+      await saveSession(req);
+
       if (role === "admin") {
         return sendRedirect("/admin.html");
-      } else {
-        return sendRedirect("/manager.html");
       }
+
+      return sendRedirect("/manager.html");
     }
 
-    // Check verification status
+    // ==================================================
+    // UNVERIFIED USER
+    // ==================================================
     if (user.is_verified === false) {
-      // Generate/resend OTP if not present or expired
-      let otpData = otpStore[email];
-      if (!otpData || otpData.expires < Date.now()) {
-        const otp = Math.floor(100000 + Math.random() * 900000);
-        const crypto = require('crypto');
-        const hashedOtp = crypto.createHash('sha256').update(String(otp)).digest('hex');
-        otpStore[email] = {
+
+      let otpData = req.session.registrationOtp;
+
+      // Generate OTP if missing or expired
+      if (
+        !otpData ||
+        otpData.email !== email ||
+        otpData.expires < Date.now()
+      ) {
+
+        const otp = generateOtp();
+        const hashedOtp = hashOtp(otp);
+
+        req.session.registrationOtp = {
+          email,
           otp: hashedOtp,
           type: "register",
           expires: Date.now() + 5 * 60 * 1000,
           attempts: 0
         };
+
+        await saveSession(req);
+
         await sendEmail(
           email,
           "Registration Verification - FindMyThing",
           `
           <h2>Email Verification</h2>
+
           <p>Your verification code is:</p>
-          <h1 style="letter-spacing: 2px; color: #1a2744;">${otp}</h1>
-          <p>Valid for 5 minutes</p>
+
+          <h1 style="letter-spacing: 2px; color: #1a2744;">
+            ${otp}
+          </h1>
+
+          <p>Valid for 5 minutes.</p>
           `
         );
       }
-      return sendRedirect(`/login-otp.html?email=${email}&error=unverified`);
+
+      return sendRedirect(
+        `/login-otp.html?email=${encodeURIComponent(email)}&error=unverified`
+      );
     }
+
+    // ==================================================
+    // VERIFIED USER
+    // ==================================================
 
     req.session.userId = user._id;
     req.session.role = user.role;
 
+    await saveSession(req);
+
     if (role === "admin") {
       return sendRedirect("/admin.html");
-    } else if (role === "manager") {
+    }
+
+    if (role === "manager") {
       return sendRedirect("/manager.html");
-    } else {
-      return sendRedirect("/");
     }
-  } catch (err) {
+
+    return sendRedirect("/");
+  }
+
+  catch (err) {
     console.error("Login Error:", err);
+
     const errMsg = "Login failed";
-    if (req.headers['content-type'] === 'application/json' || req.xhr) {
-      return res.status(500).json({ error: errMsg });
+
+    if (
+      req.headers["content-type"] === "application/json" ||
+      req.xhr
+    ) {
+      return res.status(500).json({
+        error: errMsg
+      });
     }
-    res.status(500).send(errMsg);
+
+    return res.status(500).send(errMsg);
   }
 }
 
-// Logout GET
+// ======================================================
+// LOGOUT
+// ======================================================
 function logout(req, res) {
-  req.session.destroy();
-  res.redirect("/login.html");
+  req.session.destroy(() => {
+    res.redirect("/login.html");
+  });
 }
 
-// Send OTP POST (for password reset and resending registration verification)
+// ======================================================
+// SEND OTP
+// ======================================================
 async function sendOtp(req, res) {
   try {
     const { email } = req.body;
+
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.send("Email not registered");
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    const crypto = require('crypto');
-    const hashedOtp = crypto.createHash('sha256').update(String(otp)).digest('hex');
+    const otp = generateOtp();
+    const hashedOtp = hashOtp(otp);
 
+    // ==================================================
+    // REGISTRATION VERIFICATION
+    // ==================================================
     if (user.is_verified === false) {
-      otpStore[email] = {
+
+      req.session.registrationOtp = {
+        email,
         otp: hashedOtp,
-        rawOtp: otp,
         type: "register",
         expires: Date.now() + 5 * 60 * 1000,
         attempts: 0
       };
+
+      await saveSession(req);
 
       await sendEmail(
         email,
         "Registration Verification - FindMyThing",
         `
         <h2>Email Verification</h2>
+
         <p>Your verification code is:</p>
-        <h1 style="letter-spacing: 2px; color: #1a2744;">${otp}</h1>
-        <p>Valid for 5 minutes</p>
+
+        <h1 style="letter-spacing: 2px; color: #1a2744;">
+          ${otp}
+        </h1>
+
+        <p>Valid for 5 minutes.</p>
         `
       );
-      res.send("OTP sent successfully. Please check your inbox.");
-    } else {
-      otpStore[email] = {
-        otp: hashedOtp,
-        rawOtp: otp,
-        type: "reset",
-        expires: Date.now() + 5 * 60 * 1000,
-        attempts: 0
-      };
 
-      await sendEmail(email, "OTP Reset", `<h1>${otp}</h1>`);
-      res.send("OTP sent");
+      return res.send(
+        "OTP sent successfully. Please check your inbox."
+      );
     }
+
+    // ==================================================
+    // PASSWORD RESET
+    // ==================================================
+
+    req.session.resetOtp = {
+      email,
+      otp: hashedOtp,
+      type: "reset",
+      expires: Date.now() + 5 * 60 * 1000,
+      attempts: 0
+    };
+
+    await saveSession(req);
+
+    await sendEmail(
+      email,
+      "OTP Reset",
+      `<h1>${otp}</h1><p>Valid for 5 minutes.</p>`
+    );
+
+    return res.send("OTP sent");
+
   } catch (err) {
     console.error("Send OTP Error:", err);
-    res.status(500).send("Failed to send OTP");
+    return res.status(500).send("Failed to send OTP");
   }
 }
 
-// Verify Login OTP POST (for registration verification)
+// ======================================================
+// VERIFY LOGIN OTP
+// Registration verification
+// ======================================================
 async function verifyLoginOtp(req, res) {
   try {
     const { email, otp } = req.body;
-    const data = otpStore[email];
 
-    if (!data || data.type !== "register") return res.send("OTP not requested for registration");
-    if (data.expires < Date.now()) return res.send("OTP expired");
-    
-    if (data.attempts >= 5) {
-      return res.send("Maximum OTP verification attempts exceeded");
+    const data = req.session.registrationOtp;
+
+    // IMPORTANT
+    if (
+      !data ||
+      data.type !== "register" ||
+      data.email !== email
+    ) {
+      return res.send("OTP not requested for registration");
     }
-    data.attempts = (data.attempts || 0) + 1;
 
-    const crypto = require('crypto');
-    const hashedInput = crypto.createHash('sha256').update(String(otp)).digest('hex');
-    if (data.otp !== hashedInput) return res.send("Invalid OTP");
+    if (data.expires < Date.now()) {
+      delete req.session.registrationOtp;
+      await saveSession(req);
+
+      return res.send("OTP expired");
+    }
+
+    if (data.attempts >= 5) {
+      return res.send(
+        "Maximum OTP verification attempts exceeded"
+      );
+    }
+
+    data.attempts++;
+
+    const hashedInput = hashOtp(otp);
+
+    if (data.otp !== hashedInput) {
+      await saveSession(req);
+      return res.send("Invalid OTP");
+    }
 
     const user = await User.findOne({ email });
-    if (!user) return res.send("User not found");
 
+    if (!user) {
+      return res.send("User not found");
+    }
+
+    // Verify user
     user.is_verified = true;
+
     await user.save();
 
-    delete otpStore[email];
-    res.redirect("/login.html?registered=success");
+    // Remove OTP
+    delete req.session.registrationOtp;
+
+    await saveSession(req);
+
+    return res.redirect("/login.html?registered=success");
+
   } catch (err) {
     console.error("Verify Login OTP Error:", err);
-    res.status(500).send("Failed to verify OTP");
+    return res.status(500).send("Failed to verify OTP");
   }
 }
 
-// Verify OTP POST (for password reset validation)
-function verifyOtp(req, res) {
-  const { email, otp } = req.body;
-  const data = otpStore[email];
+// ======================================================
+// VERIFY RESET OTP
+// ======================================================
+async function verifyOtp(req, res) {
+  try {
 
-  if (!data || data.type !== "reset") return res.send("OTP not requested");
-  if (data.expires < Date.now()) return res.send("OTP expired");
+    const { email, otp } = req.body;
 
-  const crypto = require('crypto');
-  const hashedInput = crypto.createHash('sha256').update(String(otp)).digest('hex');
-  if (data.otp !== hashedInput) return res.send("Invalid OTP");
+    const data = req.session.resetOtp;
 
-  res.send("OTP verified");
+    if (
+      !data ||
+      data.type !== "reset" ||
+      data.email !== email
+    ) {
+      return res.send("OTP not requested");
+    }
+
+    if (data.expires < Date.now()) {
+      delete req.session.resetOtp;
+      await saveSession(req);
+
+      return res.send("OTP expired");
+    }
+
+    const hashedInput = hashOtp(otp);
+
+    if (data.otp !== hashedInput) {
+      return res.send("Invalid OTP");
+    }
+
+    return res.send("OTP verified");
+
+  } catch (err) {
+    console.error("Verify OTP Error:", err);
+    return res.status(500).send("Failed to verify OTP");
+  }
 }
 
-// Reset Password POST
+// ======================================================
+// RESET PASSWORD
+// ======================================================
 async function resetPassword(req, res) {
   try {
-    const { email, password, confirmPassword } = req.body;
+
+    const {
+      email,
+      password,
+      confirmPassword
+    } = req.body;
 
     if (!password || password.length < 6) {
-      return res.status(400).send("Password must be at least 6 characters long");
+      return res.status(400).send(
+        "Password must be at least 6 characters long"
+      );
     }
 
     if (password !== confirmPassword) {
-      return res.status(400).send("Passwords do not match");
+      return res.status(400).send(
+        "Passwords do not match"
+      );
     }
 
-    const bcrypt = require('bcryptjs');
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const otpData = req.session.resetOtp;
 
-    await User.updateOne({ email }, { $set: { password: hashedPassword } });
-    delete otpStore[email];
+    if (
+      !otpData ||
+      otpData.email !== email ||
+      otpData.type !== "reset"
+    ) {
+      return res.status(400).send(
+        "Please verify OTP first"
+      );
+    }
 
-    res.send("Password reset successful");
+    if (otpData.expires < Date.now()) {
+      delete req.session.resetOtp;
+      await saveSession(req);
+
+      return res.status(400).send(
+        "OTP expired"
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(
+      password,
+      10
+    );
+
+    await User.updateOne(
+      { email },
+      {
+        $set: {
+          password: hashedPassword
+        }
+      }
+    );
+
+    delete req.session.resetOtp;
+
+    await saveSession(req);
+
+    return res.send(
+      "Password reset successful"
+    );
+
   } catch (err) {
     console.error("Reset Password Error:", err);
-    res.status(500).send("Failed to reset password");
+    return res.status(500).send(
+      "Failed to reset password"
+    );
   }
 }
 
+// ======================================================
+// EXPORT
+// ======================================================
 module.exports = {
   register,
   login,

@@ -1,5 +1,7 @@
-const dns = require('dns');
-dns.setServers(['8.8.8.8', '1.1.1.1']);
+const dns = require("dns");
+
+// Use public DNS servers
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 const express = require("express");
 const session = require("express-session");
@@ -9,119 +11,279 @@ const dotenv = require("dotenv");
 const path = require("path");
 const fs = require("fs");
 
-// Load Environment Variables
+// Load environment variables
 dotenv.config();
 
+// Database
 const connectDB = require("./config/db");
-const { runStartupMigration, getCurrentCycle } = require("./utils/helper");
+
+// Helpers
+const {
+  runStartupMigration,
+  getCurrentCycle
+} = require("./utils/helper");
+
+// Models
 const Item = require("./models/Item");
 const Collected = require("./models/Collected");
 
-// Import Route Handlers
+// Routes
 const authRoutes = require("./routes/authRoutes");
 const itemRoutes = require("./routes/itemRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes");
 
+// Error handler
 const errorHandler = require("./middleware/errorHandler");
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/findmything";
-const isProduction = process.env.NODE_ENV === "production";
+// ======================================================
+// EXPRESS APP
+// ======================================================
 
-// Enable trust proxy for cloud environments behind load balancers/reverse proxies
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+const mongoUri =
+  process.env.MONGO_URI ||
+  process.env.MONGODB_URI ||
+  "mongodb://127.0.0.1:27017/findmything";
+
+const isProduction =
+  process.env.NODE_ENV === "production";
+
+// ======================================================
+// TRUST PROXY
+// ======================================================
+
 app.set("trust proxy", 1);
 
-// Security Headers Middleware
-app.use(helmet({
-  contentSecurityPolicy: false, // Disabled to allow external CDNs and inline scripts used in views
-  crossOriginEmbedderPolicy: false
-}));
+// ======================================================
+// SECURITY HEADERS
+// ======================================================
 
-// Basic Express Middlewares
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+  })
+);
+
+// ======================================================
+// BASIC MIDDLEWARE
+// ======================================================
+
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+);
+
 app.use(express.json());
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, "public/uploads");
+// ======================================================
+// UPLOADS DIRECTORY
+// ======================================================
+
+const uploadsDir = path.join(
+  __dirname,
+  "public/uploads"
+);
+
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+  fs.mkdirSync(uploadsDir, {
+    recursive: true
+  });
 }
 
-// Persistent Session Middleware with MongoDB Store
-app.use(session({
-  secret: process.env.SESSION_SECRET || "findmything_session_secret_default_key",
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: mongoUri,
-    dbName: "findmything",
-    collectionName: "sessions",
-    ttl: 7 * 24 * 60 * 60 // 7 days
-  }),
-  cookie: {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-  }
-}));
+// ======================================================
+// SESSION
+// ======================================================
 
-// Static Files Serving
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+app.use(
+  session({
+    secret:
+      process.env.SESSION_SECRET ||
+      "findmything_session_secret_default_key",
 
-// Register Route Middlewares
+    resave: false,
+
+    saveUninitialized: false,
+
+    store: MongoStore.create({
+      mongoUrl: mongoUri,
+      dbName: "findmything",
+      collectionName: "sessions",
+
+      ttl: 7 * 24 * 60 * 60
+    }),
+
+    cookie: {
+      httpOnly: true,
+
+      secure: isProduction,
+
+      sameSite: "lax",
+
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    }
+  })
+);
+
+// ======================================================
+// STATIC FILES
+// ======================================================
+
+app.use(
+  express.static(
+    path.join(__dirname, "public")
+  )
+);
+
+app.use(
+  "/uploads",
+  express.static(
+    path.join(__dirname, "public/uploads")
+  )
+);
+
+// ======================================================
+// ROUTES
+// ======================================================
+
 app.use(authRoutes);
-app.use(itemRoutes);
-app.use(adminRoutes);
-app.use(userRoutes); // Fallback router serving index and static pages
 
-// Global Error Handler Middleware
+app.use(itemRoutes);
+
+app.use(adminRoutes);
+
+app.use(userRoutes);
+
+// ======================================================
+// GLOBAL ERROR HANDLER
+// ======================================================
+
 app.use(errorHandler);
 
-// Connect to MongoDB Database
-connectDB().then(() => {
-  // Run migration backfill for existing DB items
-  setTimeout(runStartupMigration, 1000);
-});
+// ======================================================
+// DATABASE CONNECTION
+// ======================================================
 
-// Export Express app for Vercel
-module.exports = app;
+connectDB()
+  .then(() => {
 
-/* ================= AUTO DELETE OLD COLLECTED (30 days limit) ================= */
+    console.log("Database connection initialized.");
+
+    // Run migration after database connection
+    setTimeout(() => {
+      runStartupMigration();
+    }, 1000);
+
+    // Start local server only when running directly
+    if (require.main === module) {
+
+      app.listen(PORT, () => {
+
+        console.log(
+          `Server running in ${isProduction
+            ? "production"
+            : "development"
+          } mode on port ${PORT}`
+        );
+
+      });
+
+    }
+
+  })
+  .catch((err) => {
+
+    console.error(
+      "Failed to initialize database:",
+      err
+    );
+
+  });
+
+// ======================================================
+// AUTO DELETE OLD COLLECTED ITEMS
+// ======================================================
+
 setInterval(async () => {
+
   try {
+
     const date = new Date();
-    date.setMonth(date.getMonth() - 1);
+
+    date.setMonth(
+      date.getMonth() - 1
+    );
 
     await Collected.deleteMany({
-      collectedAt: { $lt: date }
+      collectedAt: {
+        $lt: date
+      }
     });
+
+    console.log(
+      "Auto delete: Old collected items checked."
+    );
+
   } catch (err) {
-    console.error("Auto delete collected interval error:", err.message);
+
+    console.error(
+      "Auto delete collected interval error:",
+      err.message
+    );
+
   }
+
 }, 86400000);
 
-/* ================= AUTO CYCLE RESET ================= */
+// ======================================================
+// AUTO CYCLE RESET
+// ======================================================
+
 let lastCycle = getCurrentCycle();
 
 setInterval(async () => {
+
   try {
-    const currentCycle = getCurrentCycle();
+
+    const currentCycle =
+      getCurrentCycle();
 
     if (currentCycle !== lastCycle) {
-      console.log("🔄 Cycle Changed → Resetting Data");
 
-      await Item.deleteMany({ cycle: lastCycle });
-      await Collected.deleteMany({ cycle: lastCycle });
+      console.log(
+        "🔄 Cycle Changed → Resetting Data"
+      );
+
+      await Item.deleteMany({
+        cycle: lastCycle
+      });
+
+      await Collected.deleteMany({
+        cycle: lastCycle
+      });
 
       lastCycle = currentCycle;
+
     }
+
   } catch (err) {
-    console.error("Auto cycle reset interval error:", err.message);
+
+    console.error(
+      "Auto cycle reset interval error:",
+      err.message
+    );
+
   }
+
 }, 86400000);
 
-// Server start is deferred to connectDB promise resolution
+// ======================================================
+// EXPORT FOR VERCEL
+// ======================================================
+
+module.exports = app;
