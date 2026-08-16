@@ -1,1407 +1,2306 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard — MITS FindMyThing</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/navbar.css">
-<style>
-/* ═══════════════════════════════════════════
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — MITS FindMyThing</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    /* ═══════════════════════════════════════════
    TOKENS
 ═══════════════════════════════════════════ */
-:root {
-  --bg:        #060b14;
-  --bg2:       #090f1e;
-  --bg3:       #0d1528;
-  --surface:   #101828;
-  --surface2:  #152035;
-  --surface3:  #1a2840;
-  --border:    rgba(196,160,64,0.12);
-  --border2:   rgba(196,160,64,0.24);
-  --border3:   rgba(196,160,64,0.42);
-  --gold:      #c4a040;
-  --gold2:     #e2c06a;
-  --gold3:     #f4dea0;
-  --goldGlow:  rgba(196,160,64,0.18);
-  --text:      #e4e8f2;
-  --text2:     #8894b0;
-  --text3:     #485070;
-  --red:       #d94040;
-  --red2:      #f06060;
-  --red-bg:    rgba(217,64,64,0.1);
-  --blue:      #3a8fd6;
-  --blue2:     #60aef0;
-  --blue-bg:   rgba(58,143,214,0.1);
-  --green:     #2ab870;
-  --green2:    #4cd890;
-  --green-bg:  rgba(42,184,112,0.1);
-  --amber:     #e09030;
-  --amber-bg:  rgba(224,144,48,0.1);
-  --purple:    #8860d0;
-  --purple-bg: rgba(136,96,208,0.1);
-  --teal:      #20a8a0;
-  --teal-bg:   rgba(32,168,160,0.1);
-  --r:         16px;
-  --r2:        12px;
-  --r3:        8px;
-  --shadow:    0 24px 60px rgba(0,0,0,0.7);
-  --shadow2:   0 8px 30px rgba(0,0,0,0.4);
-}
+    :root {
+      --bg: #060b14;
+      --bg2: #090f1e;
+      --bg3: #0d1528;
+      --surface: #101828;
+      --surface2: #152035;
+      --surface3: #1a2840;
+      --border: rgba(196, 160, 64, 0.12);
+      --border2: rgba(196, 160, 64, 0.24);
+      --border3: rgba(196, 160, 64, 0.42);
+      --gold: #c4a040;
+      --gold2: #e2c06a;
+      --gold3: #f4dea0;
+      --goldGlow: rgba(196, 160, 64, 0.18);
+      --text: #e4e8f2;
+      --text2: #8894b0;
+      --text3: #485070;
+      --red: #d94040;
+      --red2: #f06060;
+      --red-bg: rgba(217, 64, 64, 0.1);
+      --blue: #3a8fd6;
+      --blue2: #60aef0;
+      --blue-bg: rgba(58, 143, 214, 0.1);
+      --green: #2ab870;
+      --green2: #4cd890;
+      --green-bg: rgba(42, 184, 112, 0.1);
+      --amber: #e09030;
+      --amber-bg: rgba(224, 144, 48, 0.1);
+      --purple: #8860d0;
+      --purple-bg: rgba(136, 96, 208, 0.1);
+      --teal: #20a8a0;
+      --teal-bg: rgba(32, 168, 160, 0.1);
+      --r: 16px;
+      --r2: 12px;
+      --r3: 8px;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+      --shadow2: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--border3)}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent
+    }
 
-/* ═══════════════════════
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 3px
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border3)
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════
    AMBIENT BACKGROUND
 ═══════════════════════ */
-.bg-stage{
-  position:fixed;inset:0;z-index:0;
-  pointer-events:none;overflow:hidden;
-}
-/* Fine grain noise */
-.bg-stage::before{
-  content:'';
-  position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  background-size:200px 200px;
-  opacity:0.5;
-  mix-blend-mode:overlay;
-}
-/* Grid */
-.bg-stage::after{
-  content:'';
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(196,160,64,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196,160,64,0.025) 1px, transparent 1px);
-  background-size:72px 72px;
-  animation:gMove 40s linear infinite;
-}
-@keyframes gMove{0%{background-position:0 0}100%{background-position:72px 72px}}
+    .bg-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
 
-/* Light orbs */
-.orb{
-  position:absolute;border-radius:50%;
-  filter:blur(100px);
-  animation:oPulse 12s ease-in-out infinite alternate;
-}
-.orb-1{width:600px;height:600px;top:-250px;left:-150px;background:rgba(196,160,64,0.06);animation-delay:0s}
-.orb-2{width:500px;height:500px;bottom:-150px;right:-100px;background:rgba(58,143,214,0.05);animation-delay:4s}
-.orb-3{width:350px;height:350px;top:45%;left:45%;background:rgba(42,184,112,0.03);animation-delay:8s}
-.orb-4{width:250px;height:250px;top:20%;right:20%;background:rgba(136,96,208,0.04);animation-delay:2s}
-@keyframes oPulse{0%{opacity:0.5;transform:scale(1)}100%{opacity:1;transform:scale(1.2)}}
+    /* Fine grain noise */
+    .bg-stage::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.5;
+      mix-blend-mode: overlay;
+    }
 
-/* Vignette */
-.vignette{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at center, transparent 40%, rgba(6,11,20,0.7) 100%);
-}
+    /* Grid */
+    .bg-stage::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(196, 160, 64, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(196, 160, 64, 0.025) 1px, transparent 1px);
+      background-size: 72px 72px;
+      animation: gMove 40s linear infinite;
+    }
 
-/* ═══════════════════════
+    @keyframes gMove {
+      0% {
+        background-position: 0 0
+      }
+
+      100% {
+        background-position: 72px 72px
+      }
+    }
+
+    /* Light orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      animation: oPulse 12s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      top: -250px;
+      left: -150px;
+      background: rgba(196, 160, 64, 0.06);
+      animation-delay: 0s
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      bottom: -150px;
+      right: -100px;
+      background: rgba(58, 143, 214, 0.05);
+      animation-delay: 4s
+    }
+
+    .orb-3 {
+      width: 350px;
+      height: 350px;
+      top: 45%;
+      left: 45%;
+      background: rgba(42, 184, 112, 0.03);
+      animation-delay: 8s
+    }
+
+    .orb-4 {
+      width: 250px;
+      height: 250px;
+      top: 20%;
+      right: 20%;
+      background: rgba(136, 96, 208, 0.04);
+      animation-delay: 2s
+    }
+
+    @keyframes oPulse {
+      0% {
+        opacity: 0.5;
+        transform: scale(1)
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1.2)
+      }
+    }
+
+    /* Vignette */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(6, 11, 20, 0.7) 100%);
+    }
+
+    /* ═══════════════════════
    NAVBAR
 ═══════════════════════ */
-.navbar{
-  position:sticky;top:0;z-index:500;
-  background:rgba(6,11,20,0.9);
-  backdrop-filter:blur(28px) saturate(1.4);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;
-  justify-content:space-between;
-  padding:0 44px;height:66px;
-}
-.navbar-shimmer{
-  position:absolute;bottom:-1px;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent 0%,var(--gold) 25%,var(--gold2) 50%,var(--gold) 75%,transparent 100%);
-  background-size:200% 100%;
-  animation:shimmer 4s linear infinite;
-}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: rgba(6, 11, 20, 0.9);
+      backdrop-filter: blur(28px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 44px;
+      height: 66px;
+    }
 
-.nav-brand-wrap{display:flex;align-items:center;gap:18px}
-.nav-logo{
-  width:38px;height:38px;border-radius:10px;
-  background:linear-gradient(135deg,rgba(196,160,64,0.2),rgba(196,160,64,0.05));
-  border:1px solid var(--border2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;
-  box-shadow:0 0 20px rgba(196,160,64,0.1);
-  flex-shrink:0;
-}
-.nav-brand{
-  font-family:'Cormorant Garamond',serif;
-  font-size:22px;font-weight:700;color:var(--text);
-  letter-spacing:-0.3px;line-height:1;
-}
-.nav-brand span{color:var(--gold)}
-.nav-brand-sub{
-  font-size:9px;color:var(--gold);
-  letter-spacing:3.5px;text-transform:uppercase;
-  margin-top:2px;opacity:0.8;
-}
+    .navbar-shimmer {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 25%, var(--gold2) 50%, var(--gold) 75%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer 4s linear infinite;
+    }
 
-.admin-chip{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--red-bg);
-  border:1px solid rgba(217,64,64,0.35);
-  color:var(--red2);font-size:10.5px;font-weight:700;
-  padding:5px 14px;border-radius:100px;
-  letter-spacing:1.2px;text-transform:uppercase;
-  box-shadow:0 0 24px rgba(217,64,64,0.12);
-}
-.admin-pulse{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--red2);
-  animation:pulse 2s ease infinite;
-  box-shadow:0 0 8px var(--red2);
-}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(1.8)}}
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0
+      }
 
-.nav-actions{display:flex;align-items:center;gap:6px}
-#google_translate_element{font-size:11px;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,0.04);border:1px solid var(--border)}
-.goog-logo-link,.goog-te-gadget span{display:none!important}
-.goog-te-gadget{color:transparent!important}
+      100% {
+        background-position: -200% 0
+      }
+    }
 
-.nav-link{
-  color:var(--text2);text-decoration:none;
-  font-size:12.5px;font-weight:400;
-  padding:7px 14px;border-radius:8px;
-  border:1px solid transparent;
-  transition:all 0.22s;
-}
-.nav-link:hover{color:var(--gold2);border-color:var(--border2);background:var(--goldGlow)}
-.nav-link.danger:hover{color:var(--red2);border-color:rgba(217,64,64,0.3);background:var(--red-bg)}
-.nav-link.active{color:var(--gold);border-color:var(--border2);background:var(--goldGlow)}
+    .nav-brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px
+    }
 
-/* ═══════════════════════
+    .nav-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(196, 160, 64, 0.2), rgba(196, 160, 64, 0.05));
+      border: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 0 20px rgba(196, 160, 64, 0.1);
+      flex-shrink: 0;
+    }
+
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+      line-height: 1;
+    }
+
+    .nav-brand span {
+      color: var(--gold)
+    }
+
+    .nav-brand-sub {
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      margin-top: 2px;
+      opacity: 0.8;
+    }
+
+    .admin-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red-bg);
+      border: 1px solid rgba(217, 64, 64, 0.35);
+      color: var(--red2);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 100px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      box-shadow: 0 0 24px rgba(217, 64, 64, 0.12);
+    }
+
+    .admin-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red2);
+      animation: pulse 2s ease infinite;
+      box-shadow: 0 0 8px var(--red2);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: 0.3;
+        transform: scale(1.8)
+      }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    #google_translate_element {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border)
+    }
+
+    .goog-logo-link,
+    .goog-te-gadget span {
+      display: none !important
+    }
+
+    .goog-te-gadget {
+      color: transparent !important
+    }
+
+    .nav-link {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 400;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: all 0.22s;
+    }
+
+    .nav-link:hover {
+      color: var(--gold2);
+      border-color: var(--border2);
+      background: var(--goldGlow)
+    }
+
+    .nav-link.danger:hover {
+      color: var(--red2);
+      border-color: rgba(217, 64, 64, 0.3);
+      background: var(--red-bg)
+    }
+
+    .nav-link.active {
+      color: var(--gold);
+      border-color: var(--border2);
+      background: var(--goldGlow)
+    }
+
+    /* ═══════════════════════
    PAGE
 ═══════════════════════ */
-.page{
-  position:relative;z-index:1;
-  padding:40px 44px 80px;
-  max-width:1700px;margin:0 auto;
-}
+    .page {
+      position: relative;
+      z-index: 1;
+      padding: 40px 44px 80px;
+      max-width: 1700px;
+      margin: 0 auto;
+    }
 
-/* ═══════════════════════
+    /* ═══════════════════════
    PAGE HEADER
 ═══════════════════════ */
-.page-header{
-  margin-bottom:36px;
-  animation:fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) both;
-}
-.breadcrumb{
-  display:flex;align-items:center;gap:8px;
-  font-size:11px;color:var(--text3);
-  margin-bottom:10px;
-  font-family:'DM Mono',monospace;letter-spacing:0.4px;
-}
-.breadcrumb-sep{color:var(--border3)}
-.breadcrumb-cur{color:var(--gold)}
-.page-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:40px;font-weight:700;color:var(--text);
-  line-height:1.1;letter-spacing:-0.5px;
-}
-.page-title em{color:var(--gold);font-style:italic}
-.page-subtitle{
-  font-size:13.5px;color:var(--text2);
-  margin-top:7px;max-width:560px;line-height:1.65;
-}
+    .page-header {
+      margin-bottom: 36px;
+      animation: fadeUp 0.7s cubic-bezier(.22, .68, 0, 1.2) both;
+    }
 
-/* Privilege strip */
-.priv-strip{
-  display:flex;align-items:flex-start;gap:14px;
-  background:linear-gradient(135deg,rgba(217,64,64,0.08),rgba(217,64,64,0.04));
-  border:1px solid rgba(217,64,64,0.25);
-  border-left:3px solid var(--red2);
-  border-radius:var(--r2);padding:14px 18px;
-  font-size:12.5px;color:#e8a0a0;
-  margin-bottom:32px;
-  animation:fadeUp 0.7s 0.05s cubic-bezier(.22,.68,0,1.2) both;
-}
-.priv-icon{font-size:22px;line-height:1;flex-shrink:0;margin-top:1px}
-.priv-text strong{color:var(--red2);display:block;margin-bottom:3px;font-size:13px}
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text3);
+      margin-bottom: 10px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.4px;
+    }
 
-/* ═══════════════════════
+    .breadcrumb-sep {
+      color: var(--border3)
+    }
+
+    .breadcrumb-cur {
+      color: var(--gold)
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    .page-title em {
+      color: var(--gold);
+      font-style: italic
+    }
+
+    .page-subtitle {
+      font-size: 13.5px;
+      color: var(--text2);
+      margin-top: 7px;
+      max-width: 560px;
+      line-height: 1.65;
+    }
+
+    /* Privilege strip */
+    .priv-strip {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: linear-gradient(135deg, rgba(217, 64, 64, 0.08), rgba(217, 64, 64, 0.04));
+      border: 1px solid rgba(217, 64, 64, 0.25);
+      border-left: 3px solid var(--red2);
+      border-radius: var(--r2);
+      padding: 14px 18px;
+      font-size: 12.5px;
+      color: #e8a0a0;
+      margin-bottom: 32px;
+      animation: fadeUp 0.7s 0.05s cubic-bezier(.22, .68, 0, 1.2) both;
+    }
+
+    .priv-icon {
+      font-size: 22px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .priv-text strong {
+      color: var(--red2);
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px
+    }
+
+    /* ═══════════════════════
    STATS GRID
 ═══════════════════════ */
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(175px,1fr));
-  gap:14px;
-  margin-bottom:36px;
-  animation:fadeUp 0.7s 0.1s cubic-bezier(.22,.68,0,1.2) both;
-}
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 14px;
+      margin-bottom: 36px;
+      animation: fadeUp 0.7s 0.1s cubic-bezier(.22, .68, 0, 1.2) both;
+    }
 
-.stat-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:22px 20px 20px;
-  position:relative;overflow:hidden;
-  transition:transform 0.3s cubic-bezier(.22,.68,0,1.2), box-shadow 0.3s, border-color 0.3s;
-  cursor:default;
-}
-.stat-card:hover{
-  transform:translateY(-6px);
-  border-color:var(--border2);
-  box-shadow:0 20px 50px rgba(0,0,0,0.5);
-}
-/* Top accent line */
-.stat-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--sc-accent,var(--gold));
-  box-shadow:0 0 18px var(--sc-accent,var(--gold));
-}
-/* Corner glow */
-.stat-card::after{
-  content:'';
-  position:absolute;top:0;right:0;
-  width:80px;height:80px;
-  background:radial-gradient(ellipse at top right,var(--sc-glow,rgba(196,160,64,0.1)) 0%,transparent 70%);
-  pointer-events:none;
-}
-.sc-icon{font-size:26px;margin-bottom:14px;display:block;line-height:1}
-.sc-num{
-  font-family:'Cormorant Garamond',serif;
-  font-size:42px;font-weight:700;color:var(--text);
-  line-height:1;margin-bottom:4px;display:block;
-  background:linear-gradient(135deg,var(--text),var(--sc-col,var(--gold)));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.sc-label{
-  font-size:10.5px;color:var(--text3);
-  text-transform:uppercase;letter-spacing:1.8px;font-weight:600;
-}
-.sc-delta{
-  position:absolute;top:20px;right:18px;
-  font-size:10px;font-weight:700;
-  padding:3px 10px;border-radius:100px;
-  background:var(--sc-glow,rgba(196,160,64,0.12));
-  color:var(--sc-col,var(--gold));
-  border:1px solid rgba(255,255,255,0.06);
-}
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 22px 20px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(.22, .68, 0, 1.2), box-shadow 0.3s, border-color 0.3s;
+      cursor: default;
+    }
 
-/* Card flavors */
-.sc-gold   {--sc-accent:var(--gold);--sc-col:var(--gold);--sc-glow:rgba(196,160,64,0.12)}
-.sc-red    {--sc-accent:var(--red);--sc-col:var(--red2);--sc-glow:rgba(217,64,64,0.1)}
-.sc-blue   {--sc-accent:var(--blue);--sc-col:var(--blue2);--sc-glow:rgba(58,143,214,0.1)}
-.sc-green  {--sc-accent:var(--green);--sc-col:var(--green2);--sc-glow:rgba(42,184,112,0.1)}
-.sc-amber  {--sc-accent:var(--amber);--sc-col:#f0b050;--sc-glow:rgba(224,144,48,0.1)}
-.sc-purple {--sc-accent:var(--purple);--sc-col:#b090f0;--sc-glow:rgba(136,96,208,0.1)}
+    .stat-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
 
-/* ═══════════════════════
+    /* Top accent line */
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--sc-accent, var(--gold));
+      box-shadow: 0 0 18px var(--sc-accent, var(--gold));
+    }
+
+    /* Corner glow */
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(ellipse at top right, var(--sc-glow, rgba(196, 160, 64, 0.1)) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .sc-icon {
+      font-size: 26px;
+      margin-bottom: 14px;
+      display: block;
+      line-height: 1
+    }
+
+    .sc-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+      display: block;
+      background: linear-gradient(135deg, var(--text), var(--sc-col, var(--gold)));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sc-label {
+      font-size: 10.5px;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      font-weight: 600;
+    }
+
+    .sc-delta {
+      position: absolute;
+      top: 20px;
+      right: 18px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: var(--sc-glow, rgba(196, 160, 64, 0.12));
+      color: var(--sc-col, var(--gold));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Card flavors */
+    .sc-gold {
+      --sc-accent: var(--gold);
+      --sc-col: var(--gold);
+      --sc-glow: rgba(196, 160, 64, 0.12)
+    }
+
+    .sc-red {
+      --sc-accent: var(--red);
+      --sc-col: var(--red2);
+      --sc-glow: rgba(217, 64, 64, 0.1)
+    }
+
+    .sc-blue {
+      --sc-accent: var(--blue);
+      --sc-col: var(--blue2);
+      --sc-glow: rgba(58, 143, 214, 0.1)
+    }
+
+    .sc-green {
+      --sc-accent: var(--green);
+      --sc-col: var(--green2);
+      --sc-glow: rgba(42, 184, 112, 0.1)
+    }
+
+    .sc-amber {
+      --sc-accent: var(--amber);
+      --sc-col: #f0b050;
+      --sc-glow: rgba(224, 144, 48, 0.1)
+    }
+
+    .sc-purple {
+      --sc-accent: var(--purple);
+      --sc-col: #b090f0;
+      --sc-glow: rgba(136, 96, 208, 0.1)
+    }
+
+    /* ═══════════════════════
    SECTION TITLES
 ═══════════════════════ */
-.section-head{
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:12px;
-  margin-bottom:18px;
-  padding-bottom:14px;
-  border-bottom:1px solid var(--border);
-}
-.section-head-left{display:flex;align-items:center;gap:14px}
-.sh-icon{
-  width:42px;height:42px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
-  border:1px solid var(--border);
-}
-.sh-icon.si-items{background:rgba(196,160,64,0.1);border-color:rgba(196,160,64,0.2)}
-.sh-icon.si-users{background:var(--blue-bg);border-color:rgba(58,143,214,0.2)}
-.sh-icon.si-coll{background:var(--green-bg);border-color:rgba(42,184,112,0.2)}
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
 
-.sh-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:22px;font-weight:700;color:var(--text);
-  letter-spacing:-0.2px;
-}
-.sh-sub{font-size:11.5px;color:var(--text3);margin-top:2px}
+    .section-head-left {
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
 
-.sh-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:5px 14px;border-radius:100px;
-  font-size:11px;font-weight:700;letter-spacing:0.8px;
-  text-transform:uppercase;border:1px solid;
-}
+    .sh-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
 
-/* ═══════════════════════
+    .sh-icon.si-items {
+      background: rgba(196, 160, 64, 0.1);
+      border-color: rgba(196, 160, 64, 0.2)
+    }
+
+    .sh-icon.si-users {
+      background: var(--blue-bg);
+      border-color: rgba(58, 143, 214, 0.2)
+    }
+
+    .sh-icon.si-coll {
+      background: var(--green-bg);
+      border-color: rgba(42, 184, 112, 0.2)
+    }
+
+    .sh-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.2px;
+    }
+
+    .sh-sub {
+      font-size: 11.5px;
+      color: var(--text3);
+      margin-top: 2px
+    }
+
+    .sh-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border: 1px solid;
+    }
+
+    /* ═══════════════════════
    FILTER CARDS
 ═══════════════════════ */
-.filter-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:18px 22px;
-  margin-bottom:14px;
-}
-.flabel{
-  display:flex;align-items:center;gap:10px;
-  font-size:10px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;color:var(--text3);
-  margin-bottom:14px;
-}
-.flabel::after{content:'';flex:1;height:1px;background:var(--border)}
-.frow{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
-.fg{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}
-.fg label{
-  font-size:10px;font-weight:700;letter-spacing:1px;
-  text-transform:uppercase;color:var(--text3);
-}
-.fg input,.fg select{
-  padding:8px 12px;
-  border:1.5px solid rgba(255,255,255,0.07);
-  border-radius:var(--r3);
-  font-family:'DM Sans',sans-serif;
-  font-size:13px;color:var(--text);
-  background:rgba(255,255,255,0.04);
-  outline:none;transition:all 0.22s;
-}
-.fg input:focus,.fg select:focus{
-  border-color:var(--gold);
-  background:rgba(196,160,64,0.05);
-  box-shadow:0 0 0 3px rgba(196,160,64,0.1);
-}
-.fg input::placeholder{color:var(--text3)}
-.fg select option{background:#152035;color:var(--text)}
+    .filter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 22px;
+      margin-bottom: 14px;
+    }
 
-.btn-reset{
-  padding:8px 18px;
-  background:transparent;
-  border:1.5px solid rgba(255,255,255,0.07);
-  border-radius:var(--r3);
-  font-family:'DM Sans',sans-serif;
-  font-size:12px;color:var(--text3);
-  cursor:pointer;transition:all 0.22s;white-space:nowrap;
-}
-.btn-reset:hover{border-color:var(--gold);color:var(--gold);background:var(--goldGlow)}
+    .flabel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 14px;
+    }
 
-.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.pill{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(196,160,64,0.08);
-  border:1px solid rgba(196,160,64,0.22);
-  border-radius:100px;padding:3px 11px;
-  font-size:11px;color:var(--gold);font-weight:500;
-}
-.pill button{background:none;border:none;cursor:pointer;color:var(--gold);font-size:12px;line-height:1;padding:0;transition:color 0.2s}
-.pill button:hover{color:var(--red2)}
+    .flabel::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border)
+    }
 
-/* ═══════════════════════
+    .frow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end
+    }
+
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 140px
+    }
+
+    .fg label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    .fg input,
+    .fg select {
+      padding: 8px 12px;
+      border: 1.5px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--r3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      outline: none;
+      transition: all 0.22s;
+    }
+
+    .fg input:focus,
+    .fg select:focus {
+      border-color: var(--gold);
+      background: rgba(196, 160, 64, 0.05);
+      box-shadow: 0 0 0 3px rgba(196, 160, 64, 0.1);
+    }
+
+    .fg input::placeholder {
+      color: var(--text3)
+    }
+
+    .fg select option {
+      background: #152035;
+      color: var(--text)
+    }
+
+    .btn-reset {
+      padding: 8px 18px;
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--r3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--text3);
+      cursor: pointer;
+      transition: all 0.22s;
+      white-space: nowrap;
+    }
+
+    .btn-reset:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--goldGlow)
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(196, 160, 64, 0.08);
+      border: 1px solid rgba(196, 160, 64, 0.22);
+      border-radius: 100px;
+      padding: 3px 11px;
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .pill button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gold);
+      font-size: 12px;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.2s
+    }
+
+    .pill button:hover {
+      color: var(--red2)
+    }
+
+    /* ═══════════════════════
    TABS
 ═══════════════════════ */
-.tab-bar{
-  display:flex;gap:0;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r2);
-  padding:5px;width:fit-content;
-  flex-wrap:wrap;margin-bottom:16px;
-}
-.tb{
-  display:flex;align-items:center;gap:8px;
-  padding:9px 22px;border-radius:var(--r3);border:none;
-  font-family:'DM Sans',sans-serif;
-  font-size:12.5px;font-weight:500;
-  cursor:pointer;transition:all 0.25s cubic-bezier(.22,.68,0,1.2);
-  background:transparent;color:var(--text3);
-}
-.tb:hover{color:var(--text)}
-.tb.active-all{background:linear-gradient(135deg,var(--surface2),var(--bg3));color:var(--gold2);box-shadow:var(--shadow2)}
-.tb.active-lost{background:linear-gradient(135deg,rgba(217,64,64,0.22),rgba(180,40,40,0.28));color:var(--red2);box-shadow:0 4px 14px rgba(217,64,64,0.18)}
-.tb.active-found{background:linear-gradient(135deg,rgba(58,143,214,0.18),rgba(30,100,180,0.25));color:var(--blue2);box-shadow:0 4px 14px rgba(58,143,214,0.12)}
-.tc{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(255,255,255,0.08)}
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 5px;
+      width: fit-content;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
 
-/* ═══════════════════════
+    .tb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 22px;
+      border-radius: var(--r3);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(.22, .68, 0, 1.2);
+      background: transparent;
+      color: var(--text3);
+    }
+
+    .tb:hover {
+      color: var(--text)
+    }
+
+    .tb.active-all {
+      background: linear-gradient(135deg, var(--surface2), var(--bg3));
+      color: var(--gold2);
+      box-shadow: var(--shadow2)
+    }
+
+    .tb.active-lost {
+      background: linear-gradient(135deg, rgba(217, 64, 64, 0.22), rgba(180, 40, 40, 0.28));
+      color: var(--red2);
+      box-shadow: 0 4px 14px rgba(217, 64, 64, 0.18)
+    }
+
+    .tb.active-found {
+      background: linear-gradient(135deg, rgba(58, 143, 214, 0.18), rgba(30, 100, 180, 0.25));
+      color: var(--blue2);
+      box-shadow: 0 4px 14px rgba(58, 143, 214, 0.12)
+    }
+
+    .tc {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.08)
+    }
+
+    /* ═══════════════════════
    TABLE CARDS
 ═══════════════════════ */
-.table-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  overflow:hidden;
-  box-shadow:var(--shadow2);
-  margin-bottom:40px;
-  animation:fadeUp 0.7s 0.15s cubic-bezier(.22,.68,0,1.2) both;
-}
-.table-card.tc-gold  {border-top:2px solid var(--gold)}
-.table-card.tc-blue  {border-top:2px solid var(--blue)}
-.table-card.tc-green {border-top:2px solid var(--green)}
-.table-card.tc-red   {border-top:2px solid var(--red)}
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: var(--shadow2);
+      margin-bottom: 40px;
+      animation: fadeUp 0.7s 0.15s cubic-bezier(.22, .68, 0, 1.2) both;
+    }
 
-.tscroll{overflow-x:auto}
+    .table-card.tc-gold {
+      border-top: 2px solid var(--gold)
+    }
 
-table{width:100%;border-collapse:collapse;font-size:12.5px}
+    .table-card.tc-blue {
+      border-top: 2px solid var(--blue)
+    }
 
-thead th{
-  background:rgba(255,255,255,0.025);color:var(--text2);
-  padding:11px 14px;font-weight:600;
-  font-size:10px;letter-spacing:1px;text-transform:uppercase;
-  border-bottom:1px solid var(--border);
-  white-space:nowrap;position:sticky;top:0;z-index:2;
-  cursor:pointer;user-select:none;transition:all 0.2s;
-}
-thead th:hover{background:rgba(196,160,64,0.05);color:var(--gold2)}
-thead th.sorted{color:var(--gold)}
-thead th .si{margin-left:5px;opacity:0.3;font-size:9px;display:inline-block;transition:transform 0.2s}
-thead th.sorted .si{opacity:1}
+    .table-card.tc-green {
+      border-top: 2px solid var(--green)
+    }
 
-tbody td{
-  padding:11px 14px;
-  border-bottom:1px solid rgba(255,255,255,0.035);
-  color:var(--text);vertical-align:middle;text-align:center;
-  transition:background 0.15s;
-}
-tbody tr:last-child td{border-bottom:none}
-tbody tr.data-row{transition:background 0.15s;cursor:pointer}
-tbody tr.data-row:hover td{background:rgba(196,160,64,0.035)}
+    .table-card.tc-red {
+      border-top: 2px solid var(--red)
+    }
 
-.table-footer{
-  padding:11px 20px;
-  background:rgba(255,255,255,0.018);
-  border-top:1px solid var(--border);
-  font-size:11px;color:var(--text3);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:8px;
-}
-.table-footer strong{color:var(--text2)}
+    .tscroll {
+      overflow-x: auto
+    }
 
-/* Expand row */
-.erow{display:none}
-.erow td{
-  background:rgba(196,160,64,0.025);
-  padding:16px 22px;text-align:left;
-  border-bottom:1px solid var(--border);
-}
-.erow.open{display:table-row;animation:expandR 0.22s ease both}
-@keyframes expandR{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px}
-.ef label{
-  font-size:9.5px;font-weight:700;letter-spacing:1.4px;
-  text-transform:uppercase;color:var(--text3);
-  display:block;margin-bottom:3px;
-}
-.ef span{font-size:12.5px;color:var(--text2);font-weight:500}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px
+    }
 
-/* ═══════════════════════
+    thead th {
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--text2);
+      padding: 11px 14px;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    thead th:hover {
+      background: rgba(196, 160, 64, 0.05);
+      color: var(--gold2)
+    }
+
+    thead th.sorted {
+      color: var(--gold)
+    }
+
+    thead th .si {
+      margin-left: 5px;
+      opacity: 0.3;
+      font-size: 9px;
+      display: inline-block;
+      transition: transform 0.2s
+    }
+
+    thead th.sorted .si {
+      opacity: 1
+    }
+
+    tbody td {
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+      color: var(--text);
+      vertical-align: middle;
+      text-align: center;
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none
+    }
+
+    tbody tr.data-row {
+      transition: background 0.15s;
+      cursor: pointer
+    }
+
+    tbody tr.data-row:hover td {
+      background: rgba(196, 160, 64, 0.035)
+    }
+
+    .table-footer {
+      padding: 11px 20px;
+      background: rgba(255, 255, 255, 0.018);
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .table-footer strong {
+      color: var(--text2)
+    }
+
+    /* Expand row */
+    .erow {
+      display: none
+    }
+
+    .erow td {
+      background: rgba(196, 160, 64, 0.025);
+      padding: 16px 22px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .erow.open {
+      display: table-row;
+      animation: expandR 0.22s ease both
+    }
+
+    @keyframes expandR {
+      from {
+        opacity: 0;
+        transform: translateY(-4px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .egrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 12px
+    }
+
+    .ef label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--text3);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .ef span {
+      font-size: 12.5px;
+      color: var(--text2);
+      font-weight: 500
+    }
+
+    /* ═══════════════════════
    BADGES
 ═══════════════════════ */
-.badge{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:3px 10px;border-radius:100px;
-  font-size:10.5px;font-weight:700;letter-spacing:0.3px;
-}
-.b-lost     {background:var(--red-bg);color:#f08080;border:1px solid rgba(217,64,64,0.22)}
-.b-found    {background:var(--blue-bg);color:#80b8f0;border:1px solid rgba(58,143,214,0.22)}
-.b-collected{background:var(--green-bg);color:#80d8a8;border:1px solid rgba(42,184,112,0.22)}
-.b-pending  {background:var(--amber-bg);color:#f0c080;border:1px solid rgba(224,144,48,0.22)}
-.b-admin    {background:var(--red-bg);color:var(--red2);border:1px solid rgba(217,64,64,0.3)}
-.b-manager  {background:rgba(196,160,64,0.1);color:var(--gold2);border:1px solid rgba(196,160,64,0.28)}
-.b-user     {background:var(--blue-bg);color:var(--blue2);border:1px solid rgba(58,143,214,0.22)}
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
 
-/* Date chip */
-.dchip{
-  display:inline-flex;align-items:center;gap:4px;
-  font-family:'DM Mono',monospace;font-size:11px;
-  color:var(--text2);white-space:nowrap;
-}
+    .b-lost {
+      background: var(--red-bg);
+      color: #f08080;
+      border: 1px solid rgba(217, 64, 64, 0.22)
+    }
 
-/* Image thumb */
-.timg{
-  width:44px;height:44px;border-radius:var(--r3);
-  object-fit:cover;cursor:pointer;
-  border:1px solid var(--border);
-  transition:all 0.22s;
-}
-.timg:hover{transform:scale(1.16);border-color:var(--gold);box-shadow:0 0 20px rgba(196,160,64,0.3)}
-.no-img{
-  width:44px;height:44px;border-radius:var(--r3);
-  background:rgba(255,255,255,0.03);border:1px dashed var(--border);
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:15px;color:var(--text3);
-}
+    .b-found {
+      background: var(--blue-bg);
+      color: #80b8f0;
+      border: 1px solid rgba(58, 143, 214, 0.22)
+    }
 
-/* Email link */
-.elink{
-  color:var(--gold);text-decoration:none;
-  font-size:11.5px;font-family:'DM Mono',monospace;
-  transition:color 0.2s;
-}
-.elink:hover{color:var(--gold2);text-decoration:underline}
+    .b-collected {
+      background: var(--green-bg);
+      color: #80d8a8;
+      border: 1px solid rgba(42, 184, 112, 0.22)
+    }
 
-/* ═══════════════════════
+    .b-pending {
+      background: var(--amber-bg);
+      color: #f0c080;
+      border: 1px solid rgba(224, 144, 48, 0.22)
+    }
+
+    .b-admin {
+      background: var(--red-bg);
+      color: var(--red2);
+      border: 1px solid rgba(217, 64, 64, 0.3)
+    }
+
+    .b-manager {
+      background: rgba(196, 160, 64, 0.1);
+      color: var(--gold2);
+      border: 1px solid rgba(196, 160, 64, 0.28)
+    }
+
+    .b-user {
+      background: var(--blue-bg);
+      color: var(--blue2);
+      border: 1px solid rgba(58, 143, 214, 0.22)
+    }
+
+    /* Date chip */
+    .dchip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text2);
+      white-space: nowrap;
+    }
+
+    /* Image thumb */
+    .timg {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r3);
+      object-fit: cover;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all 0.22s;
+    }
+
+    .timg:hover {
+      transform: scale(1.16);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(196, 160, 64, 0.3)
+    }
+
+    .no-img {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r3);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: var(--text3);
+    }
+
+    /* Email link */
+    .elink {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 11.5px;
+      font-family: 'DM Mono', monospace;
+      transition: color 0.2s;
+    }
+
+    .elink:hover {
+      color: var(--gold2);
+      text-decoration: underline
+    }
+
+    /* ═══════════════════════
    DELETE BUTTON
 ═══════════════════════ */
-.del-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  background:var(--red-bg);color:var(--red2);
-  border:1px solid rgba(217,64,64,0.28);
-  padding:6px 14px;border-radius:var(--r3);
-  font-family:'DM Sans',sans-serif;
-  font-size:11.5px;font-weight:600;
-  cursor:pointer;transition:all 0.22s;white-space:nowrap;
-}
-.del-btn:hover{background:var(--red);color:#fff;border-color:var(--red);box-shadow:0 6px 18px rgba(217,64,64,0.4);transform:translateY(-1px)}
-.del-btn:active{transform:translateY(0)}
+    .del-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--red-bg);
+      color: var(--red2);
+      border: 1px solid rgba(217, 64, 64, 0.28);
+      padding: 6px 14px;
+      border-radius: var(--r3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s;
+      white-space: nowrap;
+    }
 
-/* ═══════════════════════
+    .del-btn:hover {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+      box-shadow: 0 6px 18px rgba(217, 64, 64, 0.4);
+      transform: translateY(-1px)
+    }
+
+    .del-btn:active {
+      transform: translateY(0)
+    }
+
+    /* ═══════════════════════
    USER PROFILE EXPANDED
 ═══════════════════════ */
-.user-profile-panel{
-  display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;
-  padding:4px 0;
-}
-.user-avatar-xl{
-  width:72px;height:72px;border-radius:50%;
-  background:linear-gradient(135deg,var(--surface2),var(--surface3));
-  border:2px solid var(--border2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:28px;flex-shrink:0;
-  box-shadow:0 0 24px rgba(196,160,64,0.12);
-}
-.user-info-primary{flex:1;min-width:200px}
-.user-name-lg{
-  font-family:'Cormorant Garamond',serif;
-  font-size:20px;font-weight:700;color:var(--text);
-  margin-bottom:2px;
-}
-.user-email-lg{
-  font-family:'DM Mono',monospace;
-  font-size:12px;color:var(--gold);
-  margin-bottom:8px;
-}
-.user-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.user-stat-chip{
-  display:inline-flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid var(--border);
-  border-radius:var(--r3);
-  padding:4px 11px;font-size:11px;color:var(--text2);
-}
-.user-stat-chip span{font-weight:700;color:var(--text)}
+    .user-profile-panel {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      padding: 4px 0;
+    }
 
-.user-detail-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-  gap:10px;flex:2;
-}
-.udf{
-  background:rgba(255,255,255,0.025);
-  border:1px solid var(--border);
-  border-radius:var(--r3);
-  padding:10px 13px;
-}
-.udf label{
-  font-size:9.5px;font-weight:700;
-  letter-spacing:1.4px;text-transform:uppercase;
-  color:var(--text3);display:block;margin-bottom:4px;
-}
-.udf span{font-size:12.5px;color:var(--text2);font-weight:500;word-break:break-all}
+    .user-avatar-xl {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--surface2), var(--surface3));
+      border: 2px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+      box-shadow: 0 0 24px rgba(196, 160, 64, 0.12);
+    }
 
-/* ═══════════════════════
+    .user-info-primary {
+      flex: 1;
+      min-width: 200px
+    }
+
+    .user-name-lg {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .user-email-lg {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .user-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .user-stat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--r3);
+      padding: 4px 11px;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .user-stat-chip span {
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    .user-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px;
+      flex: 2;
+    }
+
+    .udf {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border);
+      border-radius: var(--r3);
+      padding: 10px 13px;
+    }
+
+    .udf label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--text3);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .udf span {
+      font-size: 12.5px;
+      color: var(--text2);
+      font-weight: 500;
+      word-break: break-all
+    }
+
+    /* ═══════════════════════
    ROLE SELECT
 ═══════════════════════ */
-.role-sel{
-  padding:5px 10px;
-  background:rgba(255,255,255,0.04);
-  border:1.5px solid var(--border);
-  border-radius:var(--r3);
-  font-family:'DM Sans',sans-serif;
-  font-size:12px;color:var(--text);
-  cursor:pointer;outline:none;
-  transition:border-color 0.2s;
-}
-.role-sel:focus{border-color:var(--gold)}
-.role-sel option{background:#152035;color:var(--text)}
+    .role-sel {
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
 
-/* ═══════════════════════
+    .role-sel:focus {
+      border-color: var(--gold)
+    }
+
+    .role-sel option {
+      background: #152035;
+      color: var(--text)
+    }
+
+    /* ═══════════════════════
    IMAGE MODAL
 ═══════════════════════ */
-.modal{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.9);
-  justify-content:center;align-items:center;
-  z-index:9000;padding:24px;
-  backdrop-filter:blur(12px);
-}
-.modal.open{display:flex;animation:mIn 0.28s cubic-bezier(.22,.68,0,1.2) both}
-@keyframes mIn{from{opacity:0;transform:scale(0.88)}to{opacity:1;transform:scale(1)}}
-.mi{
-  position:relative;max-width:720px;width:100%;
-  background:var(--surface);border-radius:var(--r);
-  overflow:hidden;border:1px solid var(--border2);
-  box-shadow:0 50px 120px rgba(0,0,0,0.9);
-}
-.mi-img{text-align:center;background:#020608;padding:24px}
-.mi-img img{max-width:100%;max-height:460px;border-radius:var(--r2);object-fit:contain;display:block;margin:0 auto}
-.mi-info{padding:18px 22px}
-.mi-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px}
-.mi-desc{font-size:13.5px;color:var(--text2);line-height:1.65}
-.mi-close{
-  position:absolute;top:14px;right:14px;
-  background:rgba(255,255,255,0.08);border:none;border-radius:50%;
-  width:32px;height:32px;font-size:16px;color:var(--text);
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:background 0.2s,transform 0.2s;
-}
-.mi-close:hover{background:rgba(255,255,255,0.18);transform:rotate(90deg)}
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 9000;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
 
-/* ═══════════════════════
+    .modal.open {
+      display: flex;
+      animation: mIn 0.28s cubic-bezier(.22, .68, 0, 1.2) both
+    }
+
+    @keyframes mIn {
+      from {
+        opacity: 0;
+        transform: scale(0.88)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .mi {
+      position: relative;
+      max-width: 720px;
+      width: 100%;
+      background: var(--surface);
+      border-radius: var(--r);
+      overflow: hidden;
+      border: 1px solid var(--border2);
+      box-shadow: 0 50px 120px rgba(0, 0, 0, 0.9);
+    }
+
+    .mi-img {
+      text-align: center;
+      background: #020608;
+      padding: 24px
+    }
+
+    .mi-img img {
+      max-width: 100%;
+      max-height: 460px;
+      border-radius: var(--r2);
+      object-fit: contain;
+      display: block;
+      margin: 0 auto
+    }
+
+    .mi-info {
+      padding: 18px 22px
+    }
+
+    .mi-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .mi-desc {
+      font-size: 13.5px;
+      color: var(--text2);
+      line-height: 1.65
+    }
+
+    .mi-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .mi-close:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: rotate(90deg)
+    }
+
+    /* ═══════════════════════
    CONFIRM MODAL
 ═══════════════════════ */
-.confirm-overlay{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.84);
-  justify-content:center;align-items:center;
-  z-index:9100;backdrop-filter:blur(8px);
-}
-.confirm-overlay.open{display:flex;animation:mIn 0.22s ease both}
-.cbox{
-  background:var(--surface);border-radius:var(--r);
-  padding:40px 44px;max-width:420px;width:100%;
-  border:1px solid rgba(217,64,64,0.28);
-  box-shadow:0 0 80px rgba(217,64,64,0.12),var(--shadow);
-  text-align:center;
-}
-.cbox-icon{font-size:48px;margin-bottom:16px;display:block}
-.cbox-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:24px;font-weight:700;color:var(--text);margin-bottom:8px;
-}
-.cbox-text{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:6px}
-.cbox-item{
-  font-size:13.5px;font-weight:600;color:var(--text);
-  background:rgba(217,64,64,0.07);padding:10px 18px;
-  border-radius:var(--r3);margin:12px 0 22px;
-  border:1px solid rgba(217,64,64,0.18);
-  font-family:'DM Mono',monospace;
-  word-break:break-all;
-}
-.cbox-btns{display:flex;gap:12px;justify-content:center}
-.btn-cancel{
-  padding:10px 28px;background:transparent;
-  border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--r3);
-  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text2);
-  cursor:pointer;transition:all 0.22s;
-}
-.btn-cancel:hover{border-color:var(--text2);color:var(--text)}
-.btn-del-confirm{
-  padding:10px 28px;
-  background:linear-gradient(135deg,#c83030,#a02020);
-  border:none;border-radius:var(--r3);
-  font-family:'DM Sans',sans-serif;
-  font-size:14px;font-weight:700;
-  color:#fff;cursor:pointer;transition:all 0.22s;
-  box-shadow:0 4px 18px rgba(217,64,64,0.4);
-  letter-spacing:0.3px;
-}
-.btn-del-confirm:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(217,64,64,0.55)}
-.btn-del-confirm:active{transform:translateY(0)}
+    .confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.84);
+      justify-content: center;
+      align-items: center;
+      z-index: 9100;
+      backdrop-filter: blur(8px);
+    }
 
-/* ═══════════════════════
+    .confirm-overlay.open {
+      display: flex;
+      animation: mIn 0.22s ease both
+    }
+
+    .cbox {
+      background: var(--surface);
+      border-radius: var(--r);
+      padding: 40px 44px;
+      max-width: 420px;
+      width: 100%;
+      border: 1px solid rgba(217, 64, 64, 0.28);
+      box-shadow: 0 0 80px rgba(217, 64, 64, 0.12), var(--shadow);
+      text-align: center;
+    }
+
+    .cbox-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block
+    }
+
+    .cbox-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .cbox-text {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.65;
+      margin-bottom: 6px
+    }
+
+    .cbox-item {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      background: rgba(217, 64, 64, 0.07);
+      padding: 10px 18px;
+      border-radius: var(--r3);
+      margin: 12px 0 22px;
+      border: 1px solid rgba(217, 64, 64, 0.18);
+      font-family: 'DM Mono', monospace;
+      word-break: break-all;
+    }
+
+    .cbox-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center
+    }
+
+    .btn-cancel {
+      padding: 10px 28px;
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--r3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+
+    .btn-cancel:hover {
+      border-color: var(--text2);
+      color: var(--text)
+    }
+
+    .btn-del-confirm {
+      padding: 10px 28px;
+      background: linear-gradient(135deg, #c83030, #a02020);
+      border: none;
+      border-radius: var(--r3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.22s;
+      box-shadow: 0 4px 18px rgba(217, 64, 64, 0.4);
+      letter-spacing: 0.3px;
+    }
+
+    .btn-del-confirm:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(217, 64, 64, 0.55)
+    }
+
+    .btn-del-confirm:active {
+      transform: translateY(0)
+    }
+
+    /* ═══════════════════════
    ANIMATION
 ═══════════════════════ */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
 
-/* ═══════════════════════
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ═══════════════════════
    EMPTY STATE
 ═══════════════════════ */
-.empty-state{
-  padding:52px 24px;text-align:center;
-  color:var(--text3);
-}
-.empty-state .es-icon{font-size:40px;margin-bottom:14px;display:block;opacity:0.5}
-.empty-state p{font-size:14px}
+    .empty-state {
+      padding: 52px 24px;
+      text-align: center;
+      color: var(--text3);
+    }
 
-/* ═══════════════════════
+    .empty-state .es-icon {
+      font-size: 40px;
+      margin-bottom: 14px;
+      display: block;
+      opacity: 0.5
+    }
+
+    .empty-state p {
+      font-size: 14px
+    }
+
+    /* ═══════════════════════
    RESPONSIVE
 ═══════════════════════ */
-@media(max-width:960px){
-  .page{padding:20px 18px 60px}
-  .navbar{padding:0 18px}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .frow{flex-direction:column}
-  .tb{padding:9px 14px;font-size:12px}
-  .nav-link{display:none}
-}
-@media(max-width:540px){
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .page-title{font-size:30px}
-}
-</style>
+    @media(max-width:960px) {
+      .page {
+        padding: 20px 18px 60px
+      }
+
+      .navbar {
+        padding: 0 18px
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .frow {
+        flex-direction: column
+      }
+
+      .tb {
+        padding: 9px 14px;
+        font-size: 12px
+      }
+
+      .nav-link {
+        display: none
+      }
+    }
+
+    @media(max-width:540px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .page-title {
+        font-size: 30px
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- AMBIENT -->
-<div class="bg-stage">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <div class="orb orb-4"></div>
-  <div class="vignette"></div>
-</div>
-
-<!-- NAVBAR -->
-<nav class="navbar" id="mainNavbar"></nav>
-
-<!-- PAGE -->
-<div class="page">
-
-  <!-- HEADER -->
-  <div class="page-header">
-    <div class="breadcrumb">
-      <span>Portal Home</span>
-      <span class="breadcrumb-sep">›</span>
-      <span class="breadcrumb-cur">Admin Dashboard</span>
-    </div>
-    <h1 class="page-title">Admin <em>Control Panel</em></h1>
-    <p class="page-subtitle">Full system access — manage all items, review submissions, delete records, and control user roles across the MITS FindMyThing portal.</p>
+  <!-- AMBIENT -->
+  <div class="bg-stage">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="vignette"></div>
   </div>
 
-  <!-- PRIV STRIP -->
-  <div class="priv-strip">
-    <span class="priv-icon">🛡️</span>
-    <div class="priv-text">
-      <strong>Administrator Access Active</strong>
-      You have full read / write / delete privileges. All actions are logged in the system audit trail. Handle data with care — deletions are permanent and cannot be undone.
-    </div>
-  </div>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="mainNavbar"></nav>
 
-  <!-- STATS -->
-  <div class="stats-grid" id="statsGrid">
-    <div class="stat-card sc-gold">
-      <span class="sc-icon">📦</span>
-      <span class="sc-num" id="sTotalItems">—</span>
-      <span class="sc-label">Total Items</span>
-    </div>
-    <div class="stat-card sc-red">
-      <span class="sc-icon">😞</span>
-      <span class="sc-num" id="sTotalLost">—</span>
-      <span class="sc-label">Lost Items</span>
-    </div>
-    <div class="stat-card sc-blue">
-      <span class="sc-icon">😀</span>
-      <span class="sc-num" id="sTotalFound">—</span>
-      <span class="sc-label">Found Items</span>
-    </div>
-    <div class="stat-card sc-green">
-      <span class="sc-icon">✅</span>
-      <span class="sc-num" id="sTotalCollected">—</span>
-      <span class="sc-label">Collected</span>
-    </div>
-    <div class="stat-card sc-amber">
-      <span class="sc-icon">⏳</span>
-      <span class="sc-num" id="sTotalPending">—</span>
-      <span class="sc-label">Pending</span>
-    </div>
-    <div class="stat-card sc-purple">
-      <span class="sc-icon">👥</span>
-      <span class="sc-num" id="sTotalUsers">—</span>
-      <span class="sc-label">Registered Users</span>
-    </div>
-  </div>
+  <!-- PAGE -->
+  <div class="page">
 
-  <!-- ══ SECTION: ALL ITEMS ══ -->
-  <div class="section-head">
-    <div class="section-head-left">
-      <div class="sh-icon si-items">📦</div>
-      <div>
-        <div class="sh-title">All Items Registry</div>
-        <div class="sh-sub">View, filter, expand and delete any item — lost or found</div>
+    <!-- HEADER -->
+    <div class="page-header">
+      <div class="breadcrumb">
+        <span>Portal Home</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-cur">Admin Dashboard</span>
+      </div>
+      <h1 class="page-title">Admin <em>Control Panel</em></h1>
+      <p class="page-subtitle">Full system access — manage all items, review submissions, delete records, and control
+        user roles across the MITS FindMyThing portal.</p>
+    </div>
+
+    <!-- PRIV STRIP -->
+    <div class="priv-strip">
+      <span class="priv-icon">🛡️</span>
+      <div class="priv-text">
+        <strong>Administrator Access Active</strong>
+        You have full read / write / delete privileges. All actions are logged in the system audit trail. Handle data
+        with care — deletions are permanent and cannot be undone.
       </div>
     </div>
-  </div>
 
-  <div class="filter-card">
-    <div class="flabel">🔎 Filter Items</div>
-    <div class="frow">
-      <div class="fg" style="flex:2;min-width:200px">
-        <label>Search</label>
-        <input type="text" id="ifSearch" placeholder="Name, description, submitter...">
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card sc-gold">
+        <span class="sc-icon">📦</span>
+        <span class="sc-num" id="sTotalItems">—</span>
+        <span class="sc-label">Total Items</span>
       </div>
-      <div class="fg"><label>Type</label><select id="ifType"><option value="">All Types</option></select></div>
-      <div class="fg"><label>Report</label>
-        <select id="ifReport">
-          <option value="">All</option>
-          <option value="lost">Lost</option>
-          <option value="found">Found</option>
-        </select>
+      <div class="stat-card sc-red">
+        <span class="sc-icon">😞</span>
+        <span class="sc-num" id="sTotalLost">—</span>
+        <span class="sc-label">Lost Items</span>
       </div>
-      <div class="fg"><label>Status</label>
-        <select id="ifStatus">
-          <option value="">All</option>
-          <option value="pending">Pending</option>
-          <option value="collected">Collected</option>
-        </select>
+      <div class="stat-card sc-blue">
+        <span class="sc-icon">😀</span>
+        <span class="sc-num" id="sTotalFound">—</span>
+        <span class="sc-label">Found Items</span>
       </div>
-      <div class="fg"><label>From</label><input type="date" id="ifFrom"></div>
-      <div class="fg"><label>To</label><input type="date" id="ifTo"></div>
-      <div style="padding-top:18px"><button class="btn-reset" id="ifReset">✕ Reset</button></div>
+      <div class="stat-card sc-green">
+        <span class="sc-icon">✅</span>
+        <span class="sc-num" id="sTotalCollected">—</span>
+        <span class="sc-label">Collected</span>
+      </div>
+      <div class="stat-card sc-amber">
+        <span class="sc-icon">⏳</span>
+        <span class="sc-num" id="sTotalPending">—</span>
+        <span class="sc-label">Pending</span>
+      </div>
+      <div class="stat-card sc-purple">
+        <span class="sc-icon">👥</span>
+        <span class="sc-num" id="sTotalUsers">—</span>
+        <span class="sc-label">Registered Users</span>
+      </div>
     </div>
-    <div class="pills" id="iPills"></div>
-  </div>
 
-  <div class="tab-bar">
-    <button class="tb active-all" id="itabAll"   onclick="setITab('all')">📋 All <span class="tc" id="itc-all">0</span></button>
-    <button class="tb"            id="itabLost"  onclick="setITab('lost')">😞 Lost <span class="tc" id="itc-lost">0</span></button>
-    <button class="tb"            id="itabFound" onclick="setITab('found')">😀 Found <span class="tc" id="itc-found">0</span></button>
-  </div>
+    <!-- ══ SECTION: ALL ITEMS ══ -->
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="sh-icon si-items">📦</div>
+        <div>
+          <div class="sh-title">All Items Registry</div>
+          <div class="sh-sub">View, filter, expand and delete any item — lost or found</div>
+        </div>
+      </div>
+    </div>
 
-  <div id="iview-all">
-    <div class="table-card tc-gold">
-      <div class="tscroll"><table><thead><tr id="iheadAll"></tr></thead><tbody id="ibodyAll"></tbody></table></div>
-      <div class="table-footer"><span>Showing <strong id="icntAll">0</strong> items</span><span>Click row to expand · Click header to sort</span></div>
+    <div class="filter-card">
+      <div class="flabel">🔎 Filter Items</div>
+      <div class="frow">
+        <div class="fg" style="flex:2;min-width:200px">
+          <label>Search</label>
+          <input type="text" id="ifSearch" placeholder="Name, description, submitter...">
+        </div>
+        <div class="fg"><label>Type</label><select id="ifType">
+            <option value="">All Types</option>
+          </select></div>
+        <div class="fg"><label>Report</label>
+          <select id="ifReport">
+            <option value="">All</option>
+            <option value="lost">Lost</option>
+            <option value="found">Found</option>
+          </select>
+        </div>
+        <div class="fg"><label>Status</label>
+          <select id="ifStatus">
+            <option value="">All</option>
+            <option value="pending">Pending</option>
+            <option value="collected">Collected</option>
+          </select>
+        </div>
+        <div class="fg"><label>From</label><input type="date" id="ifFrom"></div>
+        <div class="fg"><label>To</label><input type="date" id="ifTo"></div>
+        <div style="padding-top:18px"><button class="btn-reset" id="ifReset">✕ Reset</button></div>
+      </div>
+      <div class="pills" id="iPills"></div>
     </div>
-  </div>
-  <div id="iview-lost" style="display:none">
-    <div class="table-card tc-red">
-      <div class="tscroll"><table><thead><tr id="iheadLost"></tr></thead><tbody id="ibodyLost"></tbody></table></div>
-      <div class="table-footer"><span>Showing <strong id="icntLost">0</strong> lost items</span></div>
+
+    <div class="tab-bar">
+      <button class="tb active-all" id="itabAll" onclick="setITab('all')">📋 All <span class="tc"
+          id="itc-all">0</span></button>
+      <button class="tb" id="itabLost" onclick="setITab('lost')">😞 Lost <span class="tc"
+          id="itc-lost">0</span></button>
+      <button class="tb" id="itabFound" onclick="setITab('found')">😀 Found <span class="tc"
+          id="itc-found">0</span></button>
     </div>
-  </div>
-  <div id="iview-found" style="display:none">
+
+    <div id="iview-all">
+      <div class="table-card tc-gold">
+        <div class="tscroll">
+          <table>
+            <thead>
+              <tr id="iheadAll"></tr>
+            </thead>
+            <tbody id="ibodyAll"></tbody>
+          </table>
+        </div>
+        <div class="table-footer"><span>Showing <strong id="icntAll">0</strong> items</span><span>Click row to expand ·
+            Click header to sort</span></div>
+      </div>
+    </div>
+    <div id="iview-lost" style="display:none">
+      <div class="table-card tc-red">
+        <div class="tscroll">
+          <table>
+            <thead>
+              <tr id="iheadLost"></tr>
+            </thead>
+            <tbody id="ibodyLost"></tbody>
+          </table>
+        </div>
+        <div class="table-footer"><span>Showing <strong id="icntLost">0</strong> lost items</span></div>
+      </div>
+    </div>
+    <div id="iview-found" style="display:none">
+      <div class="table-card tc-blue">
+        <div class="tscroll">
+          <table>
+            <thead>
+              <tr id="iheadFound"></tr>
+            </thead>
+            <tbody id="ibodyFound"></tbody>
+          </table>
+        </div>
+        <div class="table-footer"><span>Showing <strong id="icntFound">0</strong> found items</span></div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION: COLLECTED ══ -->
+    <div class="section-head" style="margin-top:8px">
+      <div class="section-head-left">
+        <div class="sh-icon si-coll">✅</div>
+        <div>
+          <div class="sh-title">Collected Items</div>
+          <div class="sh-sub">Permanently delete collected records from the system</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <div class="flabel">🔎 Filter Collected</div>
+      <div class="frow">
+        <div class="fg" style="flex:2;min-width:200px">
+          <label>Search</label>
+          <input type="text" id="cfSearch" placeholder="Name, submitter...">
+        </div>
+        <div class="fg"><label>Collected On</label><input type="date" id="cfDate"></div>
+        <div class="fg"><label>From</label><input type="date" id="cfFrom"></div>
+        <div class="fg"><label>To</label><input type="date" id="cfTo"></div>
+        <div style="padding-top:18px"><button class="btn-reset" id="cfReset">✕ Reset</button></div>
+      </div>
+      <div class="pills" id="cPills"></div>
+    </div>
+
+    <div class="table-card tc-green">
+      <div class="tscroll">
+        <table>
+          <thead>
+            <tr id="cheadAll"></tr>
+          </thead>
+          <tbody id="cbodyAll"></tbody>
+        </table>
+      </div>
+      <div class="table-footer"><span>Showing <strong id="ccntAll">0</strong> collected items</span></div>
+    </div>
+
+    <!-- ══ SECTION: USERS ══ -->
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="sh-icon si-users">👥</div>
+        <div>
+          <div class="sh-title">Registered Users</div>
+          <div class="sh-sub">Full user profiles — view accounts, submission history, and manage roles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <div class="flabel">🔎 Filter Users</div>
+      <div class="frow">
+        <div class="fg" style="flex:2;min-width:200px">
+          <label>Search Name / Email</label>
+          <input type="text" id="ufSearch" placeholder="Name or email address...">
+        </div>
+        <div class="fg"><label>Role</label>
+          <select id="ufRole">
+            <option value="">All Roles</option>
+            <option value="user">User</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div style="padding-top:18px"><button class="btn-reset" id="ufReset">✕ Reset</button></div>
+      </div>
+      <div class="pills" id="uPills"></div>
+    </div>
+
     <div class="table-card tc-blue">
-      <div class="tscroll"><table><thead><tr id="iheadFound"></tr></thead><tbody id="ibodyFound"></tbody></table></div>
-      <div class="table-footer"><span>Showing <strong id="icntFound">0</strong> found items</span></div>
+      <div class="tscroll">
+        <table>
+          <thead>
+            <tr id="uhead"></tr>
+          </thead>
+          <tbody id="ubody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer"><span>Showing <strong id="ucnt">0</strong> users</span><span>Click row to expand full
+          profile</span></div>
     </div>
-  </div>
 
-  <!-- ══ SECTION: COLLECTED ══ -->
-  <div class="section-head" style="margin-top:8px">
-    <div class="section-head-left">
-      <div class="sh-icon si-coll">✅</div>
-      <div>
-        <div class="sh-title">Collected Items</div>
-        <div class="sh-sub">Permanently delete collected records from the system</div>
+  </div><!-- /page -->
+
+  <!-- IMAGE MODAL -->
+  <div id="imgModal" class="modal" onclick="closeImg(event)">
+    <div class="mi" onclick="event.stopPropagation()">
+      <button class="mi-close" onclick="closeImg()">✕</button>
+      <div class="mi-img"><img id="mImg" src="" alt=""></div>
+      <div class="mi-info">
+        <div class="mi-name" id="mName"></div>
+        <div class="mi-desc" id="mDesc"></div>
       </div>
     </div>
   </div>
 
-  <div class="filter-card">
-    <div class="flabel">🔎 Filter Collected</div>
-    <div class="frow">
-      <div class="fg" style="flex:2;min-width:200px">
-        <label>Search</label>
-        <input type="text" id="cfSearch" placeholder="Name, submitter...">
-      </div>
-      <div class="fg"><label>Collected On</label><input type="date" id="cfDate"></div>
-      <div class="fg"><label>From</label><input type="date" id="cfFrom"></div>
-      <div class="fg"><label>To</label><input type="date" id="cfTo"></div>
-      <div style="padding-top:18px"><button class="btn-reset" id="cfReset">✕ Reset</button></div>
-    </div>
-    <div class="pills" id="cPills"></div>
-  </div>
-
-  <div class="table-card tc-green">
-    <div class="tscroll"><table><thead><tr id="cheadAll"></tr></thead><tbody id="cbodyAll"></tbody></table></div>
-    <div class="table-footer"><span>Showing <strong id="ccntAll">0</strong> collected items</span></div>
-  </div>
-
-  <!-- ══ SECTION: USERS ══ -->
-  <div class="section-head">
-    <div class="section-head-left">
-      <div class="sh-icon si-users">👥</div>
-      <div>
-        <div class="sh-title">Registered Users</div>
-        <div class="sh-sub">Full user profiles — view accounts, submission history, and manage roles</div>
+  <!-- DELETE CONFIRM MODAL -->
+  <div id="delModal" class="confirm-overlay" onclick="closeDel(event)">
+    <div class="cbox" onclick="event.stopPropagation()">
+      <span class="cbox-icon">🗑️</span>
+      <div class="cbox-title">Permanent Deletion</div>
+      <div class="cbox-text">You are about to permanently remove this record:</div>
+      <div class="cbox-item" id="delItemName">—</div>
+      <div class="cbox-text" style="font-size:12px;color:var(--text3)">This action is irreversible and will be logged in
+        the admin audit trail.</div>
+      <div class="cbox-btns" style="margin-top:22px">
+        <button class="btn-cancel" onclick="closeDel()">Cancel</button>
+        <button class="btn-del-confirm" id="btnConfirmDel">Delete Permanently</button>
       </div>
     </div>
   </div>
 
-  <div class="filter-card">
-    <div class="flabel">🔎 Filter Users</div>
-    <div class="frow">
-      <div class="fg" style="flex:2;min-width:200px">
-        <label>Search Name / Email</label>
-        <input type="text" id="ufSearch" placeholder="Name or email address...">
-      </div>
-      <div class="fg"><label>Role</label>
-        <select id="ufRole">
-          <option value="">All Roles</option>
-          <option value="user">User</option>
-          <option value="manager">Manager</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
-      <div style="padding-top:18px"><button class="btn-reset" id="ufReset">✕ Reset</button></div>
-    </div>
-    <div class="pills" id="uPills"></div>
-  </div>
+  <script>
+    // ════════════════════════════════════
+    // STATE
+    // ════════════════════════════════════
+    let allItems = [], filtItems = [], collData = [], filtColl = [], usersData = [], filtUsers = [];
+    let iSortCol = '', iSortDir = 1, cSortCol = '', cSortDir = 1;
+    let iTab = 'all', iRowIdx = 0, cRowIdx = 0, uRowIdx = 0;
+    let iExp = null, cExp = null, uExp = null;
 
-  <div class="table-card tc-blue">
-    <div class="tscroll"><table><thead><tr id="uhead"></tr></thead><tbody id="ubody"></tbody></table></div>
-    <div class="table-footer"><span>Showing <strong id="ucnt">0</strong> users</span><span>Click row to expand full profile</span></div>
-  </div>
+    // ════════════════════════════════════
+    // UTILS
+    // ════════════════════════════════════
+    const $ = id => document.getElementById(id);
+    const safe = v => (v && String(v).trim()) ? String(v).trim() : 'N/A';
+    const isLost = i => !!i.lostLocation;
+    const isDone = i => !!i.collected;
+    const getDate = i => i.dateLost || i.dateFound || '';
+    const isoD = r => { try { return new Date(r).toISOString().split('T')[0] } catch (e) { return '' } };
+    const fmtDate = r => { try { return new Date(r).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) } catch (e) { return r || 'N/A' } };
+    const esc = s => String(s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
-</div><!-- /page -->
+    // Cloudinary-aware image URL helper.
+    // New uploads are stored as full Cloudinary HTTPS URLs.
+    // Old records may still contain only a filename, so those continue
+    // to use the local /uploads/ path.
+    function getImageUrl(image) {
+      if (!image) return '';
+      const value = String(image).trim();
+      if (!value) return '';
+      if (/^https?:\/\//i.test(value)) return value;
+      if (value.startsWith('//')) return window.location.protocol + value;
+      if (value.startsWith('/')) return value;
+      return '/uploads/' + value;
+    }
 
-<!-- IMAGE MODAL -->
-<div id="imgModal" class="modal" onclick="closeImg(event)">
-  <div class="mi" onclick="event.stopPropagation()">
-    <button class="mi-close" onclick="closeImg()">✕</button>
-    <div class="mi-img"><img id="mImg" src="" alt=""></div>
-    <div class="mi-info">
-      <div class="mi-name" id="mName"></div>
-      <div class="mi-desc" id="mDesc"></div>
-    </div>
-  </div>
-</div>
+    // ════════════════════════════════════
+    // INIT
+    // ════════════════════════════════════
+    async function init() {
+      try {
+        const [sR, iR, cR, uR] = await Promise.all([
+          fetch('/api/stats'), fetch('/api/items'), fetch('/api/collected'), fetch('/api/users')
+        ]);
+        const stats = await sR.json();
+        const items = await iR.json();
+        const coll = await cR.json();
+        const users = await uR.json().catch(() => []);
 
-<!-- DELETE CONFIRM MODAL -->
-<div id="delModal" class="confirm-overlay" onclick="closeDel(event)">
-  <div class="cbox" onclick="event.stopPropagation()">
-    <span class="cbox-icon">🗑️</span>
-    <div class="cbox-title">Permanent Deletion</div>
-    <div class="cbox-text">You are about to permanently remove this record:</div>
-    <div class="cbox-item" id="delItemName">—</div>
-    <div class="cbox-text" style="font-size:12px;color:var(--text3)">This action is irreversible and will be logged in the admin audit trail.</div>
-    <div class="cbox-btns" style="margin-top:22px">
-      <button class="btn-cancel" onclick="closeDel()">Cancel</button>
-      <button class="btn-del-confirm" id="btnConfirmDel">Delete Permanently</button>
-    </div>
-  </div>
-</div>
+        $('sTotalItems').textContent = stats.totalItems || items.length;
+        $('sTotalCollected').textContent = stats.totalCollected || coll.length;
+        $('sTotalLost').textContent = items.filter(isLost).length;
+        $('sTotalFound').textContent = items.filter(i => !isLost(i)).length;
+        $('sTotalPending').textContent = items.filter(i => !isDone(i)).length;
+        $('sTotalUsers').textContent = Array.isArray(users) ? users.length : '—';
 
-<script>
-// ════════════════════════════════════
-// STATE
-// ════════════════════════════════════
-let allItems=[],filtItems=[],collData=[],filtColl=[],usersData=[],filtUsers=[];
-let iSortCol='',iSortDir=1,cSortCol='',cSortDir=1;
-let iTab='all',iRowIdx=0,cRowIdx=0,uRowIdx=0;
-let iExp=null,cExp=null,uExp=null;
+        allItems = items;
+        collData = coll;
+        usersData = Array.isArray(users) ? users : [];
 
-// ════════════════════════════════════
-// UTILS
-// ════════════════════════════════════
-const $  = id => document.getElementById(id);
-const safe = v => (v&&String(v).trim())?String(v).trim():'N/A';
-const isLost  = i => !!i.lostLocation;
-const isDone  = i => !!i.collected;
-const getDate = i => i.dateLost||i.dateFound||'';
-const isoD    = r => { try{return new Date(r).toISOString().split('T')[0]}catch(e){return''} };
-const fmtDate = r => { try{return new Date(r).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return r||'N/A'} };
-const esc     = s => String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        populateTypeFilter();
+        applyItemFilters();
+        applyCollFilters();
+        applyUserFilters();
 
-// ════════════════════════════════════
-// INIT
-// ════════════════════════════════════
-async function init(){
-  try{
-    const[sR,iR,cR,uR]=await Promise.all([
-      fetch('/api/stats'),fetch('/api/items'),fetch('/api/collected'),fetch('/api/users')
-    ]);
-    const stats=await sR.json();
-    const items=await iR.json();
-    const coll =await cR.json();
-    const users=await uR.json().catch(()=>[]);
+      } catch (e) { console.error('Init error:', e) }
+    }
 
-    $('sTotalItems').textContent=stats.totalItems||items.length;
-    $('sTotalCollected').textContent=stats.totalCollected||coll.length;
-    $('sTotalLost').textContent=items.filter(isLost).length;
-    $('sTotalFound').textContent=items.filter(i=>!isLost(i)).length;
-    $('sTotalPending').textContent=items.filter(i=>!isDone(i)).length;
-    $('sTotalUsers').textContent=Array.isArray(users)?users.length:'—';
+    // ════════════════════════════════════
+    // ITEMS
+    // ════════════════════════════════════
+    function populateTypeFilter() {
+      const types = [...new Set(allItems.map(i => i.type).filter(Boolean))].sort();
+      const sel = $('ifType');
+      types.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o) });
+    }
 
-    allItems=items;
-    collData=coll;
-    usersData=Array.isArray(users)?users:[];
+    function getIF() { return { search: $('ifSearch').value.trim().toLowerCase(), type: $('ifType').value, report: $('ifReport').value, status: $('ifStatus').value, from: $('ifFrom').value, to: $('ifTo').value } }
 
-    populateTypeFilter();
-    applyItemFilters();
-    applyCollFilters();
-    applyUserFilters();
+    function applyItemFilters() {
+      const f = getIF();
+      filtItems = allItems.filter(item => {
+        const d = getDate(item);
+        const txt = [item.name, item.type, item.description, item.lostLocation, item.foundLocation, item.location, item.userName, item.userEmail, item.contact].map(v => (v || '').toLowerCase()).join(' ');
+        if (f.search && !txt.includes(f.search)) return false;
+        if (f.type && item.type !== f.type) return false;
+        if (f.report === 'lost' && !isLost(item)) return false;
+        if (f.report === 'found' && isLost(item)) return false;
+        if (f.status === 'pending' && isDone(item)) return false;
+        if (f.status === 'collected' && !isDone(item)) return false;
+        if (f.from && d && d < f.from) return false;
+        if (f.to && d && d > f.to) return false;
+        return true;
+      });
+      updateIPills(f);
+      renderItems();
+    }
 
-  }catch(e){console.error('Init error:',e)}
-}
+    function updateIPills(f) {
+      const el = $('iPills'); el.innerHTML = '';
+      const add = (k, l) => { const p = document.createElement('span'); p.className = 'pill'; p.innerHTML = `${l} <button onclick="clearIF('${k}')">✕</button>`; el.appendChild(p) };
+      if (f.search) add('ifSearch', `"${f.search}"`);
+      if (f.type) add('ifType', f.type);
+      if (f.report) add('ifReport', f.report === 'lost' ? 'Lost' : 'Found');
+      if (f.status) add('ifStatus', f.status === 'pending' ? 'Pending' : 'Collected');
+      if (f.from) add('ifFrom', `From: ${f.from}`);
+      if (f.to) add('ifTo', `To: ${f.to}`);
+    }
 
-// ════════════════════════════════════
-// ITEMS
-// ════════════════════════════════════
-function populateTypeFilter(){
-  const types=[...new Set(allItems.map(i=>i.type).filter(Boolean))].sort();
-  const sel=$('ifType');
-  types.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o)});
-}
+    function clearIF(id) { const el = $(id); el.tagName === 'SELECT' ? el.selectedIndex = 0 : el.value = ''; applyItemFilters() }
+    $('ifReset').addEventListener('click', () => { ['ifSearch', 'ifType', 'ifReport', 'ifStatus', 'ifFrom', 'ifTo'].forEach(id => { const el = $(id); el.tagName === 'SELECT' ? el.selectedIndex = 0 : el.value = '' }); applyItemFilters() });
+    ['ifSearch', 'ifType', 'ifReport', 'ifStatus', 'ifFrom', 'ifTo'].forEach(id => { $(id).addEventListener('input', applyItemFilters); $(id).addEventListener('change', applyItemFilters) });
 
-function getIF(){return{search:$('ifSearch').value.trim().toLowerCase(),type:$('ifType').value,report:$('ifReport').value,status:$('ifStatus').value,from:$('ifFrom').value,to:$('ifTo').value}}
+    function setITab(tab) {
+      iTab = tab;
+      ['all', 'lost', 'found'].forEach(t => {
+        $('iview-' + t).style.display = t === tab ? 'block' : 'none';
+        const btn = $('itab' + t[0].toUpperCase() + t.slice(1));
+        btn.className = 'tb';
+        if (t === tab) btn.classList.add('active-' + t);
+      });
+    }
 
-function applyItemFilters(){
-  const f=getIF();
-  filtItems=allItems.filter(item=>{
-    const d=getDate(item);
-    const txt=[item.name,item.type,item.description,item.lostLocation,item.foundLocation,item.location,item.userName,item.userEmail,item.contact].map(v=>(v||'').toLowerCase()).join(' ');
-    if(f.search&&!txt.includes(f.search))return false;
-    if(f.type&&item.type!==f.type)return false;
-    if(f.report==='lost'&&!isLost(item))return false;
-    if(f.report==='found'&&isLost(item))return false;
-    if(f.status==='pending'&&isDone(item))return false;
-    if(f.status==='collected'&&!isDone(item))return false;
-    if(f.from&&d&&d<f.from)return false;
-    if(f.to&&d&&d>f.to)return false;
-    return true;
-  });
-  updateIPills(f);
-  renderItems();
-}
+    function iSort(col) { if (iSortCol === col) iSortDir *= -1; else { iSortCol = col; iSortDir = 1 } renderItems() }
+    function doISort(arr) {
+      if (!iSortCol) return arr;
+      return [...arr].sort((a, b) => {
+        const m = { name: [a.name || '', b.name || ''], type: [a.type || '', b.type || ''], date: [getDate(a), getDate(b)], report: [isLost(a) ? 'l' : 'f', isLost(b) ? 'l' : 'f'], status: [isDone(a) ? 'c' : 'p', isDone(b) ? 'c' : 'p'], by: [a.userName || '', b.userName || ''] };
+        const [va, vb] = m[iSortCol] || ['', ''];
+        return va < vb ? -iSortDir : va > vb ? iSortDir : 0;
+      });
+    }
 
-function updateIPills(f){
-  const el=$('iPills');el.innerHTML='';
-  const add=(k,l)=>{const p=document.createElement('span');p.className='pill';p.innerHTML=`${l} <button onclick="clearIF('${k}')">✕</button>`;el.appendChild(p)};
-  if(f.search)add('ifSearch',`"${f.search}"`);
-  if(f.type)add('ifType',f.type);
-  if(f.report)add('ifReport',f.report==='lost'?'Lost':'Found');
-  if(f.status)add('ifStatus',f.status==='pending'?'Pending':'Collected');
-  if(f.from)add('ifFrom',`From: ${f.from}`);
-  if(f.to)add('ifTo',`To: ${f.to}`);
-}
+    const ICOLS = [
+      { k: 'name', l: 'Item Name', s: true }, { k: 'type', l: 'Type', s: true },
+      { k: 'desc', l: 'Description', s: false }, { k: 'loc', l: 'Location', s: false },
+      { k: 'date', l: 'Date', s: true }, { k: 'report', l: 'Report', s: true },
+      { k: 'status', l: 'Status', s: true }, { k: 'by', l: 'Submitted By', s: true },
+      { k: 'email', l: 'Email', s: false }, { k: 'contact', l: 'Contact', s: false },
+      { k: 'hby', l: 'Handed By', s: false }, { k: 'hto', l: 'Handed To', s: false },
+      { k: 'img', l: 'Image', s: false }, { k: 'delete', l: 'Delete', s: false }
+    ];
 
-function clearIF(id){const el=$(id);el.tagName==='SELECT'?el.selectedIndex=0:el.value='';applyItemFilters()}
-$('ifReset').addEventListener('click',()=>{['ifSearch','ifType','ifReport','ifStatus','ifFrom','ifTo'].forEach(id=>{const el=$(id);el.tagName==='SELECT'?el.selectedIndex=0:el.value=''});applyItemFilters()});
-['ifSearch','ifType','ifReport','ifStatus','ifFrom','ifTo'].forEach(id=>{$(id).addEventListener('input',applyItemFilters);$(id).addEventListener('change',applyItemFilters)});
+    function buildIHead(trEl) {
+      trEl.innerHTML = ICOLS.map(c => {
+        const sorted = iSortCol === c.k;
+        const icon = sorted ? (iSortDir === 1 ? '▲' : '▼') : '↕';
+        const click = c.s ? `onclick="iSort('${c.k}')"` : '';
+        const cur = c.s ? '' : 'style="cursor:default"';
+        return `<th class="${sorted ? 'sorted' : ''}" ${click} ${cur}>${c.l}${c.s ? `<span class="si">${icon}</span>` : ''}</th>`;
+      }).join('');
+    }
 
-function setITab(tab){
-  iTab=tab;
-  ['all','lost','found'].forEach(t=>{
-    $('iview-'+t).style.display=t===tab?'block':'none';
-    const btn=$('itab'+t[0].toUpperCase()+t.slice(1));
-    btn.className='tb';
-    if(t===tab)btn.classList.add('active-'+t);
-  });
-}
+    function buildIRow(item) {
+      const idx = iRowIdx++;
+      const lost = isLost(item); const done = isDone(item);
+      const loc = safe(item.lostLocation || item.foundLocation);
+      const date = safe(getDate(item));
+      const imageUrl = getImageUrl(item.image);
+      const imgH = imageUrl
+        ? `<img class="timg" src="${imageUrl}" alt="${esc(item.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" onclick="event.stopPropagation();openImg('${imageUrl}','${esc(item.name)}','${esc(item.description)}')"><span class="no-img" style="display:none">📷</span>`
+        : `<div class="no-img">📷</div>`;
 
-function iSort(col){if(iSortCol===col)iSortDir*=-1;else{iSortCol=col;iSortDir=1}renderItems()}
-function doISort(arr){
-  if(!iSortCol)return arr;
-  return[...arr].sort((a,b)=>{
-    const m={name:[a.name||'',b.name||''],type:[a.type||'',b.type||''],date:[getDate(a),getDate(b)],report:[isLost(a)?'l':'f',isLost(b)?'l':'f'],status:[isDone(a)?'c':'p',isDone(b)?'c':'p'],by:[a.userName||'',b.userName||'']};
-    const[va,vb]=m[iSortCol]||['',''];
-    return va<vb?-iSortDir:va>vb?iSortDir:0;
-  });
-}
-
-const ICOLS=[
-  {k:'name',l:'Item Name',s:true},{k:'type',l:'Type',s:true},
-  {k:'desc',l:'Description',s:false},{k:'loc',l:'Location',s:false},
-  {k:'date',l:'Date',s:true},{k:'report',l:'Report',s:true},
-  {k:'status',l:'Status',s:true},{k:'by',l:'Submitted By',s:true},
-  {k:'email',l:'Email',s:false},{k:'contact',l:'Contact',s:false},
-  {k:'hby',l:'Handed By',s:false},{k:'hto',l:'Handed To',s:false},
-  {k:'img',l:'Image',s:false},{k:'delete',l:'Delete',s:false}
-];
-
-function buildIHead(trEl){
-  trEl.innerHTML=ICOLS.map(c=>{
-    const sorted=iSortCol===c.k;
-    const icon=sorted?(iSortDir===1?'▲':'▼'):'↕';
-    const click=c.s?`onclick="iSort('${c.k}')"`:'';
-    const cur=c.s?'':'style="cursor:default"';
-    return`<th class="${sorted?'sorted':''}" ${click} ${cur}>${c.l}${c.s?`<span class="si">${icon}</span>`:''}</th>`;
-  }).join('');
-}
-
-function buildIRow(item){
-  const idx=iRowIdx++;
-  const lost=isLost(item);const done=isDone(item);
-  const loc=safe(item.lostLocation||item.foundLocation);
-  const date=safe(getDate(item));
-  const imgH=item.image
-    ?`<img class="timg" src="/uploads/${item.image}" alt="${esc(item.name)}" onclick="event.stopPropagation();openImg('/uploads/${item.image}','${esc(item.name)}','${esc(item.description)}')">`
-    :`<div class="no-img">📷</div>`;
-
-  const cells={
-    name:   `<td style="text-align:left"><strong style="font-weight:600;color:var(--text)">${safe(item.name)}</strong></td>`,
-    type:   `<td>${safe(item.type)}</td>`,
-    desc:   `<td style="max-width:150px;text-align:left;white-space:normal;font-size:11.5px;color:var(--text2)">${safe(item.description)}</td>`,
-    loc:    `<td style="font-size:11.5px">${loc}</td>`,
-    date:   `<td><span class="dchip">📅 ${date}</span></td>`,
-    report: `<td>${lost?'<span class="badge b-lost">● Lost</span>':'<span class="badge b-found">● Found</span>'}</td>`,
-    status: `<td>${done?'<span class="badge b-collected">✓ Collected</span>':'<span class="badge b-pending">⏳ Pending</span>'}</td>`,
-    by:     `<td style="font-size:12px">${safe(item.userName)}</td>`,
-    email:  `<td><a class="elink" href="mailto:${safe(item.userEmail)}" onclick="event.stopPropagation()">${safe(item.userEmail)}</a></td>`,
-    contact:`<td style="font-family:'DM Mono',monospace;font-size:11.5px">${safe(item.contact)}</td>`,
-    hby:    `<td style="font-size:12px">${safe(item.handedBy)}</td>`,
-    hto:    `<td style="font-size:12px">${safe(item.handedTo)}</td>`,
-    img:    `<td>${imgH}</td>`,
-    delete: `<td onclick="event.stopPropagation()">
+      const cells = {
+        name: `<td style="text-align:left"><strong style="font-weight:600;color:var(--text)">${safe(item.name)}</strong></td>`,
+        type: `<td>${safe(item.type)}</td>`,
+        desc: `<td style="max-width:150px;text-align:left;white-space:normal;font-size:11.5px;color:var(--text2)">${safe(item.description)}</td>`,
+        loc: `<td style="font-size:11.5px">${loc}</td>`,
+        date: `<td><span class="dchip">📅 ${date}</span></td>`,
+        report: `<td>${lost ? '<span class="badge b-lost">● Lost</span>' : '<span class="badge b-found">● Found</span>'}</td>`,
+        status: `<td>${done ? '<span class="badge b-collected">✓ Collected</span>' : '<span class="badge b-pending">⏳ Pending</span>'}</td>`,
+        by: `<td style="font-size:12px">${safe(item.userName)}</td>`,
+        email: `<td><a class="elink" href="mailto:${safe(item.userEmail)}" onclick="event.stopPropagation()">${safe(item.userEmail)}</a></td>`,
+        contact: `<td style="font-family:'DM Mono',monospace;font-size:11.5px">${safe(item.contact)}</td>`,
+        hby: `<td style="font-size:12px">${safe(item.handedBy)}</td>`,
+        hto: `<td style="font-size:12px">${safe(item.handedTo)}</td>`,
+        img: `<td>${imgH}</td>`,
+        delete: `<td onclick="event.stopPropagation()">
 <button class="del-btn"
 onclick="deleteRecord('${item._id}','${esc(item.name)}')">
 🗑 Delete
 </button>
 </td>`
-  };
+      };
 
-  async function deleteRecord(id, name){
+      async function deleteRecord(id, name) {
 
-  const ok = confirm(`Delete "${name}" ?`);
+        const ok = confirm(`Delete "${name}" ?`);
 
-  if(!ok) return;
+        if (!ok) return;
 
-  try{
+        try {
 
-    const res = await fetch(`/clear-record/${id}`,{
-      method:"DELETE"
-    });
+          const res = await fetch(`/clear-record/${id}`, {
+            method: "DELETE"
+          });
 
-    const data = await res.json();
+          const data = await res.json();
 
-    alert(data.message);
+          alert(data.message);
 
-    location.reload();
+          location.reload();
 
-  }catch(err){
+        } catch (err) {
 
-    console.log(err);
-    alert("Delete failed");
+          console.log(err);
+          alert("Delete failed");
 
-  }
+        }
 
-}
+      }
 
-  const fields=[
-    {l:'Item Name',v:safe(item.name)},{l:'Type',v:safe(item.type)},{l:'Report',v:lost?'Lost':'Found'},
-    {l:'Status',v:done?'Collected':'Pending'},{l:'Date',v:date},{l:'Location',v:loc},
-    {l:'Submit Location',v:safe(item.location)},{l:'Submitted By',v:safe(item.userName)},
-    {l:'Email',v:safe(item.userEmail)},{l:'Contact',v:safe(item.contact)},
-    {l:'Handed By',v:safe(item.handedBy)},{l:'Handed To',v:safe(item.handedTo)},
-    {l:'Description',v:safe(item.description),full:true}
-  ];
+      const fields = [
+        { l: 'Item Name', v: safe(item.name) }, { l: 'Type', v: safe(item.type) }, { l: 'Report', v: lost ? 'Lost' : 'Found' },
+        { l: 'Status', v: done ? 'Collected' : 'Pending' }, { l: 'Date', v: date }, { l: 'Location', v: loc },
+        { l: 'Submit Location', v: safe(item.location) }, { l: 'Submitted By', v: safe(item.userName) },
+        { l: 'Email', v: safe(item.userEmail) }, { l: 'Contact', v: safe(item.contact) },
+        { l: 'Handed By', v: safe(item.handedBy) }, { l: 'Handed To', v: safe(item.handedTo) },
+        { l: 'Description', v: safe(item.description), full: true }
+      ];
 
-  return `<tr class="data-row" onclick="toggleIRow(${idx})" id="imr-${idx}">${ICOLS.map(c=>cells[c.k]||'').join('')}</tr>
-<tr class="erow" id="idr-${idx}"><td colspan="${ICOLS.length}"><div class="egrid">${fields.map(f=>`<div class="ef"${f.full?' style="grid-column:1/-1"':''}><label>${f.l}</label><span${f.full?' style="white-space:pre-wrap"':''}>${f.v}</span></div>`).join('')}</div></td></tr>`;
-}
+      return `<tr class="data-row" onclick="toggleIRow(${idx})" id="imr-${idx}">${ICOLS.map(c => cells[c.k] || '').join('')}</tr>
+<tr class="erow" id="idr-${idx}"><td colspan="${ICOLS.length}"><div class="egrid">${fields.map(f => `<div class="ef"${f.full ? ' style="grid-column:1/-1"' : ''}><label>${f.l}</label><span${f.full ? ' style="white-space:pre-wrap"' : ''}>${f.v}</span></div>`).join('')}</div></td></tr>`;
+    }
 
-function toggleIRow(idx){
-  const dr=$('idr-'+idx);if(!dr)return;
-  const open=dr.classList.contains('open');
-  if(iExp!==null&&iExp!==idx)$('idr-'+iExp)?.classList.remove('open');
-  dr.classList.toggle('open',!open);
-  iExp=open?null:idx;
-}
+    function toggleIRow(idx) {
+      const dr = $('idr-' + idx); if (!dr) return;
+      const open = dr.classList.contains('open');
+      if (iExp !== null && iExp !== idx) $('idr-' + iExp)?.classList.remove('open');
+      dr.classList.toggle('open', !open);
+      iExp = open ? null : idx;
+    }
 
-function emptyState(msg,cols){
-  return`<tr><td colspan="${cols}"><div class="empty-state"><span class="es-icon">🔍</span><p>${msg}</p></div></td></tr>`;
-}
+    function emptyState(msg, cols) {
+      return `<tr><td colspan="${cols}"><div class="empty-state"><span class="es-icon">🔍</span><p>${msg}</p></div></td></tr>`;
+    }
 
-function renderItems(){
-  iRowIdx=0;
-  const la=doISort(filtItems.filter(isLost));
-  const fa=doISort(filtItems.filter(i=>!isLost(i)));
-  const aa=doISort(filtItems);
-  $('itc-all').textContent=filtItems.length;
-  $('itc-lost').textContent=la.length;
-  $('itc-found').textContent=fa.length;
+    function renderItems() {
+      iRowIdx = 0;
+      const la = doISort(filtItems.filter(isLost));
+      const fa = doISort(filtItems.filter(i => !isLost(i)));
+      const aa = doISort(filtItems);
+      $('itc-all').textContent = filtItems.length;
+      $('itc-lost').textContent = la.length;
+      $('itc-found').textContent = fa.length;
 
-  const R=(bId,hId,arr,msg,cntId)=>{
-    iRowIdx=0;buildIHead($(hId));
-    $(bId).innerHTML=arr.length?arr.map(buildIRow).join(''):emptyState(msg,ICOLS.length);
-    $(cntId).textContent=arr.length;
-  };
-  R('ibodyAll','iheadAll',aa,'No items match filters.','icntAll');
-  R('ibodyLost','iheadLost',la,'No lost items match filters.','icntLost');
-  R('ibodyFound','iheadFound',fa,'No found items match filters.','icntFound');
-  iExp=null;
-}
+      const R = (bId, hId, arr, msg, cntId) => {
+        iRowIdx = 0; buildIHead($(hId));
+        $(bId).innerHTML = arr.length ? arr.map(buildIRow).join('') : emptyState(msg, ICOLS.length);
+        $(cntId).textContent = arr.length;
+      };
+      R('ibodyAll', 'iheadAll', aa, 'No items match filters.', 'icntAll');
+      R('ibodyLost', 'iheadLost', la, 'No lost items match filters.', 'icntLost');
+      R('ibodyFound', 'iheadFound', fa, 'No found items match filters.', 'icntFound');
+      iExp = null;
+    }
 
-// ════════════════════════════════════
-// COLLECTED
-// ════════════════════════════════════
-function getCF(){return{search:$('cfSearch').value.trim().toLowerCase(),date:$('cfDate').value,from:$('cfFrom').value,to:$('cfTo').value}}
+    // ════════════════════════════════════
+    // COLLECTED
+    // ════════════════════════════════════
+    function getCF() { return { search: $('cfSearch').value.trim().toLowerCase(), date: $('cfDate').value, from: $('cfFrom').value, to: $('cfTo').value } }
 
-function applyCollFilters(){
-  const f=getCF();
-  filtColl=collData.filter(item=>{
-    const d=isoD(item.collectedAt);
-    const txt=[item.name,item.type,item.description,item.userName,item.userEmail].map(v=>(v||'').toLowerCase()).join(' ');
-    if(f.search&&!txt.includes(f.search))return false;
-    if(f.date&&d!==f.date)return false;
-    if(f.from&&d&&d<f.from)return false;
-    if(f.to&&d&&d>f.to)return false;
-    return true;
-  });
-  updateCPills(f);renderColl();
-}
+    function applyCollFilters() {
+      const f = getCF();
+      filtColl = collData.filter(item => {
+        const d = isoD(item.collectedAt);
+        const txt = [item.name, item.type, item.description, item.userName, item.userEmail].map(v => (v || '').toLowerCase()).join(' ');
+        if (f.search && !txt.includes(f.search)) return false;
+        if (f.date && d !== f.date) return false;
+        if (f.from && d && d < f.from) return false;
+        if (f.to && d && d > f.to) return false;
+        return true;
+      });
+      updateCPills(f); renderColl();
+    }
 
-function updateCPills(f){
-  const el=$('cPills');el.innerHTML='';
-  const add=(k,l)=>{const p=document.createElement('span');p.className='pill';p.innerHTML=`${l} <button onclick="clearCF('${k}')">✕</button>`;el.appendChild(p)};
-  if(f.search)add('cfSearch',`"${f.search}"`);
-  if(f.date)add('cfDate',`On: ${f.date}`);
-  if(f.from)add('cfFrom',`From: ${f.from}`);
-  if(f.to)add('cfTo',`To: ${f.to}`);
-}
-function clearCF(id){$(id).value='';applyCollFilters()}
-$('cfReset').addEventListener('click',()=>{['cfSearch','cfDate','cfFrom','cfTo'].forEach(id=>$(id).value='');applyCollFilters()});
-['cfSearch','cfDate','cfFrom','cfTo'].forEach(id=>{$(id).addEventListener('input',applyCollFilters);$(id).addEventListener('change',applyCollFilters)});
+    function updateCPills(f) {
+      const el = $('cPills'); el.innerHTML = '';
+      const add = (k, l) => { const p = document.createElement('span'); p.className = 'pill'; p.innerHTML = `${l} <button onclick="clearCF('${k}')">✕</button>`; el.appendChild(p) };
+      if (f.search) add('cfSearch', `"${f.search}"`);
+      if (f.date) add('cfDate', `On: ${f.date}`);
+      if (f.from) add('cfFrom', `From: ${f.from}`);
+      if (f.to) add('cfTo', `To: ${f.to}`);
+    }
+    function clearCF(id) { $(id).value = ''; applyCollFilters() }
+    $('cfReset').addEventListener('click', () => { ['cfSearch', 'cfDate', 'cfFrom', 'cfTo'].forEach(id => $(id).value = ''); applyCollFilters() });
+    ['cfSearch', 'cfDate', 'cfFrom', 'cfTo'].forEach(id => { $(id).addEventListener('input', applyCollFilters); $(id).addEventListener('change', applyCollFilters) });
 
-const CCOLS=[
-  {k:'name',l:'Item Name',s:true},{k:'type',l:'Type',s:true},
-  {k:'desc',l:'Description',s:false},{k:'loc',l:'Location',s:false},
-  {k:'colldate',l:'Collected On',s:true},{k:'by',l:'Submitted By',s:true},
-  {k:'email',l:'Email',s:false},{k:'hby',l:'Handed By',s:false},
-  {k:'hto',l:'Handed To',s:false},{k:'img',l:'Image',s:false},
-  {k:'delete',l:'Delete',s:false}
-];
+    const CCOLS = [
+      { k: 'name', l: 'Item Name', s: true }, { k: 'type', l: 'Type', s: true },
+      { k: 'desc', l: 'Description', s: false }, { k: 'loc', l: 'Location', s: false },
+      { k: 'colldate', l: 'Collected On', s: true }, { k: 'by', l: 'Submitted By', s: true },
+      { k: 'email', l: 'Email', s: false }, { k: 'hby', l: 'Handed By', s: false },
+      { k: 'hto', l: 'Handed To', s: false }, { k: 'img', l: 'Image', s: false },
+      { k: 'delete', l: 'Delete', s: false }
+    ];
 
-function buildCHead(trEl){
-  trEl.innerHTML=CCOLS.map(c=>{
-    const sorted=cSortCol===c.k;
-    const icon=sorted?(cSortDir===1?'▲':'▼'):'↕';
-    const click=c.s?`onclick="cSort('${c.k}')"`:'';
-    const cur=c.s?'':'style="cursor:default"';
-    return`<th class="${sorted?'sorted':''}" ${click} ${cur}>${c.l}${c.s?`<span class="si">${icon}</span>`:''}</th>`;
-  }).join('');
-}
+    function buildCHead(trEl) {
+      trEl.innerHTML = CCOLS.map(c => {
+        const sorted = cSortCol === c.k;
+        const icon = sorted ? (cSortDir === 1 ? '▲' : '▼') : '↕';
+        const click = c.s ? `onclick="cSort('${c.k}')"` : '';
+        const cur = c.s ? '' : 'style="cursor:default"';
+        return `<th class="${sorted ? 'sorted' : ''}" ${click} ${cur}>${c.l}${c.s ? `<span class="si">${icon}</span>` : ''}</th>`;
+      }).join('');
+    }
 
-function cSort(col){if(cSortCol===col)cSortDir*=-1;else{cSortCol=col;cSortDir=1}renderColl()}
-function doCSort(arr){
-  if(!cSortCol)return[...arr].sort((a,b)=>(isoD(b.collectedAt)||'').localeCompare(isoD(a.collectedAt)||''));
-  return[...arr].sort((a,b)=>{
-    const m={name:[a.name||'',b.name||''],type:[a.type||'',b.type||''],colldate:[isoD(a.collectedAt),isoD(b.collectedAt)],by:[a.userName||'',b.userName||'']};
-    const[va,vb]=m[cSortCol]||['',''];
-    return va<vb?-cSortDir:va>vb?cSortDir:0;
-  });
-}
+    function cSort(col) { if (cSortCol === col) cSortDir *= -1; else { cSortCol = col; cSortDir = 1 } renderColl() }
+    function doCSort(arr) {
+      if (!cSortCol) return [...arr].sort((a, b) => (isoD(b.collectedAt) || '').localeCompare(isoD(a.collectedAt) || ''));
+      return [...arr].sort((a, b) => {
+        const m = { name: [a.name || '', b.name || ''], type: [a.type || '', b.type || ''], colldate: [isoD(a.collectedAt), isoD(b.collectedAt)], by: [a.userName || '', b.userName || ''] };
+        const [va, vb] = m[cSortCol] || ['', ''];
+        return va < vb ? -cSortDir : va > vb ? cSortDir : 0;
+      });
+    }
 
-function buildCRow(item){
-  const idx=cRowIdx++;
-  const loc=safe(item.lostLocation||item.foundLocation);
-  const cd=fmtDate(item.collectedAt);
-  const imgH=item.image
-    ?`<img class="timg" src="/uploads/${item.image}" alt="${esc(item.name)}" onclick="event.stopPropagation();openImg('/uploads/${item.image}','${esc(item.name)}','${esc(item.description)}')">`
-    :`<div class="no-img">📷</div>`;
-  const cells={
-    name:    `<td style="text-align:left"><strong style="font-weight:600">${safe(item.name)}</strong></td>`,
-    type:    `<td>${safe(item.type)}</td>`,
-    desc:    `<td style="max-width:150px;text-align:left;white-space:normal;font-size:11.5px;color:var(--text2)">${safe(item.description)}</td>`,
-    loc:     `<td style="font-size:11.5px">${loc}</td>`,
-    colldate:`<td><span class="dchip">✅ ${cd}</span></td>`,
-    by:      `<td style="font-size:12px">${safe(item.userName)}</td>`,
-    email:   `<td><a class="elink" href="mailto:${safe(item.userEmail)}" onclick="event.stopPropagation()">${safe(item.userEmail)}</a></td>`,
-    hby:     `<td style="font-size:12px">${safe(item.handedBy)}</td>`,
-    hto:     `<td style="font-size:12px">${safe(item.handedTo)}</td>`,
-    img:     `<td>${imgH}</td>`,
-    delete:  `<td onclick="event.stopPropagation()"><button class="del-btn" onclick="openDel('${item._id}','${esc(item.name)}','/delete-collected')">🗑 Delete</button></td>`
-  };
-  const fields=[
-    {l:'Item Name',v:safe(item.name)},{l:'Type',v:safe(item.type)},
-    {l:'Collected On',v:cd},{l:'Location',v:loc},
-    {l:'Submitted By',v:safe(item.userName)},{l:'Email',v:safe(item.userEmail)},
-    {l:'Handed By',v:safe(item.handedBy)},{l:'Handed To',v:safe(item.handedTo)},
-    {l:'Description',v:safe(item.description),full:true}
-  ];
-  return`<tr class="data-row" onclick="toggleCRow(${idx})" id="cmr-${idx}">${CCOLS.map(c=>cells[c.k]||'').join('')}</tr>
-<tr class="erow" id="cdr-${idx}"><td colspan="${CCOLS.length}"><div class="egrid">${fields.map(f=>`<div class="ef"${f.full?' style="grid-column:1/-1"':''}><label>${f.l}</label><span${f.full?' style="white-space:pre-wrap"':''}>${f.v}</span></div>`).join('')}</div></td></tr>`;
-}
+    function buildCRow(item) {
+      const idx = cRowIdx++;
+      const loc = safe(item.lostLocation || item.foundLocation);
+      const cd = fmtDate(item.collectedAt);
+      const imageUrl = getImageUrl(item.image);
+      const imgH = imageUrl
+        ? `<img class="timg" src="${imageUrl}" alt="${esc(item.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'" onclick="event.stopPropagation();openImg('${imageUrl}','${esc(item.name)}','${esc(item.description)}')"><span class="no-img" style="display:none">📷</span>`
+        : `<div class="no-img">📷</div>`;
+      const cells = {
+        name: `<td style="text-align:left"><strong style="font-weight:600">${safe(item.name)}</strong></td>`,
+        type: `<td>${safe(item.type)}</td>`,
+        desc: `<td style="max-width:150px;text-align:left;white-space:normal;font-size:11.5px;color:var(--text2)">${safe(item.description)}</td>`,
+        loc: `<td style="font-size:11.5px">${loc}</td>`,
+        colldate: `<td><span class="dchip">✅ ${cd}</span></td>`,
+        by: `<td style="font-size:12px">${safe(item.userName)}</td>`,
+        email: `<td><a class="elink" href="mailto:${safe(item.userEmail)}" onclick="event.stopPropagation()">${safe(item.userEmail)}</a></td>`,
+        hby: `<td style="font-size:12px">${safe(item.handedBy)}</td>`,
+        hto: `<td style="font-size:12px">${safe(item.handedTo)}</td>`,
+        img: `<td>${imgH}</td>`,
+        delete: `<td onclick="event.stopPropagation()"><button class="del-btn" onclick="openDel('${item._id}','${esc(item.name)}','/delete-collected')">🗑 Delete</button></td>`
+      };
+      const fields = [
+        { l: 'Item Name', v: safe(item.name) }, { l: 'Type', v: safe(item.type) },
+        { l: 'Collected On', v: cd }, { l: 'Location', v: loc },
+        { l: 'Submitted By', v: safe(item.userName) }, { l: 'Email', v: safe(item.userEmail) },
+        { l: 'Handed By', v: safe(item.handedBy) }, { l: 'Handed To', v: safe(item.handedTo) },
+        { l: 'Description', v: safe(item.description), full: true }
+      ];
+      return `<tr class="data-row" onclick="toggleCRow(${idx})" id="cmr-${idx}">${CCOLS.map(c => cells[c.k] || '').join('')}</tr>
+<tr class="erow" id="cdr-${idx}"><td colspan="${CCOLS.length}"><div class="egrid">${fields.map(f => `<div class="ef"${f.full ? ' style="grid-column:1/-1"' : ''}><label>${f.l}</label><span${f.full ? ' style="white-space:pre-wrap"' : ''}>${f.v}</span></div>`).join('')}</div></td></tr>`;
+    }
 
-function toggleCRow(idx){
-  const dr=$('cdr-'+idx);if(!dr)return;
-  const open=dr.classList.contains('open');
-  if(cExp!==null&&cExp!==idx)$('cdr-'+cExp)?.classList.remove('open');
-  dr.classList.toggle('open',!open);
-  cExp=open?null:idx;
-}
+    function toggleCRow(idx) {
+      const dr = $('cdr-' + idx); if (!dr) return;
+      const open = dr.classList.contains('open');
+      if (cExp !== null && cExp !== idx) $('cdr-' + cExp)?.classList.remove('open');
+      dr.classList.toggle('open', !open);
+      cExp = open ? null : idx;
+    }
 
-function renderColl(){
-  cRowIdx=0;
-  const arr=doCSort(filtColl);
-  buildCHead($('cheadAll'));
-  $('cbodyAll').innerHTML=arr.length?arr.map(buildCRow).join(''):emptyState('No collected items match filters.',CCOLS.length);
-  $('ccntAll').textContent=arr.length;
-  cExp=null;
-}
+    function renderColl() {
+      cRowIdx = 0;
+      const arr = doCSort(filtColl);
+      buildCHead($('cheadAll'));
+      $('cbodyAll').innerHTML = arr.length ? arr.map(buildCRow).join('') : emptyState('No collected items match filters.', CCOLS.length);
+      $('ccntAll').textContent = arr.length;
+      cExp = null;
+    }
 
-// ════════════════════════════════════
-// USERS — enhanced with full profile expand
-// ════════════════════════════════════
-function getUF(){return{search:$('ufSearch').value.trim().toLowerCase(),role:$('ufRole').value}}
+    // ════════════════════════════════════
+    // USERS — enhanced with full profile expand
+    // ════════════════════════════════════
+    function getUF() { return { search: $('ufSearch').value.trim().toLowerCase(), role: $('ufRole').value } }
 
-function applyUserFilters(){
-  const f=getUF();
-  filtUsers=usersData.filter(u=>{
-    const txt=[(u.name||''),(u.email||'')].map(v=>v.toLowerCase()).join(' ');
-    if(f.search&&!txt.includes(f.search))return false;
-    if(f.role&&u.role!==f.role)return false;
-    return true;
-  });
-  updateUPills(f);renderUsers();
-}
+    function applyUserFilters() {
+      const f = getUF();
+      filtUsers = usersData.filter(u => {
+        const txt = [(u.name || ''), (u.email || '')].map(v => v.toLowerCase()).join(' ');
+        if (f.search && !txt.includes(f.search)) return false;
+        if (f.role && u.role !== f.role) return false;
+        return true;
+      });
+      updateUPills(f); renderUsers();
+    }
 
-function updateUPills(f){
-  const el=$('uPills');el.innerHTML='';
-  const add=(k,l)=>{const p=document.createElement('span');p.className='pill';p.innerHTML=`${l} <button onclick="clearUF('${k}')">✕</button>`;el.appendChild(p)};
-  if(f.search)add('ufSearch',`"${f.search}"`);
-  if(f.role)add('ufRole',f.role);
-}
-function clearUF(id){const el=$(id);el.tagName==='SELECT'?el.selectedIndex=0:el.value='';applyUserFilters()}
-$('ufReset').addEventListener('click',()=>{['ufSearch','ufRole'].forEach(id=>{const el=$(id);el.tagName==='SELECT'?el.selectedIndex=0:el.value=''});applyUserFilters()});
-['ufSearch','ufRole'].forEach(id=>{$(id).addEventListener('input',applyUserFilters);$(id).addEventListener('change',applyUserFilters)});
+    function updateUPills(f) {
+      const el = $('uPills'); el.innerHTML = '';
+      const add = (k, l) => { const p = document.createElement('span'); p.className = 'pill'; p.innerHTML = `${l} <button onclick="clearUF('${k}')">✕</button>`; el.appendChild(p) };
+      if (f.search) add('ufSearch', `"${f.search}"`);
+      if (f.role) add('ufRole', f.role);
+    }
+    function clearUF(id) { const el = $(id); el.tagName === 'SELECT' ? el.selectedIndex = 0 : el.value = ''; applyUserFilters() }
+    $('ufReset').addEventListener('click', () => { ['ufSearch', 'ufRole'].forEach(id => { const el = $(id); el.tagName === 'SELECT' ? el.selectedIndex = 0 : el.value = '' }); applyUserFilters() });
+    ['ufSearch', 'ufRole'].forEach(id => { $(id).addEventListener('input', applyUserFilters); $(id).addEventListener('change', applyUserFilters) });
 
-// User table columns
-const UCOLS=[
-  {k:'avatar',l:''},
-  {k:'name',l:'Full Name'},
-  {k:'email',l:'Email Address'},
-  {k:'role',l:'Role'},
-  {k:'joined',l:'Joined'},
-  {k:'items',l:'Submissions'},
-  {k:'activity',l:'Last Active'},
-  {k:'delete',l:'Delete'}
-];
+    // User table columns
+    const UCOLS = [
+      { k: 'avatar', l: '' },
+      { k: 'name', l: 'Full Name' },
+      { k: 'email', l: 'Email Address' },
+      { k: 'role', l: 'Role' },
+      { k: 'joined', l: 'Joined' },
+      { k: 'items', l: 'Submissions' },
+      { k: 'activity', l: 'Last Active' },
+      { k: 'delete', l: 'Delete' }
+    ];
 
-function getInitials(name){
-  if(!name||name==='N/A')return'?';
-  return name.split(' ').map(p=>p[0]||'').join('').slice(0,2).toUpperCase();
-}
+    function getInitials(name) {
+      if (!name || name === 'N/A') return '?';
+      return name.split(' ').map(p => p[0] || '').join('').slice(0, 2).toUpperCase();
+    }
 
-function getAvatarColor(name){
-  const colors=['#c4a040','#3a8fd6','#2ab870','#8860d0','#e09030','#d94040','#20a8a0'];
-  let h=0;for(let c of(name||'')){h=(h*31+c.charCodeAt(0))%colors.length}return colors[h];
-}
+    function getAvatarColor(name) {
+      const colors = ['#c4a040', '#3a8fd6', '#2ab870', '#8860d0', '#e09030', '#d94040', '#20a8a0'];
+      let h = 0; for (let c of (name || '')) { h = (h * 31 + c.charCodeAt(0)) % colors.length } return colors[h];
+    }
 
-function buildUHead(){
-  $('uhead').innerHTML=UCOLS.map(c=>`<th style="cursor:default">${c.l}</th>`).join('');
-}
+    function buildUHead() {
+      $('uhead').innerHTML = UCOLS.map(c => `<th style="cursor:default">${c.l}</th>`).join('');
+    }
 
-// Count user's items from allItems
-function countUserItems(email){
-  return allItems.filter(i=>(i.userEmail||'').toLowerCase()===(email||'').toLowerCase()).length;
-}
+    // Count user's items from allItems
+    function countUserItems(email) {
+      return allItems.filter(i => (i.userEmail || '').toLowerCase() === (email || '').toLowerCase()).length;
+    }
 
-// Build expanded user profile row
-function buildUserExpandRow(u,colspan){
-  const color=getAvatarColor(u.name);
-  const initials=getInitials(u.name);
-  const joinDate=u.createdAt?fmtDate(u.createdAt):'N/A';
-  const lastSeen=u.lastLogin?fmtDate(u.lastLogin):'N/A';
-  const itemCount=u.itemCount||countUserItems(u.email)||0;
-  const roleBadge=u.role==='admin'?'b-admin':u.role==='manager'?'b-manager':'b-user';
-  const phone=safe(u.phone||u.mobile||u.contact);
-  const dept=safe(u.department||u.dept||u.branch);
-  const rollNo=safe(u.rollNo||u.rollNumber||u.studentId);
-  const bio=safe(u.bio||u.about);
-  const lostCount=allItems.filter(i=>isLost(i)&&(i.userEmail||'').toLowerCase()===(u.email||'').toLowerCase()).length;
-  const foundCount=allItems.filter(i=>!isLost(i)&&(i.userEmail||'').toLowerCase()===(u.email||'').toLowerCase()).length;
-  const collCount=collData.filter(i=>(i.userEmail||'').toLowerCase()===(u.email||'').toLowerCase()).length;
+    // Build expanded user profile row
+    function buildUserExpandRow(u, colspan) {
+      const color = getAvatarColor(u.name);
+      const initials = getInitials(u.name);
+      const joinDate = u.createdAt ? fmtDate(u.createdAt) : 'N/A';
+      const lastSeen = u.lastLogin ? fmtDate(u.lastLogin) : 'N/A';
+      const itemCount = u.itemCount || countUserItems(u.email) || 0;
+      const roleBadge = u.role === 'admin' ? 'b-admin' : u.role === 'manager' ? 'b-manager' : 'b-user';
+      const phone = safe(u.phone || u.mobile || u.contact);
+      const dept = safe(u.department || u.dept || u.branch);
+      const rollNo = safe(u.rollNo || u.rollNumber || u.studentId);
+      const bio = safe(u.bio || u.about);
+      const lostCount = allItems.filter(i => isLost(i) && (i.userEmail || '').toLowerCase() === (u.email || '').toLowerCase()).length;
+      const foundCount = allItems.filter(i => !isLost(i) && (i.userEmail || '').toLowerCase() === (u.email || '').toLowerCase()).length;
+      const collCount = collData.filter(i => (i.userEmail || '').toLowerCase() === (u.email || '').toLowerCase()).length;
 
-  return`<tr class="erow" id="udr-${u._id}">
+      return `<tr class="erow" id="udr-${u._id}">
   <td colspan="${colspan}">
     <div class="user-profile-panel">
       <div style="flex-shrink:0">
@@ -1431,9 +2330,9 @@ function buildUserExpandRow(u,colspan){
         <div class="udf" style="grid-column:1/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
           <label style="margin:0">Change Role →</label>
           <select class="role-sel" onchange="changeRole('${u._id}',this.value)">
-            <option value="user" ${u.role==='user'?'selected':''}>User</option>
-            <option value="manager" ${u.role==='manager'?'selected':''}>Manager</option>
-            <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
+            <option value="user" ${u.role === 'user' ? 'selected' : ''}>User</option>
+            <option value="manager" ${u.role === 'manager' ? 'selected' : ''}>Manager</option>
+            <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
           </select>
           <span style="font-size:11px;color:var(--text3)">Changes take effect immediately</span>
         </div>
@@ -1441,80 +2340,87 @@ function buildUserExpandRow(u,colspan){
     </div>
   </td>
 </tr>`;
-}
+    }
 
-function renderUsers(){
-  buildUHead();
-  const html=filtUsers.map(u=>{
-    const color=getAvatarColor(u.name);
-    const initials=getInitials(u.name);
-    const roleBadge=u.role==='admin'?'b-admin':u.role==='manager'?'b-manager':'b-user';
-    const itemCount=u.itemCount||countUserItems(u.email)||0;
+    function renderUsers() {
+      buildUHead();
+      const html = filtUsers.map(u => {
+        const color = getAvatarColor(u.name);
+        const initials = getInitials(u.name);
+        const roleBadge = u.role === 'admin' ? 'b-admin' : u.role === 'manager' ? 'b-manager' : 'b-user';
+        const itemCount = u.itemCount || countUserItems(u.email) || 0;
 
-    return`<tr class="data-row" onclick="toggleURow('${u._id}')">
+        return `<tr class="data-row" onclick="toggleURow('${u._id}')">
       <td><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,${color}22,${color}11);border:1.5px solid ${color}55;display:inline-flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:${color}">${initials}</div></td>
       <td style="text-align:left;font-weight:600;color:var(--text)">${safe(u.name)}</td>
       <td><a class="elink" href="mailto:${safe(u.email)}" onclick="event.stopPropagation()">${safe(u.email)}</a></td>
       <td><span class="badge ${roleBadge}">${safe(u.role)}</span></td>
-      <td><span class="dchip">${u.createdAt?fmtDate(u.createdAt):'N/A'}</span></td>
+      <td><span class="dchip">${u.createdAt ? fmtDate(u.createdAt) : 'N/A'}</span></td>
       <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2)">${itemCount}</span></td>
-      <td><span class="dchip">${u.lastLogin?fmtDate(u.lastLogin):'N/A'}</span></td>
+      <td><span class="dchip">${u.lastLogin ? fmtDate(u.lastLogin) : 'N/A'}</span></td>
       <td onclick="event.stopPropagation()"><button class="del-btn" onclick="openDel('${u._id}','${esc(u.name)} (${esc(u.email)})','/delete-user')">🗑 Delete</button></td>
     </tr>
-    ${buildUserExpandRow(u,UCOLS.length)}`;
-  }).join('');
+    ${buildUserExpandRow(u, UCOLS.length)}`;
+      }).join('');
 
-  $('ubody').innerHTML=html||emptyState('No users match filters.',UCOLS.length);
-  $('ucnt').textContent=filtUsers.length;
-}
+      $('ubody').innerHTML = html || emptyState('No users match filters.', UCOLS.length);
+      $('ucnt').textContent = filtUsers.length;
+    }
 
-function toggleURow(uid){
-  const dr=$('udr-'+uid);if(!dr)return;
-  const open=dr.classList.contains('open');
-  if(uExp!==null&&uExp!==uid)$('udr-'+uExp)?.classList.remove('open');
-  dr.classList.toggle('open',!open);
-  uExp=open?null:uid;
-}
+    function toggleURow(uid) {
+      const dr = $('udr-' + uid); if (!dr) return;
+      const open = dr.classList.contains('open');
+      if (uExp !== null && uExp !== uid) $('udr-' + uExp)?.classList.remove('open');
+      dr.classList.toggle('open', !open);
+      uExp = open ? null : uid;
+    }
 
-function changeRole(uid,newRole){
-  fetch('/update-role',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:uid,role:newRole})})
-    .then(r=>r.ok?console.log('Role updated'):console.error('Role update failed'))
-    .catch(console.error);
-}
+    function changeRole(uid, newRole) {
+      fetch('/update-role', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: uid, role: newRole }) })
+        .then(r => r.ok ? console.log('Role updated') : console.error('Role update failed'))
+        .catch(console.error);
+    }
 
-// ════════════════════════════════════
-// MODALS
-// ════════════════════════════════════
-function openImg(src,name,desc){
-  $('mImg').src=src;$('mName').textContent=name;$('mDesc').textContent=desc;
-  $('imgModal').classList.add('open');document.body.style.overflow='hidden';
-}
-function closeImg(e){if(!e||e.target===$('imgModal')){$('imgModal').classList.remove('open');document.body.style.overflow='';}}
+    // ════════════════════════════════════
+    // MODALS
+    // ════════════════════════════════════
+    function openImg(src, name, desc) {
+      const img = $('mImg');
+      img.onerror = () => { img.onerror = null; img.style.display = 'none'; };
+      img.onload = () => { img.style.display = 'block'; };
+      img.src = src;
+      $('mName').textContent = name;
+      $('mDesc').textContent = desc;
+      $('imgModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeImg(e) { if (!e || e.target === $('imgModal')) { $('imgModal').classList.remove('open'); document.body.style.overflow = ''; } }
 
-function openDel(id,name,endpoint){
-  $('delItemName').textContent=name;
-  $('delModal').classList.add('open');document.body.style.overflow='hidden';
-  $('btnConfirmDel').onclick=()=>{closeDel();submitDel(id,endpoint)};
-}
-function closeDel(e){if(!e||e.target===$('delModal')){$('delModal').classList.remove('open');document.body.style.overflow='';}}
-function submitDel(id,endpoint){
-  const f=document.createElement('form');
-  f.method='POST';f.action=endpoint;
-  const inp=document.createElement('input');
-  inp.type='hidden';inp.name='itemId';inp.value=id;
-  f.appendChild(inp);document.body.appendChild(f);f.submit();
-}
+    function openDel(id, name, endpoint) {
+      $('delItemName').textContent = name;
+      $('delModal').classList.add('open'); document.body.style.overflow = 'hidden';
+      $('btnConfirmDel').onclick = () => { closeDel(); submitDel(id, endpoint) };
+    }
+    function closeDel(e) { if (!e || e.target === $('delModal')) { $('delModal').classList.remove('open'); document.body.style.overflow = ''; } }
+    function submitDel(id, endpoint) {
+      const f = document.createElement('form');
+      f.method = 'POST'; f.action = endpoint;
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = 'itemId'; inp.value = id;
+      f.appendChild(inp); document.body.appendChild(f); f.submit();
+    }
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeImg();closeDel()}});
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeImg(); closeDel() } });
 
-// ════════════════════════════════════
-// BOOT
-// ════════════════════════════════════
-init();
-</script>
+    // ════════════════════════════════════
+    // BOOT
+    // ════════════════════════════════════
+    init();
+  </script>
 
-<script src="/js/navbar.js"></script>
-<script src="/js/translate.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/translate.js"></script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
+
 </html>
