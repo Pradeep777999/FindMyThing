@@ -1,738 +1,1571 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Reported Items — MITS FindMyThing Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/navbar.css">
-<style>
-:root {
-  --navy:      #1a2744;
-  --navy2:     #243058;
-  --gold:      #c9a84c;
-  --gold2:     #e8c97a;
-  --cream:     #faf7f0;
-  --white:     #ffffff;
-  --muted:     #6b7280;
-  --border:    #e2e8f0;
-  --lost:      #e74c3c;
-  --lost-bg:   #fef2f0;
-  --found:     #2980b9;
-  --found-bg:  #eef6fc;
-  --green:     #1a6b3a;
-  --green-bg:  #ecfdf5;
-  --amber:     #d97706;
-  --amber-bg:  #fffbeb;
-  --shadow:    0 4px 24px rgba(26,39,68,0.10);
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Reported Items — MITS FindMyThing Portal</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    :root {
+      --navy: #1a2744;
+      --navy2: #243058;
+      --gold: #c9a84c;
+      --gold2: #e8c97a;
+      --cream: #faf7f0;
+      --white: #ffffff;
+      --muted: #6b7280;
+      --border: #e2e8f0;
+      --lost: #e74c3c;
+      --lost-bg: #fef2f0;
+      --found: #2980b9;
+      --found-bg: #eef6fc;
+      --green: #1a6b3a;
+      --green-bg: #ecfdf5;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --shadow: 0 4px 24px rgba(26, 39, 68, 0.10);
+    }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--cream);
-  color: var(--navy);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* ── Background ── */
-.bg-layer {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none; overflow: hidden;
-}
-.bg-layer::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 5% 10%,  rgba(201,168,76,0.07) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 70% at 95% 90%, rgba(26,39,68,0.05)   0%, transparent 55%);
-}
-.bg-dots {
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(201,168,76,0.11) 1px, transparent 1px);
-  background-size: 38px 38px;
-}
-.bg-ring {
-  position: absolute; border-radius: 50%;
-  border: 1px solid rgba(201,168,76,0.09);
-}
-.br1 { width:640px; height:640px; top:-220px; right:-160px; animation: spin 72s linear infinite; }
-.br2 { width:440px; height:440px; bottom:0; left:-130px;    animation: spin 95s linear infinite reverse; }
-@keyframes spin { to { transform: rotate(360deg); } }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* ── Navbar ── */
-.navbar {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(26,39,68,0.97);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(201,168,76,0.25);
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 0 36px; height: 64px;
-  animation: slideDown 0.6s ease both;
-}
-.navbar::after {
-  content: '';
-  position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 4s linear infinite;
-}
-@keyframes slideDown { from { transform:translateY(-100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
-@keyframes shimmer   { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    /* ── Background ── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
 
-.nav-left { display: flex; flex-direction: column; justify-content: center; }
-.nav-brand {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px; font-weight: 700; color: var(--white);
-}
-.nav-brand span { color: var(--gold); }
-.nav-brand-sub {
-  font-size: 11px; color: var(--gold);
-  letter-spacing: 2px; text-transform: uppercase;
-}
+    .bg-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 5% 10%, rgba(201, 168, 76, 0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 70% at 95% 90%, rgba(26, 39, 68, 0.05) 0%, transparent 55%);
+    }
 
-/* Role badge — changes per role */
-.role-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  border: 1px solid rgba(201,168,76,0.35);
-  font-size: 11px; font-weight: 600;
-  padding: 4px 12px; border-radius: 100px;
-  letter-spacing: 0.8px; text-transform: uppercase;
-}
-.role-badge.manager { background: rgba(201,168,76,0.15); color: var(--gold2); }
-.role-badge.admin   { background: rgba(231,76,60,0.15);  color: #f1948a; border-color: rgba(231,76,60,0.35); }
-.role-badge.user    { background: rgba(41,128,185,0.15); color: #7fb3d3; border-color: rgba(41,128,185,0.35); }
-.rbadge-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  animation: pulse 2s ease infinite;
-}
-.manager .rbadge-dot { background: var(--gold2); }
-.admin   .rbadge-dot { background: #f1948a; }
-.user    .rbadge-dot { background: #7fb3d3; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(1.5);} }
+    .bg-dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(201, 168, 76, 0.11) 1px, transparent 1px);
+      background-size: 38px 38px;
+    }
 
-.nav-links { display: flex; gap: 4px; align-items: center; }
-.nav-links a {
-  color: rgba(255,255,255,0.72); text-decoration: none;
-  font-size: 13px; font-weight: 400;
-  padding: 7px 14px; border-radius: 7px;
-  border: 1px solid transparent; transition: all 0.2s;
-}
-.nav-links a:hover { color: var(--gold2); border-color: rgba(201,168,76,0.28); background: rgba(201,168,76,0.07); }
-.nav-links a.active { background: var(--gold); color: var(--navy); font-weight: 600; border-color: var(--gold); }
+    .bg-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.09);
+    }
 
-#google_translate_element { background: rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 5px; font-size: 11px; border: 1px solid rgba(201,168,76,0.2); }
-.goog-logo-link, .goog-te-gadget span { display: none !important; }
-.goog-te-gadget { color: transparent !important; }
+    .br1 {
+      width: 640px;
+      height: 640px;
+      top: -220px;
+      right: -160px;
+      animation: spin 72s linear infinite;
+    }
 
-/* ── Page ── */
-.page { position: relative; z-index: 1; padding: 36px 40px 60px; max-width: 1500px; margin: 0 auto; }
+    .br2 {
+      width: 440px;
+      height: 440px;
+      bottom: 0;
+      left: -130px;
+      animation: spin 95s linear infinite reverse;
+    }
 
-/* ── Page header ── */
-.page-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  flex-wrap: wrap; gap: 20px; margin-bottom: 28px;
-  animation: fadeUp 0.6s ease both;
-}
-.page-header-left .breadcrumb {
-  font-size: 12px; color: var(--muted); margin-bottom: 8px;
-  display: flex; align-items: center; gap: 6px;
-}
-.page-header-left .breadcrumb a { color: var(--gold); text-decoration: none; }
-.page-header-left h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px; font-weight: 700; color: var(--navy);
-}
-.page-header-left p { font-size: 13.5px; color: var(--muted); margin-top: 4px; max-width: 520px; }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-.header-stats { display: flex; gap: 12px; flex-wrap: wrap; }
-.hstat {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 22px; text-align: center;
-  box-shadow: 0 2px 12px rgba(26,39,68,0.06); min-width: 96px;
-}
-.hstat .snum { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--navy); font-weight: 700; display: block; }
-.hstat .slbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
-.hstat.s-lost      .snum { color: var(--lost); }
-.hstat.s-found     .snum { color: var(--found); }
-.hstat.s-collected .snum { color: var(--green); }
-.hstat.s-pending   .snum { color: var(--amber); }
+    /* ── Navbar ── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(26, 39, 68, 0.97);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      height: 64px;
+      animation: slideDown 0.6s ease both;
+    }
 
-/* ── Info notice (for non-managers) ── */
-.info-notice {
-  background: linear-gradient(135deg, rgba(41,128,185,0.07), rgba(41,128,185,0.03));
-  border: 1px solid rgba(41,128,185,0.25);
-  border-left: 4px solid var(--found);
-  border-radius: 12px; padding: 13px 20px;
-  margin-bottom: 24px;
-  display: flex; gap: 12px; align-items: flex-start;
-  animation: fadeUp 0.6s 0.05s ease both;
-}
-.info-notice .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-.info-notice-text { font-size: 13px; color: var(--navy); line-height: 1.65; }
-.info-notice-text strong { color: #1a6fa8; font-weight: 600; }
+    .navbar::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 4s linear infinite;
+    }
 
-/* Manager-only policy notice */
-.policy-notice {
-  background: linear-gradient(135deg, rgba(201,168,76,0.09), rgba(201,168,76,0.04));
-  border: 1px solid rgba(201,168,76,0.3);
-  border-left: 4px solid var(--gold);
-  border-radius: 12px; padding: 13px 20px;
-  margin-bottom: 24px;
-  display: flex; gap: 12px; align-items: flex-start;
-  animation: fadeUp 0.6s 0.05s ease both;
-}
-.policy-notice .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-.policy-notice-text { font-size: 13px; color: var(--navy); line-height: 1.65; }
-.policy-notice-text strong { color: #8a6b1e; font-weight: 600; }
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
 
-/* ── Filters card ── */
-.filters-card {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: 16px; padding: 22px 26px;
-  margin-bottom: 24px; box-shadow: var(--shadow);
-  animation: fadeUp 0.6s 0.1s ease both;
-}
-.filters-label {
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
-}
-.filters-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.filters-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
-.filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 160px; }
-.filter-group label { font-size: 11.5px; font-weight: 600; color: var(--navy); letter-spacing: 0.4px; text-transform: uppercase; }
-.filter-group input,
-.filter-group select {
-  padding: 9px 13px; border: 1.5px solid var(--border); border-radius: 9px;
-  font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--navy);
-  background: #f8fafc; outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.filter-group input:focus,
-.filter-group select:focus {
-  border-color: var(--navy); background: var(--white);
-  box-shadow: 0 0 0 3px rgba(26,39,68,0.07);
-}
-.filter-group input::placeholder { color: #b0b8c9; }
-.btn-reset {
-  padding: 9px 20px; background: transparent;
-  border: 1.5px solid var(--border); border-radius: 9px;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--muted);
-  cursor: pointer; transition: all 0.2s; white-space: nowrap;
-}
-.btn-reset:hover { border-color: var(--navy); color: var(--navy); background: rgba(26,39,68,0.04); }
-.active-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.filter-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);
-  border-radius: 100px; padding: 4px 12px;
-  font-size: 12px; color: #8a6b1e; font-weight: 500;
-}
-.filter-pill button {
-  background: none; border: none; cursor: pointer;
-  color: #8a6b1e; font-size: 14px; line-height: 1; padding: 0; transition: color 0.2s;
-}
-.filter-pill button:hover { color: var(--lost); }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
 
-/* ── Tab bar ── */
-.tab-bar {
-  display: flex; gap: 0; background: var(--white);
-  border: 1px solid var(--border); border-radius: 14px;
-  padding: 5px; margin-bottom: 24px;
-  box-shadow: 0 2px 12px rgba(26,39,68,0.06);
-  animation: fadeUp 0.6s 0.15s ease both;
-  width: fit-content; flex-wrap: wrap;
-}
-.tab-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 24px; border-radius: 10px; border: none;
-  font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500;
-  cursor: pointer; transition: all 0.25s;
-  background: transparent; color: var(--muted);
-}
-.tab-btn:hover { color: var(--navy); }
-.tab-btn.active-all       { background: linear-gradient(135deg, var(--navy), var(--navy2));     color: var(--white); box-shadow: 0 4px 14px rgba(26,39,68,0.3); }
-.tab-btn.active-lost      { background: linear-gradient(135deg, var(--lost), #c0392b);          color: var(--white); box-shadow: 0 4px 14px rgba(231,76,60,0.3); }
-.tab-btn.active-found     { background: linear-gradient(135deg, var(--found), #1a6fa8);         color: var(--white); box-shadow: 0 4px 14px rgba(41,128,185,0.3); }
-.tab-btn.active-collected { background: linear-gradient(135deg, var(--green), #148f4f);         color: var(--white); box-shadow: 0 4px 14px rgba(26,107,58,0.3); }
-.tab-btn.active-pending   { background: linear-gradient(135deg, var(--amber), #b45309);         color: var(--white); box-shadow: 0 4px 14px rgba(217,119,6,0.3); }
-.tab-count {
-  font-size: 11px; font-weight: 700; padding: 2px 8px;
-  border-radius: 100px; background: rgba(255,255,255,0.25);
-}
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0
+      }
 
-/* ── Table section ── */
-.table-section { animation: fadeUp 0.6s 0.2s ease both; }
-.table-section-title { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.tsect-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0;
-}
-.tsect-icon.i-all       { background: rgba(26,39,68,0.08);  color: var(--navy); }
-.tsect-icon.i-lost      { background: rgba(231,76,60,0.1);  color: var(--lost); }
-.tsect-icon.i-found     { background: rgba(41,128,185,0.1); color: var(--found); }
-.tsect-icon.i-collected { background: rgba(26,107,58,0.1);  color: var(--green); }
-.tsect-icon.i-pending   { background: rgba(217,119,6,0.1);  color: var(--amber); }
-.tsect-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: var(--navy); }
-.tsect-sub   { font-size: 12px; color: var(--muted); margin-top: 1px; }
+      100% {
+        background-position: -200% 0
+      }
+    }
 
-.table-card {
-  background: var(--white); border-radius: 16px;
-  box-shadow: var(--shadow); border: 1px solid var(--border);
-  overflow: hidden; margin-bottom: 36px;
-}
-.table-card.c-all       { border-top: 3px solid var(--gold); }
-.table-card.c-lost      { border-top: 3px solid var(--lost); }
-.table-card.c-found     { border-top: 3px solid var(--found); }
-.table-card.c-collected { border-top: 3px solid var(--green); }
-.table-card.c-pending   { border-top: 3px solid var(--amber); }
+    .nav-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-.table-scroll { overflow-x: auto; }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+    }
 
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .nav-brand span {
+      color: var(--gold);
+    }
 
-thead th {
-  background: #f8fafc; color: var(--navy);
-  padding: 11px 14px; font-weight: 600;
-  font-size: 11px; letter-spacing: 0.5px;
-  text-transform: uppercase; border-bottom: 1px solid var(--border);
-  white-space: nowrap; position: sticky; top: 0; z-index: 2;
-  cursor: pointer; user-select: none; transition: background 0.2s;
-}
-thead th:hover { background: #f0f4f8; }
-thead th .sort-icon { margin-left: 4px; opacity: 0.35; font-size: 9px; }
-thead th.sorted .sort-icon { opacity: 1; color: var(--gold); }
+    .nav-brand-sub {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
 
-tbody td {
-  padding: 11px 14px; border-bottom: 1px solid #f0f3f8;
-  color: var(--navy); vertical-align: middle; text-align: center;
-}
-tbody tr:last-child td { border-bottom: none; }
-tbody tr { transition: background 0.15s; }
-tbody tr:hover { background: #f8fafd; }
+    /* Role badge — changes per role */
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 100px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
 
-.count-bar {
-  padding: 11px 20px; background: #f8fafc;
-  border-top: 1px solid var(--border);
-  font-size: 12px; color: var(--muted);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.count-bar strong { color: var(--navy); }
+    .role-badge.manager {
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold2);
+    }
 
-/* ── Badges ── */
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 10px; border-radius: 100px;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
-}
-.badge-lost      { background: var(--lost-bg);  color: #c0392b; border: 1px solid rgba(231,76,60,0.2); }
-.badge-found     { background: var(--found-bg); color: #1a6fa8; border: 1px solid rgba(41,128,185,0.2); }
-.badge-collected { background: var(--green-bg); color: var(--green); border: 1px solid rgba(26,107,58,0.2); }
-.badge-pending   { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(217,119,6,0.2); }
+    .role-badge.admin {
+      background: rgba(231, 76, 60, 0.15);
+      color: #f1948a;
+      border-color: rgba(231, 76, 60, 0.35);
+    }
 
-/* ── Collect button (manager only) ── */
-.collect-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: linear-gradient(135deg, #1a6b3a, #148f4f);
-  color: var(--white); border: none;
-  padding: 7px 15px; border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 3px 10px rgba(26,107,58,0.3);
-  white-space: nowrap;
-}
-.collect-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(26,107,58,0.4); }
-.collect-btn:active { transform: translateY(0); }
+    .role-badge.user {
+      background: rgba(41, 128, 185, 0.15);
+      color: #7fb3d3;
+      border-color: rgba(41, 128, 185, 0.35);
+    }
 
-/* ── Table image ── */
-.table-img {
-  width: 50px; height: 50px; border-radius: 9px;
-  object-fit: cover; cursor: pointer;
-  border: 2px solid var(--border); transition: all 0.2s;
-}
-.table-img:hover { transform: scale(1.14); border-color: var(--gold); box-shadow: 0 4px 14px rgba(201,168,76,0.3); }
-.no-img {
-  width: 50px; height: 50px; border-radius: 9px;
-  background: #f0f3f8; border: 1px dashed var(--border);
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 18px; color: #cbd5e1;
-}
+    .rbadge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
 
-/* ── Email link ── */
-.email-link { color: var(--gold); text-decoration: none; font-size: 12.5px; }
-.email-link:hover { color: var(--navy); text-decoration: underline; }
+    .manager .rbadge-dot {
+      background: var(--gold2);
+    }
 
-/* ── Expanded detail row ── */
-.detail-row { display: none; }
-.detail-row td {
-  background: linear-gradient(135deg, #f8fafc, #f0f4fa);
-  padding: 16px 20px; text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-.detail-row.open { display: table-row; animation: expandRow 0.2s ease both; }
-@keyframes expandRow { from { opacity:0; } to { opacity:1; } }
-.detail-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 14px;
-}
-.detail-field label {
-  font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--muted);
-  display: block; margin-bottom: 3px;
-}
-.detail-field span { font-size: 13.5px; color: var(--navy); font-weight: 500; }
+    .admin .rbadge-dot {
+      background: #f1948a;
+    }
 
-/* ── Image modal ── */
-.modal {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.88);
-  justify-content: center; align-items: center;
-  z-index: 9000; padding: 24px;
-  backdrop-filter: blur(6px);
-}
-.modal.open { display: flex; animation: modalIn 0.25s ease both; }
-@keyframes modalIn { from{opacity:0;transform:scale(0.92);} to{opacity:1;transform:scale(1);} }
-.modal-inner {
-  position: relative; max-width: 720px; width: 100%;
-  background: var(--white); border-radius: 20px;
-  overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-}
-.modal-img-wrap { text-align: center; background: #0a0f1a; padding: 20px; }
-.modal-img-wrap img { max-width: 100%; max-height: 460px; border-radius: 10px; object-fit: contain; display: block; margin: 0 auto; }
-.modal-info { padding: 18px 24px; }
-.modal-item-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-.modal-item-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
-.modal-close {
-  position: absolute; top: 14px; right: 16px;
-  background: rgba(0,0,0,0.5); border: none; border-radius: 50%;
-  width: 34px; height: 34px; font-size: 18px;
-  color: white; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
-}
-.modal-close:hover { background: rgba(0,0,0,0.8); }
+    .user .rbadge-dot {
+      background: #7fb3d3;
+    }
 
-/* ── Confirm modal ── */
-.confirm-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.55);
-  justify-content: center; align-items: center;
-  z-index: 9100; backdrop-filter: blur(4px);
-}
-.confirm-overlay.open { display: flex; animation: modalIn 0.2s ease both; }
-.confirm-box {
-  background: var(--white); border-radius: 18px;
-  padding: 36px 40px; max-width: 420px; width: 100%;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4); text-align: center;
-}
-.confirm-icon  { font-size: 40px; margin-bottom: 14px; }
-.confirm-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
-.confirm-text  { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 6px; }
-.confirm-item  { font-size: 14px; font-weight: 600; color: var(--navy); background: #f8fafc; padding: 8px 16px; border-radius: 8px; margin: 10px 0 24px; border: 1px solid var(--border); }
-.confirm-btns  { display: flex; gap: 12px; justify-content: center; margin-top: 24px; }
-.btn-cancel {
-  padding: 10px 28px; background: transparent;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px;
-  color: var(--muted); cursor: pointer; transition: all 0.2s;
-}
-.btn-cancel:hover { border-color: var(--navy); color: var(--navy); }
-.btn-confirm-collect {
-  padding: 10px 28px;
-  background: linear-gradient(135deg, #1a6b3a, #148f4f);
-  border: none; border-radius: 10px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
-  color: var(--white); cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 14px rgba(26,107,58,0.3);
-}
-.btn-confirm-collect:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,107,58,0.4); }
+    @keyframes pulse {
 
-/* ── Animations ── */
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
 
-/* ── Responsive ── */
-@media (max-width: 900px) {
-  .page { padding: 20px 16px 40px; }
-  .navbar { padding: 0 16px; }
-  .filters-row { flex-direction: column; }
-  .header-stats { flex-wrap: wrap; }
-  .tab-btn { padding: 9px 14px; font-size: 12.5px; }
-}
-</style>
+      50% {
+        opacity: 0.4;
+        transform: scale(1.5);
+      }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.72);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      padding: 7px 14px;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold2);
+      border-color: rgba(201, 168, 76, 0.28);
+      background: rgba(201, 168, 76, 0.07);
+    }
+
+    .nav-links a.active {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 600;
+      border-color: var(--gold);
+    }
+
+    #google_translate_element {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+
+    .goog-logo-link,
+    .goog-te-gadget span {
+      display: none !important;
+    }
+
+    .goog-te-gadget {
+      color: transparent !important;
+    }
+
+    /* ── Page ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      padding: 36px 40px 60px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    /* ── Page header ── */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .page-header-left .breadcrumb {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-header-left .breadcrumb a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .page-header-left h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .page-header-left p {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      max-width: 520px;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hstat {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 22px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(26, 39, 68, 0.06);
+      min-width: 96px;
+    }
+
+    .hstat .snum {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--navy);
+      font-weight: 700;
+      display: block;
+    }
+
+    .hstat .slbl {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    .hstat.s-lost .snum {
+      color: var(--lost);
+    }
+
+    .hstat.s-found .snum {
+      color: var(--found);
+    }
+
+    .hstat.s-collected .snum {
+      color: var(--green);
+    }
+
+    .hstat.s-pending .snum {
+      color: var(--amber);
+    }
+
+    /* ── Info notice (for non-managers) ── */
+    .info-notice {
+      background: linear-gradient(135deg, rgba(41, 128, 185, 0.07), rgba(41, 128, 185, 0.03));
+      border: 1px solid rgba(41, 128, 185, 0.25);
+      border-left: 4px solid var(--found);
+      border-radius: 12px;
+      padding: 13px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      animation: fadeUp 0.6s 0.05s ease both;
+    }
+
+    .info-notice .icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .info-notice-text {
+      font-size: 13px;
+      color: var(--navy);
+      line-height: 1.65;
+    }
+
+    .info-notice-text strong {
+      color: #1a6fa8;
+      font-weight: 600;
+    }
+
+    /* Manager-only policy notice */
+    .policy-notice {
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.09), rgba(201, 168, 76, 0.04));
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 13px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      animation: fadeUp 0.6s 0.05s ease both;
+    }
+
+    .policy-notice .icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .policy-notice-text {
+      font-size: 13px;
+      color: var(--navy);
+      line-height: 1.65;
+    }
+
+    .policy-notice-text strong {
+      color: #8a6b1e;
+      font-weight: 600;
+    }
+
+    /* ── Filters card ── */
+    .filters-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 26px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .filters-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filters-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .filter-group label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 9px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--navy);
+      background: #f8fafc;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: var(--navy);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(26, 39, 68, 0.07);
+    }
+
+    .filter-group input::placeholder {
+      color: #b0b8c9;
+    }
+
+    .btn-reset {
+      padding: 9px 20px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-reset:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+      background: rgba(26, 39, 68, 0.04);
+    }
+
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(201, 168, 76, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: #8a6b1e;
+      font-weight: 500;
+    }
+
+    .filter-pill button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8a6b1e;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .filter-pill button:hover {
+      color: var(--lost);
+    }
+
+    /* ── Tab bar ── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(26, 39, 68, 0.06);
+      animation: fadeUp 0.6s 0.15s ease both;
+      width: fit-content;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .tab-btn:hover {
+      color: var(--navy);
+    }
+
+    .tab-btn.active-all {
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(26, 39, 68, 0.3);
+    }
+
+    .tab-btn.active-lost {
+      background: linear-gradient(135deg, var(--lost), #c0392b);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(231, 76, 60, 0.3);
+    }
+
+    .tab-btn.active-found {
+      background: linear-gradient(135deg, var(--found), #1a6fa8);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(41, 128, 185, 0.3);
+    }
+
+    .tab-btn.active-collected {
+      background: linear-gradient(135deg, var(--green), #148f4f);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(26, 107, 58, 0.3);
+    }
+
+    .tab-btn.active-pending {
+      background: linear-gradient(135deg, var(--amber), #b45309);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
+    }
+
+    .tab-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ── Table section ── */
+    .table-section {
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .table-section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tsect-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .tsect-icon.i-all {
+      background: rgba(26, 39, 68, 0.08);
+      color: var(--navy);
+    }
+
+    .tsect-icon.i-lost {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--lost);
+    }
+
+    .tsect-icon.i-found {
+      background: rgba(41, 128, 185, 0.1);
+      color: var(--found);
+    }
+
+    .tsect-icon.i-collected {
+      background: rgba(26, 107, 58, 0.1);
+      color: var(--green);
+    }
+
+    .tsect-icon.i-pending {
+      background: rgba(217, 119, 6, 0.1);
+      color: var(--amber);
+    }
+
+    .tsect-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .tsect-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .table-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+
+    .table-card.c-all {
+      border-top: 3px solid var(--gold);
+    }
+
+    .table-card.c-lost {
+      border-top: 3px solid var(--lost);
+    }
+
+    .table-card.c-found {
+      border-top: 3px solid var(--found);
+    }
+
+    .table-card.c-collected {
+      border-top: 3px solid var(--green);
+    }
+
+    .table-card.c-pending {
+      border-top: 3px solid var(--amber);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      background: #f8fafc;
+      color: var(--navy);
+      padding: 11px 14px;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    thead th:hover {
+      background: #f0f4f8;
+    }
+
+    thead th .sort-icon {
+      margin-left: 4px;
+      opacity: 0.35;
+      font-size: 9px;
+    }
+
+    thead th.sorted .sort-icon {
+      opacity: 1;
+      color: var(--gold);
+    }
+
+    tbody td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #f0f3f8;
+      color: var(--navy);
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr {
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover {
+      background: #f8fafd;
+    }
+
+    .count-bar {
+      padding: 11px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .count-bar strong {
+      color: var(--navy);
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-lost {
+      background: var(--lost-bg);
+      color: #c0392b;
+      border: 1px solid rgba(231, 76, 60, 0.2);
+    }
+
+    .badge-found {
+      background: var(--found-bg);
+      color: #1a6fa8;
+      border: 1px solid rgba(41, 128, 185, 0.2);
+    }
+
+    .badge-collected {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid rgba(26, 107, 58, 0.2);
+    }
+
+    .badge-pending {
+      background: var(--amber-bg);
+      color: var(--amber);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    /* ── Collect button (manager only) ── */
+    .collect-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #1a6b3a, #148f4f);
+      color: var(--white);
+      border: none;
+      padding: 7px 15px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 3px 10px rgba(26, 107, 58, 0.3);
+      white-space: nowrap;
+    }
+
+    .collect-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(26, 107, 58, 0.4);
+    }
+
+    .collect-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ── Table image ── */
+    .table-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 9px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .table-img:hover {
+      transform: scale(1.14);
+      border-color: var(--gold);
+      box-shadow: 0 4px 14px rgba(201, 168, 76, 0.3);
+    }
+
+    .no-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 9px;
+      background: #f0f3f8;
+      border: 1px dashed var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #cbd5e1;
+    }
+
+    /* ── Email link ── */
+    .email-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 12.5px;
+    }
+
+    .email-link:hover {
+      color: var(--navy);
+      text-decoration: underline;
+    }
+
+    /* ── Expanded detail row ── */
+    .detail-row {
+      display: none;
+    }
+
+    .detail-row td {
+      background: linear-gradient(135deg, #f8fafc, #f0f4fa);
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row.open {
+      display: table-row;
+      animation: expandRow 0.2s ease both;
+    }
+
+    @keyframes expandRow {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .detail-field label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .detail-field span {
+      font-size: 13.5px;
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    /* ── Image modal ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      justify-content: center;
+      align-items: center;
+      z-index: 9000;
+      padding: 24px;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal.open {
+      display: flex;
+      animation: modalIn 0.25s ease both;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-inner {
+      position: relative;
+      max-width: 720px;
+      width: 100%;
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-img-wrap {
+      text-align: center;
+      background: #0a0f1a;
+      padding: 20px;
+    }
+
+    .modal-img-wrap img {
+      max-width: 100%;
+      max-height: 460px;
+      border-radius: 10px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .modal-info {
+      padding: 18px 24px;
+    }
+
+    .modal-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .modal-item-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* ── Confirm modal ── */
+    .confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      justify-content: center;
+      align-items: center;
+      z-index: 9100;
+      backdrop-filter: blur(4px);
+    }
+
+    .confirm-overlay.open {
+      display: flex;
+      animation: modalIn 0.2s ease both;
+    }
+
+    .confirm-box {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 36px 40px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    .confirm-icon {
+      font-size: 40px;
+      margin-bottom: 14px;
+    }
+
+    .confirm-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .confirm-text {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .confirm-item {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      background: #f8fafc;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin: 10px 0 24px;
+      border: 1px solid var(--border);
+    }
+
+    .confirm-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .btn-cancel {
+      padding: 10px 28px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
+
+    .btn-confirm-collect {
+      padding: 10px 28px;
+      background: linear-gradient(135deg, #1a6b3a, #148f4f);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(26, 107, 58, 0.3);
+    }
+
+    .btn-confirm-collect:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 107, 58, 0.4);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .page {
+        padding: 20px 16px 40px;
+      }
+
+      .navbar {
+        padding: 0 16px;
+      }
+
+      .filters-row {
+        flex-direction: column;
+      }
+
+      .header-stats {
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        padding: 9px 14px;
+        font-size: 12.5px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="bg-layer">
-  <div class="bg-dots"></div>
-  <div class="bg-ring br1"></div>
-  <div class="bg-ring br2"></div>
-</div>
+  <div class="bg-layer">
+    <div class="bg-dots"></div>
+    <div class="bg-ring br1"></div>
+    <div class="bg-ring br2"></div>
+  </div>
 
-<!-- Navbar -->
-<nav class="navbar" id="mainNavbar"></nav>
+  <!-- Navbar -->
+  <nav class="navbar" id="mainNavbar"></nav>
 
-<!-- Page -->
-<div class="page">
+  <!-- Page -->
+  <div class="page">
 
-  <!-- Header -->
-  <div class="page-header">
-    <div class="page-header-left">
-      <div class="breadcrumb">
-        <a href="/">Portal Home</a> <span>›</span>
-        <span>My Items</span>
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="breadcrumb">
+          <a href="/">Portal Home</a> <span>›</span>
+          <span>My Items</span>
+        </div>
+        <h1>My Reported Items</h1>
+        <p id="pageSubtitle">Manage and track all lost and found items reported by you. Items are logged and
+          cross-referenced daily.</p>
       </div>
-      <h1>My Reported Items</h1>
-      <p id="pageSubtitle">Manage and track all lost and found items reported by you. Items are logged and cross-referenced daily.</p>
+      <div class="header-stats">
+        <div class="hstat s-total"><span class="snum" id="statTotal">—</span><span class="slbl">Total</span></div>
+        <div class="hstat s-lost"><span class="snum" id="statLost">—</span><span class="slbl">Lost</span></div>
+        <div class="hstat s-found"><span class="snum" id="statFound">—</span><span class="slbl">Found</span></div>
+        <div class="hstat s-pending"><span class="snum" id="statPending">—</span><span class="slbl">Pending</span></div>
+        <div class="hstat s-collected"><span class="snum" id="statCollected">—</span><span class="slbl">Collected</span>
+        </div>
+      </div>
     </div>
-    <div class="header-stats">
-      <div class="hstat s-total"><span class="snum" id="statTotal">—</span><span class="slbl">Total</span></div>
-      <div class="hstat s-lost"><span class="snum" id="statLost">—</span><span class="slbl">Lost</span></div>
-      <div class="hstat s-found"><span class="snum" id="statFound">—</span><span class="slbl">Found</span></div>
-      <div class="hstat s-pending"><span class="snum" id="statPending">—</span><span class="slbl">Pending</span></div>
-      <div class="hstat s-collected"><span class="snum" id="statCollected">—</span><span class="slbl">Collected</span></div>
+
+    <!-- Notice — filled by JS based on role -->
+    <div id="noticeBox"></div>
+
+    <!-- Filters -->
+    <div class="filters-card">
+      <div class="filters-label">Search &amp; Filter</div>
+      <div class="filters-row">
+        <div class="filter-group" style="flex:2;min-width:220px;">
+          <label>Search Name / Description</label>
+          <input type="text" id="fSearch" placeholder="e.g. Samsung phone, black wallet...">
+        </div>
+        <div class="filter-group">
+          <label>Item Type</label>
+          <select id="fType">
+            <option value="">All Types</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Report Type</label>
+          <select id="fReport">
+            <option value="">All</option>
+            <option value="lost">Lost</option>
+            <option value="found">Found</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Collection Status</label>
+          <select id="fCollect">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="collected">Collected</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Date From</label>
+          <input type="date" id="fDateFrom">
+        </div>
+        <div class="filter-group">
+          <label>Date To</label>
+          <input type="date" id="fDateTo">
+        </div>
+        <div style="padding-top:20px;">
+          <button class="btn-reset" id="btnReset">✕ Reset</button>
+        </div>
+      </div>
+      <div class="active-filters" id="activePills"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn active-all" id="tabAll" onclick="setTab('all')">📋 All <span class="tab-count"
+          id="tc-all">0</span></button>
+      <button class="tab-btn" id="tabLost" onclick="setTab('lost')">😞 Lost <span class="tab-count"
+          id="tc-lost">0</span></button>
+      <button class="tab-btn" id="tabFound" onclick="setTab('found')">😀 Found <span class="tab-count"
+          id="tc-found">0</span></button>
+      <button class="tab-btn" id="tabPending" onclick="setTab('pending')">⏳ Pending <span class="tab-count"
+          id="tc-pending">0</span></button>
+      <button class="tab-btn" id="tabCollected" onclick="setTab('collected')">✅ Collected <span class="tab-count"
+          id="tc-collected">0</span></button>
+    </div>
+
+    <!-- Views (all, lost, found, pending, collected) -->
+    <div id="view-all">
+      <div class="table-section">
+        <div class="table-section-title">
+          <div class="tsect-icon i-all">📋</div>
+          <div>
+            <div class="tsect-title">All Items</div>
+            <div class="tsect-sub">Lost and found — click any row to expand full details</div>
+          </div>
+        </div>
+        <div class="table-card c-all">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr id="headAll"></tr>
+              </thead>
+              <tbody id="bodyAll"></tbody>
+            </table>
+          </div>
+          <div class="count-bar"><span>Showing <strong id="cntAll">0</strong> items</span><span
+              style="font-size:11px;color:#94a3b8;">Click row to expand · Click header to sort</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-lost" style="display:none">
+      <div class="table-section">
+        <div class="table-section-title">
+          <div class="tsect-icon i-lost">😞</div>
+          <div>
+            <div class="tsect-title">Lost Items</div>
+            <div class="tsect-sub">Items reported missing by students and staff</div>
+          </div>
+        </div>
+        <div class="table-card c-lost">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr id="headLost"></tr>
+              </thead>
+              <tbody id="bodyLost"></tbody>
+            </table>
+          </div>
+          <div class="count-bar"><span>Showing <strong id="cntLost">0</strong> lost items</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-found" style="display:none">
+      <div class="table-section">
+        <div class="table-section-title">
+          <div class="tsect-icon i-found">😀</div>
+          <div>
+            <div class="tsect-title">Found Items</div>
+            <div class="tsect-sub">Items submitted by finders awaiting collection</div>
+          </div>
+        </div>
+        <div class="table-card c-found">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr id="headFound"></tr>
+              </thead>
+              <tbody id="bodyFound"></tbody>
+            </table>
+          </div>
+          <div class="count-bar"><span>Showing <strong id="cntFound">0</strong> found items</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-pending" style="display:none">
+      <div class="table-section">
+        <div class="table-section-title">
+          <div class="tsect-icon i-pending">⏳</div>
+          <div>
+            <div class="tsect-title">Pending Collection</div>
+            <div class="tsect-sub">Items awaiting owner verification and pickup</div>
+          </div>
+        </div>
+        <div class="table-card c-pending">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr id="headPending"></tr>
+              </thead>
+              <tbody id="bodyPending"></tbody>
+            </table>
+          </div>
+          <div class="count-bar"><span>Showing <strong id="cntPending">0</strong> pending items</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-collected" style="display:none">
+      <div class="table-section">
+        <div class="table-section-title">
+          <div class="tsect-icon i-collected">✅</div>
+          <div>
+            <div class="tsect-title">Collected Items</div>
+            <div class="tsect-sub">Items successfully returned to their owners</div>
+          </div>
+        </div>
+        <div class="table-card c-collected">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr id="headCollected"></tr>
+              </thead>
+              <tbody id="bodyCollected"></tbody>
+            </table>
+          </div>
+          <div class="count-bar"><span>Showing <strong id="cntCollected">0</strong> collected items</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+
+  <!-- Image modal -->
+  <div id="imgModal" class="modal" onclick="closeImgModal(event)">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeImgModal()">✕</button>
+      <div class="modal-img-wrap"><img id="modalImg" src="" alt=""></div>
+      <div class="modal-info">
+        <div class="modal-item-name" id="modalName"></div>
+        <div class="modal-item-desc" id="modalDesc"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Notice — filled by JS based on role -->
-  <div id="noticeBox"></div>
-
-  <!-- Filters -->
-  <div class="filters-card">
-    <div class="filters-label">Search &amp; Filter</div>
-    <div class="filters-row">
-      <div class="filter-group" style="flex:2;min-width:220px;">
-        <label>Search Name / Description</label>
-        <input type="text" id="fSearch" placeholder="e.g. Samsung phone, black wallet...">
-      </div>
-      <div class="filter-group">
-        <label>Item Type</label>
-        <select id="fType"><option value="">All Types</option></select>
-      </div>
-      <div class="filter-group">
-        <label>Report Type</label>
-        <select id="fReport">
-          <option value="">All</option>
-          <option value="lost">Lost</option>
-          <option value="found">Found</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Collection Status</label>
-        <select id="fCollect">
-          <option value="">All Statuses</option>
-          <option value="pending">Pending</option>
-          <option value="collected">Collected</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Date From</label>
-        <input type="date" id="fDateFrom">
-      </div>
-      <div class="filter-group">
-        <label>Date To</label>
-        <input type="date" id="fDateTo">
-      </div>
-      <div style="padding-top:20px;">
-        <button class="btn-reset" id="btnReset">✕ Reset</button>
-      </div>
-    </div>
-    <div class="active-filters" id="activePills"></div>
-  </div>
-
-  <!-- Tabs -->
-  <div class="tab-bar">
-    <button class="tab-btn active-all"   id="tabAll"       onclick="setTab('all')">📋 All <span class="tab-count" id="tc-all">0</span></button>
-    <button class="tab-btn"              id="tabLost"      onclick="setTab('lost')">😞 Lost <span class="tab-count" id="tc-lost">0</span></button>
-    <button class="tab-btn"              id="tabFound"     onclick="setTab('found')">😀 Found <span class="tab-count" id="tc-found">0</span></button>
-    <button class="tab-btn"              id="tabPending"   onclick="setTab('pending')">⏳ Pending <span class="tab-count" id="tc-pending">0</span></button>
-    <button class="tab-btn"              id="tabCollected" onclick="setTab('collected')">✅ Collected <span class="tab-count" id="tc-collected">0</span></button>
-  </div>
-
-  <!-- Views (all, lost, found, pending, collected) -->
-  <div id="view-all">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-all">📋</div>
-        <div><div class="tsect-title">All Items</div><div class="tsect-sub">Lost and found — click any row to expand full details</div></div>
-      </div>
-      <div class="table-card c-all">
-        <div class="table-scroll"><table><thead><tr id="headAll"></tr></thead><tbody id="bodyAll"></tbody></table></div>
-        <div class="count-bar"><span>Showing <strong id="cntAll">0</strong> items</span><span style="font-size:11px;color:#94a3b8;">Click row to expand · Click header to sort</span></div>
+  <!-- Collect confirm modal (manager only) -->
+  <div id="confirmOverlay" class="confirm-overlay" onclick="closeConfirm(event)">
+    <div class="confirm-box" onclick="event.stopPropagation()">
+      <div class="confirm-icon">✅</div>
+      <div class="confirm-title">Confirm Collection</div>
+      <div class="confirm-text">You are about to mark this item as collected by its owner:</div>
+      <div class="confirm-item" id="confirmItemName">—</div>
+      <div class="confirm-text" style="font-size:12.5px;">Please verify the owner's identity with a valid photo ID
+        before proceeding. This action is logged.</div>
+      <div class="confirm-btns">
+        <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+        <button class="btn-confirm-collect" id="btnDoCollect">Mark as Collected</button>
       </div>
     </div>
   </div>
 
-  <div id="view-lost" style="display:none">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-lost">😞</div>
-        <div><div class="tsect-title">Lost Items</div><div class="tsect-sub">Items reported missing by students and staff</div></div>
-      </div>
-      <div class="table-card c-lost">
-        <div class="table-scroll"><table><thead><tr id="headLost"></tr></thead><tbody id="bodyLost"></tbody></table></div>
-        <div class="count-bar"><span>Showing <strong id="cntLost">0</strong> lost items</span></div>
-      </div>
-    </div>
-  </div>
+  <script>
+    // ── Fix navbar active highlight ─────────────────
+    function setActiveNav() {
+      const path = window.location.pathname.toLowerCase();
 
-  <div id="view-found" style="display:none">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-found">😀</div>
-        <div><div class="tsect-title">Found Items</div><div class="tsect-sub">Items submitted by finders awaiting collection</div></div>
-      </div>
-      <div class="table-card c-found">
-        <div class="table-scroll"><table><thead><tr id="headFound"></tr></thead><tbody id="bodyFound"></tbody></table></div>
-        <div class="count-bar"><span>Showing <strong id="cntFound">0</strong> found items</span></div>
-      </div>
-    </div>
-  </div>
+      // remove all active classes
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.classList.remove('active');
+      });
 
-  <div id="view-pending" style="display:none">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-pending">⏳</div>
-        <div><div class="tsect-title">Pending Collection</div><div class="tsect-sub">Items awaiting owner verification and pickup</div></div>
-      </div>
-      <div class="table-card c-pending">
-        <div class="table-scroll"><table><thead><tr id="headPending"></tr></thead><tbody id="bodyPending"></tbody></table></div>
-        <div class="count-bar"><span>Showing <strong id="cntPending">0</strong> pending items</span></div>
-      </div>
-    </div>
-  </div>
+      if (path.includes("my-items")) {
+        document.getElementById("navMy")?.classList.add("active");
+      }
+      else if (path.includes("items")) {
+        document.getElementById("navAll")?.classList.add("active");
+      }
+      else if (path.includes("collected")) {
+        document.getElementById("navCollected")?.classList.add("active");
+      }
+      else {
+        document.getElementById("navHome")?.classList.add("active");
+      }
+    }
 
-  <div id="view-collected" style="display:none">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-collected">✅</div>
-        <div><div class="tsect-title">Collected Items</div><div class="tsect-sub">Items successfully returned to their owners</div></div>
-      </div>
-      <div class="table-card c-collected">
-        <div class="table-scroll"><table><thead><tr id="headCollected"></tr></thead><tbody id="bodyCollected"></tbody></table></div>
-        <div class="count-bar"><span>Showing <strong id="cntCollected">0</strong> collected items</span></div>
-      </div>
-    </div>
-  </div>
+    // run after page load
+    setActiveNav();
+    // ── State ──────────────────────────────────────────────
+    let allItems = [];
+    let filtered = [];
+    let currentRole = '';
+    let isPrivileged = false; // true for manager/admin
+    let currentTab = 'all';
+    let sortCol = '', sortDir = 1;
+    let expandedRow = null;
+    let rowIdx = 0;
 
-</div><!-- /page -->
+    // ── Helpers ────────────────────────────────────────────
+    const safe = v => (v && String(v).trim()) ? String(v).trim() : 'N/A';
+    const byId = id => document.getElementById(id);
+    const isLost = item => !!item.lostLocation;
+    const isDone = item => !!item.collected; // adjust to your actual field
+    const getDate = item => item.dateLost || item.dateFound || '';
 
-<!-- Image modal -->
-<div id="imgModal" class="modal" onclick="closeImgModal(event)">
-  <div class="modal-inner" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeImgModal()">✕</button>
-    <div class="modal-img-wrap"><img id="modalImg" src="" alt=""></div>
-    <div class="modal-info">
-      <div class="modal-item-name" id="modalName"></div>
-      <div class="modal-item-desc" id="modalDesc"></div>
-    </div>
-  </div>
-</div>
+    // ── Image URL helpers ─────────────────────────────────────
+    // New uploads are stored in MongoDB as Cloudinary HTTPS URLs.
+    // Old records may contain only a filename from the previous local-storage setup.
+    function getImageUrl(image) {
+      if (!image) return '';
+      const value = String(image).trim();
+      if (!value) return '';
 
-<!-- Collect confirm modal (manager only) -->
-<div id="confirmOverlay" class="confirm-overlay" onclick="closeConfirm(event)">
-  <div class="confirm-box" onclick="event.stopPropagation()">
-    <div class="confirm-icon">✅</div>
-    <div class="confirm-title">Confirm Collection</div>
-    <div class="confirm-text">You are about to mark this item as collected by its owner:</div>
-    <div class="confirm-item" id="confirmItemName">—</div>
-    <div class="confirm-text" style="font-size:12.5px;">Please verify the owner's identity with a valid photo ID before proceeding. This action is logged.</div>
-    <div class="confirm-btns">
-      <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
-      <button class="btn-confirm-collect" id="btnDoCollect">Mark as Collected</button>
-    </div>
-  </div>
-</div>
+      // Cloudinary / any absolute remote URL
+      if (/^https?:\/\//i.test(value) || value.startsWith('//')) {
+        return value;
+      }
 
-<script>
-// ── Fix navbar active highlight ─────────────────
-function setActiveNav() {
-  const path = window.location.pathname.toLowerCase();
+      // Backward compatibility for old locally stored images
+      return '/uploads/' + encodeURIComponent(value);
+    }
 
-  // remove all active classes
-  document.querySelectorAll('.nav-links a').forEach(link => {
-    link.classList.remove('active');
-  });
+    function escapeAttr(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
 
-  if (path.includes("my-items")) {
-    document.getElementById("navMy")?.classList.add("active");
-  } 
-  else if (path.includes("items")) {
-    document.getElementById("navAll")?.classList.add("active");
-  } 
-  else if (path.includes("collected")) {
-    document.getElementById("navCollected")?.classList.add("active");
-  } 
-  else {
-    document.getElementById("navHome")?.classList.add("active");
-  }
-}
+    function escapeJsString(value) {
+      return String(value || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/\r?\n/g, ' ');
+    }
 
-// run after page load
-setActiveNav();
-// ── State ──────────────────────────────────────────────
-let allItems     = [];
-let filtered     = [];
-let currentRole  = '';
-let isPrivileged = false; // true for manager/admin
-let currentTab   = 'all';
-let sortCol = '', sortDir = 1;
-let expandedRow = null;
-let rowIdx = 0;
+    // ── Init ───────────────────────────────────────────────
+    async function init() {
+      try {
+        // Load user and items in parallel
+        const [uRes, iRes] = await Promise.all([fetch('/api/user'), fetch('/api/my-items')]);
+        const user = await uRes.json();
+        const items = await iRes.json();
 
-// ── Helpers ────────────────────────────────────────────
-const safe     = v => (v && String(v).trim()) ? String(v).trim() : 'N/A';
-const byId     = id => document.getElementById(id);
-const isLost   = item => !!item.lostLocation;
-const isDone   = item => !!item.collected; // adjust to your actual field
-const getDate  = item => item.dateLost || item.dateFound || '';
+        currentRole = user.role || 'user';
+        isPrivileged = (currentRole === 'admin' || currentRole === 'manager');
 
-// ── Init ───────────────────────────────────────────────
-async function init(){
-  try {
-    // Load user and items in parallel
-    const [uRes, iRes] = await Promise.all([fetch('/api/user'), fetch('/api/my-items')]);
-    const user  = await uRes.json();
-    const items = await iRes.json();
+        setupRoleUI();
+        allItems = items;
+        populateTypeFilter();
+        applyFilters();
+        updateStats(items);
+      } catch (e) { console.error(e); }
+    }
 
-    currentRole  = user.role || 'user';
-    isPrivileged = (currentRole === 'admin' || currentRole === 'manager');
+    // ── Role-based UI ──────────────────────────────────────
+    function setupRoleUI() {
+      // Role badge
+      const badge = byId('roleBadge');
+      const text = byId('roleBadgeText');
+      if (badge && text) {
+        badge.className = 'role-badge ' + (isPrivileged ? currentRole : 'user');
+        text.textContent = currentRole === 'admin' ? 'Admin' : currentRole === 'manager' ? 'Manager' : 'Student / Staff';
+      }
 
-    setupRoleUI();
-    allItems = items;
-    populateTypeFilter();
-    applyFilters();
-    updateStats(items);
-  } catch(e){ console.error(e); }
-}
+      // Show Manager Panel link only for manager/admin
+      const managerNavLink = byId('managerNavLink');
+      if (managerNavLink && isPrivileged) {
+        managerNavLink.style.display = 'inline';
+      }
 
-// ── Role-based UI ──────────────────────────────────────
-function setupRoleUI(){
-  // Role badge
-  const badge = byId('roleBadge');
-  const text  = byId('roleBadgeText');
-  if (badge && text) {
-    badge.className = 'role-badge ' + (isPrivileged ? currentRole : 'user');
-    text.textContent = currentRole === 'admin' ? 'Admin' : currentRole === 'manager' ? 'Manager' : 'Student / Staff';
-  }
-
-  // Show Manager Panel link only for manager/admin
-  const managerNavLink = byId('managerNavLink');
-  if(managerNavLink && isPrivileged){
-    managerNavLink.style.display = 'inline';
-  }
-
-  // Notice box
-  const notice = byId('noticeBox');
-  if(isPrivileged){
-    notice.innerHTML = `
+      // Notice box
+      const notice = byId('noticeBox');
+      if (isPrivileged) {
+        notice.innerHTML = `
       <div class="policy-notice">
         <span class="icon">🔒</span>
         <div class="policy-notice-text">
@@ -742,8 +1575,8 @@ function setupRoleUI(){
           All actions are logged under MITS administrative records.
         </div>
       </div>`;
-  } else {
-    notice.innerHTML = `
+      } else {
+        notice.innerHTML = `
       <div class="info-notice">
         <span class="icon">ℹ️</span>
         <div class="info-notice-text">
@@ -752,353 +1585,358 @@ function setupRoleUI(){
           To collect an item, visit the Administrative Office, Block A, Room 102 with a valid photo ID.
         </div>
       </div>`;
-  }
-}
+      }
+    }
 
-// ── Stats ──────────────────────────────────────────────
-function updateStats(items){
-  byId('statTotal').textContent     = items.length;
-  byId('statLost').textContent      = items.filter(isLost).length;
-  byId('statFound').textContent     = items.filter(i=>!isLost(i)).length;
-  byId('statPending').textContent   = items.filter(i=>!isDone(i)).length;
-  byId('statCollected').textContent = items.filter(isDone).length;
-}
+    // ── Stats ──────────────────────────────────────────────
+    function updateStats(items) {
+      byId('statTotal').textContent = items.length;
+      byId('statLost').textContent = items.filter(isLost).length;
+      byId('statFound').textContent = items.filter(i => !isLost(i)).length;
+      byId('statPending').textContent = items.filter(i => !isDone(i)).length;
+      byId('statCollected').textContent = items.filter(isDone).length;
+    }
 
-// ── Type filter ─────────────────────────────────────────
-function populateTypeFilter(){
-  const types = [...new Set(allItems.map(i=>i.type).filter(Boolean))].sort();
-  const sel = byId('fType');
-  types.forEach(t => { const o = document.createElement('option'); o.value=t; o.textContent=t; sel.appendChild(o); });
-}
+    // ── Type filter ─────────────────────────────────────────
+    function populateTypeFilter() {
+      const types = [...new Set(allItems.map(i => i.type).filter(Boolean))].sort();
+      const sel = byId('fType');
+      types.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o); });
+    }
 
-// ── Filters ─────────────────────────────────────────────
-function getFilters(){
-  return {
-    search:   byId('fSearch').value.trim().toLowerCase(),
-    type:     byId('fType').value,
-    report:   byId('fReport').value,
-    collect:  byId('fCollect').value,
-    dateFrom: byId('fDateFrom').value,
-    dateTo:   byId('fDateTo').value,
-  };
-}
+    // ── Filters ─────────────────────────────────────────────
+    function getFilters() {
+      return {
+        search: byId('fSearch').value.trim().toLowerCase(),
+        type: byId('fType').value,
+        report: byId('fReport').value,
+        collect: byId('fCollect').value,
+        dateFrom: byId('fDateFrom').value,
+        dateTo: byId('fDateTo').value,
+      };
+    }
 
-function applyFilters(){
-  const f = getFilters();
-  filtered = allItems.filter(item => {
-    const d   = getDate(item);
-    const txt = [item.name, item.type, item.description,
-                 item.lostLocation, item.foundLocation, item.location,
-                 ...(isPrivileged ? [item.userName, item.userEmail] : [])]
-                .map(v=>(v||'').toLowerCase()).join(' ');
-    if(f.search  && !txt.includes(f.search))        return false;
-    if(f.type    && item.type !== f.type)            return false;
-    if(f.report === 'lost'  && !isLost(item))        return false;
-    if(f.report === 'found' &&  isLost(item))        return false;
-    if(f.collect === 'pending'   &&  isDone(item))   return false;
-    if(f.collect === 'collected' && !isDone(item))   return false;
-    if(f.dateFrom && d && d < f.dateFrom)            return false;
-    if(f.dateTo   && d && d > f.dateTo)              return false;
-    return true;
-  });
-  updatePills(f);
-  renderAll();
-}
+    function applyFilters() {
+      const f = getFilters();
+      filtered = allItems.filter(item => {
+        const d = getDate(item);
+        const txt = [item.name, item.type, item.description,
+        item.lostLocation, item.foundLocation, item.location,
+        ...(isPrivileged ? [item.userName, item.userEmail] : [])]
+          .map(v => (v || '').toLowerCase()).join(' ');
+        if (f.search && !txt.includes(f.search)) return false;
+        if (f.type && item.type !== f.type) return false;
+        if (f.report === 'lost' && !isLost(item)) return false;
+        if (f.report === 'found' && isLost(item)) return false;
+        if (f.collect === 'pending' && isDone(item)) return false;
+        if (f.collect === 'collected' && !isDone(item)) return false;
+        if (f.dateFrom && d && d < f.dateFrom) return false;
+        if (f.dateTo && d && d > f.dateTo) return false;
+        return true;
+      });
+      updatePills(f);
+      renderAll();
+    }
 
-function updatePills(f){
-  const el = byId('activePills'); el.innerHTML = '';
-  const add = (key, lbl) => {
-    const p = document.createElement('span');
-    p.className = 'filter-pill';
-    p.innerHTML = `${lbl} <button onclick="clearFilter('${key}')">✕</button>`;
-    el.appendChild(p);
-  };
-  if(f.search)  add('fSearch',  `"${f.search}"`);
-  if(f.type)    add('fType',    f.type);
-  if(f.report)  add('fReport',  f.report === 'lost' ? 'Lost only' : 'Found only');
-  if(f.collect) add('fCollect', f.collect === 'pending' ? 'Pending' : 'Collected');
-  if(f.dateFrom)add('fDateFrom',`From: ${f.dateFrom}`);
-  if(f.dateTo)  add('fDateTo',  `To: ${f.dateTo}`);
-}
+    function updatePills(f) {
+      const el = byId('activePills'); el.innerHTML = '';
+      const add = (key, lbl) => {
+        const p = document.createElement('span');
+        p.className = 'filter-pill';
+        p.innerHTML = `${lbl} <button onclick="clearFilter('${key}')">✕</button>`;
+        el.appendChild(p);
+      };
+      if (f.search) add('fSearch', `"${f.search}"`);
+      if (f.type) add('fType', f.type);
+      if (f.report) add('fReport', f.report === 'lost' ? 'Lost only' : 'Found only');
+      if (f.collect) add('fCollect', f.collect === 'pending' ? 'Pending' : 'Collected');
+      if (f.dateFrom) add('fDateFrom', `From: ${f.dateFrom}`);
+      if (f.dateTo) add('fDateTo', `To: ${f.dateTo}`);
+    }
 
-function clearFilter(id){
-  const el = byId(id);
-  el.tagName === 'SELECT' ? (el.selectedIndex=0) : (el.value='');
-  applyFilters();
-}
+    function clearFilter(id) {
+      const el = byId(id);
+      el.tagName === 'SELECT' ? (el.selectedIndex = 0) : (el.value = '');
+      applyFilters();
+    }
 
-byId('btnReset').addEventListener('click',()=>{
-  ['fSearch','fType','fReport','fCollect','fDateFrom','fDateTo'].forEach(id=>{
-    const el=byId(id); el.tagName==='SELECT'?(el.selectedIndex=0):(el.value='');
-  }); applyFilters();
-});
-['fSearch','fType','fReport','fCollect','fDateFrom','fDateTo'].forEach(id=>{
-  byId(id).addEventListener('input', applyFilters);
-  byId(id).addEventListener('change', applyFilters);
-});
+    byId('btnReset').addEventListener('click', () => {
+      ['fSearch', 'fType', 'fReport', 'fCollect', 'fDateFrom', 'fDateTo'].forEach(id => {
+        const el = byId(id); el.tagName === 'SELECT' ? (el.selectedIndex = 0) : (el.value = '');
+      }); applyFilters();
+    });
+    ['fSearch', 'fType', 'fReport', 'fCollect', 'fDateFrom', 'fDateTo'].forEach(id => {
+      byId(id).addEventListener('input', applyFilters);
+      byId(id).addEventListener('change', applyFilters);
+    });
 
-// ── Tab ─────────────────────────────────────────────────
-function setTab(tab){
-  currentTab = tab;
-  ['all','lost','found','pending','collected'].forEach(t=>{
-    byId('view-'+t).style.display = t===tab?'block':'none';
-    const btn = byId('tab'+t.charAt(0).toUpperCase()+t.slice(1));
-    btn.className = 'tab-btn';
-    if(t===tab) btn.classList.add('active-'+t);
-  });
-}
+    // ── Tab ─────────────────────────────────────────────────
+    function setTab(tab) {
+      currentTab = tab;
+      ['all', 'lost', 'found', 'pending', 'collected'].forEach(t => {
+        byId('view-' + t).style.display = t === tab ? 'block' : 'none';
+        const btn = byId('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+        btn.className = 'tab-btn';
+        if (t === tab) btn.classList.add('active-' + t);
+      });
+    }
 
-// ── Sort ─────────────────────────────────────────────────
-function sortBy(col){
-  if(sortCol===col) sortDir*=-1; else { sortCol=col; sortDir=1; }
-  renderAll();
-}
-function doSort(items){
-  if(!sortCol) return items;
-  return [...items].sort((a,b)=>{
-    const maps = {
-      name:   [a.name||'',       b.name||''],
-      type:   [a.type||'',       b.type||''],
-      date:   [getDate(a),       getDate(b)],
-      report: [isLost(a)?'l':'f',isLost(b)?'l':'f'],
-      status: [isDone(a)?'c':'p',isDone(b)?'c':'p'],
-      by:     [a.userName||'',   b.userName||''],
-    };
-    const [va,vb] = maps[sortCol] || ['',''];
-    return va<vb?-sortDir:va>vb?sortDir:0;
-  });
-}
+    // ── Sort ─────────────────────────────────────────────────
+    function sortBy(col) {
+      if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+      renderAll();
+    }
+    function doSort(items) {
+      if (!sortCol) return items;
+      return [...items].sort((a, b) => {
+        const maps = {
+          name: [a.name || '', b.name || ''],
+          type: [a.type || '', b.type || ''],
+          date: [getDate(a), getDate(b)],
+          report: [isLost(a) ? 'l' : 'f', isLost(b) ? 'l' : 'f'],
+          status: [isDone(a) ? 'c' : 'p', isDone(b) ? 'c' : 'p'],
+          by: [a.userName || '', b.userName || ''],
+        };
+        const [va, vb] = maps[sortCol] || ['', ''];
+        return va < vb ? -sortDir : va > vb ? sortDir : 0;
+      });
+    }
 
-// ── Column definitions ─────────────────────────────────
-function getCols(){
-  const base = [
-    {key:'name',   label:'Item Name',    sort:true},
-    {key:'type',   label:'Type',         sort:true},
-    {key:'desc',   label:'Description',  sort:false},
-    {key:'loc',    label:'Location',     sort:false},
-    {key:'date',   label:'Date',         sort:true},
-    {key:'report', label:'Report Type',  sort:true},
-    {key:'status', label:'Status',       sort:true},
-  ];
-  const adminExtra = isPrivileged ? [
-    {key:'by',      label:'Submitted By', sort:true},
-    {key:'email',   label:'Email',        sort:false},
-    {key:'contact', label:'Contact',      sort:false},
-    {key:'hby',     label:'Handed By',    sort:false},
-    {key:'hto',     label:'Handed To',    sort:false},
-  ] : [];
-  const end = [
-    {key:'img',    label:'Image',         sort:false},
-    ...(isPrivileged ? [{key:'action', label:'Action', sort:false}] : []),
-  ];
-  return [...base, ...adminExtra, ...end];
-}
+    // ── Column definitions ─────────────────────────────────
+    function getCols() {
+      const base = [
+        { key: 'name', label: 'Item Name', sort: true },
+        { key: 'type', label: 'Type', sort: true },
+        { key: 'desc', label: 'Description', sort: false },
+        { key: 'loc', label: 'Location', sort: false },
+        { key: 'date', label: 'Date', sort: true },
+        { key: 'report', label: 'Report Type', sort: true },
+        { key: 'status', label: 'Status', sort: true },
+      ];
+      const adminExtra = isPrivileged ? [
+        { key: 'by', label: 'Submitted By', sort: true },
+        { key: 'email', label: 'Email', sort: false },
+        { key: 'contact', label: 'Contact', sort: false },
+        { key: 'hby', label: 'Handed By', sort: false },
+        { key: 'hto', label: 'Handed To', sort: false },
+      ] : [];
+      const end = [
+        { key: 'img', label: 'Image', sort: false },
+        ...(isPrivileged ? [{ key: 'action', label: 'Action', sort: false }] : []),
+      ];
+      return [...base, ...adminExtra, ...end];
+    }
 
-function buildHead(trEl){
-  const cols = getCols();
-  trEl.innerHTML = cols.map(c=>{
-    const sorted = sortCol===c.key;
-    const icon   = sorted?(sortDir===1?'▲':'▼'):'↕';
-    const click  = c.sort ? `onclick="sortBy('${c.key}')"` : '';
-    const cur    = c.sort ? '' : 'style="cursor:default"';
-    return `<th class="${sorted?'sorted':''}" ${click} ${cur}>
-      ${c.label}${c.sort?`<span class="sort-icon">${icon}</span>`:''}
+    function buildHead(trEl) {
+      const cols = getCols();
+      trEl.innerHTML = cols.map(c => {
+        const sorted = sortCol === c.key;
+        const icon = sorted ? (sortDir === 1 ? '▲' : '▼') : '↕';
+        const click = c.sort ? `onclick="sortBy('${c.key}')"` : '';
+        const cur = c.sort ? '' : 'style="cursor:default"';
+        return `<th class="${sorted ? 'sorted' : ''}" ${click} ${cur}>
+      ${c.label}${c.sort ? `<span class="sort-icon">${icon}</span>` : ''}
     </th>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-// ── Row builder ─────────────────────────────────────────
-function buildRow(item){
-  const idx     = rowIdx++;
-  const lost    = isLost(item);
-  const done    = isDone(item);
-  const loc     = safe(item.lostLocation || item.foundLocation);
-  const date    = safe(getDate(item));
-  const cols    = getCols();
+    // ── Row builder ─────────────────────────────────────────
+    function buildRow(item) {
+      const idx = rowIdx++;
+      const lost = isLost(item);
+      const done = isDone(item);
+      const loc = safe(item.lostLocation || item.foundLocation);
+      const date = safe(getDate(item));
+      const cols = getCols();
 
-  const reportBadge = lost
-    ? `<span class="badge badge-lost">● Lost</span>`
-    : `<span class="badge badge-found">● Found</span>`;
+      const reportBadge = lost
+        ? `<span class="badge badge-lost">● Lost</span>`
+        : `<span class="badge badge-found">● Found</span>`;
 
-  const collectBadge = done
-    ? `<span class="badge badge-collected">✓ Collected</span>`
-    : `<span class="badge badge-pending">⏳ Pending</span>`;
+      const collectBadge = done
+        ? `<span class="badge badge-collected">✓ Collected</span>`
+        : `<span class="badge badge-pending">⏳ Pending</span>`;
 
-  const imgHTML = item.image
-    ? `<img class="table-img" src="/uploads/${item.image}" alt="${safe(item.name)}"
-         onclick="event.stopPropagation();openImgModal('/uploads/${item.image}','${safe(item.name)}','${safe(item.description).replace(/'/g,"\\'")}')">`
-    : `<div class="no-img">📷</div>`;
+      const imgHTML = item.image
+        ? `<img class="table-img" src="/uploads/${item.image}" alt="${safe(item.name)}"
+         onclick="event.stopPropagation();openImgModal('/uploads/${item.image}','${safe(item.name)}','${safe(item.description).replace(/'/g, "\\'")}')">`
+        : `<div class="no-img">📷</div>`;
 
-  // Build cells in order matching getCols()
-  const cells = {
-    name:    `<td><strong style="font-weight:600;">${safe(item.name)}</strong></td>`,
-    type:    `<td>${safe(item.type)}</td>`,
-    desc:    `<td style="max-width:170px;text-align:left;white-space:normal;font-size:12px;color:var(--muted);">${safe(item.description)}</td>`,
-    loc:     `<td style="font-size:12px;">${loc}</td>`,
-    date:    `<td style="white-space:nowrap;">${date}</td>`,
-    report:  `<td>${reportBadge}</td>`,
-    status:  `<td>${collectBadge}</td>`,
-    by:      `<td>${safe(item.userName)}</td>`,
-    email:   `<td><a class="email-link" href="mailto:${safe(item.userEmail)}" onclick="event.stopPropagation()">${safe(item.userEmail)}</a></td>`,
-    contact: `<td>${safe(item.contact)}</td>`,
-    hby:     `<td>${safe(item.handedBy)}</td>`,
-    hto:     `<td>${safe(item.handedTo)}</td>`,
-    img:     `<td>${imgHTML}</td>`,
-    action:  isPrivileged
-      ? `<td onclick="event.stopPropagation()">
+      // Build cells in order matching getCols()
+      const cells = {
+        name: `<td><strong style="font-weight:600;">${safe(item.name)}</strong></td>`,
+        type: `<td>${safe(item.type)}</td>`,
+        desc: `<td style="max-width:170px;text-align:left;white-space:normal;font-size:12px;color:var(--muted);">${safe(item.description)}</td>`,
+        loc: `<td style="font-size:12px;">${loc}</td>`,
+        date: `<td style="white-space:nowrap;">${date}</td>`,
+        report: `<td>${reportBadge}</td>`,
+        status: `<td>${collectBadge}</td>`,
+        by: `<td>${safe(item.userName)}</td>`,
+        email: `<td><a class="email-link" href="mailto:${safe(item.userEmail)}" onclick="event.stopPropagation()">${safe(item.userEmail)}</a></td>`,
+        contact: `<td>${safe(item.contact)}</td>`,
+        hby: `<td>${safe(item.handedBy)}</td>`,
+        hto: `<td>${safe(item.handedTo)}</td>`,
+        img: `<td>${imgHTML}</td>`,
+        action: isPrivileged
+          ? `<td onclick="event.stopPropagation()">
           ${done
             ? `<span style="font-size:12px;color:var(--green);font-weight:600;">✓ Done</span>`
-            : `<button class="collect-btn" onclick="openConfirm('${item._id}','${safe(item.name).replace(/'/g,"\\'")}')" >✅ Mark Collected</button>`
+            : `<button class="collect-btn" onclick="openConfirm('${item._id}','${safe(item.name).replace(/'/g, "\\'")}')" >✅ Mark Collected</button>`
           }
         </td>`
-      : '',
-  };
+          : '',
+      };
 
-  const mainRow = `
+      const mainRow = `
     <tr onclick="toggleDetail(${idx})" style="cursor:pointer;" id="mr-${idx}">
       ${cols.map(c => cells[c.key] || '').join('')}
     </tr>`;
 
-  // Detail expand panel
-  const detailFields = [
-    {label:'Item Name',         val: safe(item.name)},
-    {label:'Type',              val: safe(item.type)},
-    {label:'Report Type',       val: lost ? 'Lost' : 'Found'},
-    {label:'Collection Status', val: done ? 'Collected' : 'Pending'},
-    {label:'Date',              val: date},
-    {label:'Found/Lost At',     val: loc},
-    {label:'Submit Location',   val: safe(item.location)},
-    ...(isPrivileged ? [
-      {label:'Submitted By',    val: safe(item.userName)},
-      {label:'Email',           val: safe(item.userEmail)},
-      {label:'Contact',         val: safe(item.contact)},
-      {label:'Handed By',       val: safe(item.handedBy)},
-      {label:'Handed To',       val: safe(item.handedTo)},
-    ] : []),
-    {label:'Full Description',  val: safe(item.description), full:true},
-  ];
+      // Detail expand panel
+      const detailFields = [
+        { label: 'Item Name', val: safe(item.name) },
+        { label: 'Type', val: safe(item.type) },
+        { label: 'Report Type', val: lost ? 'Lost' : 'Found' },
+        { label: 'Collection Status', val: done ? 'Collected' : 'Pending' },
+        { label: 'Date', val: date },
+        { label: 'Found/Lost At', val: loc },
+        { label: 'Submit Location', val: safe(item.location) },
+        ...(isPrivileged ? [
+          { label: 'Submitted By', val: safe(item.userName) },
+          { label: 'Email', val: safe(item.userEmail) },
+          { label: 'Contact', val: safe(item.contact) },
+          { label: 'Handed By', val: safe(item.handedBy) },
+          { label: 'Handed To', val: safe(item.handedTo) },
+        ] : []),
+        { label: 'Full Description', val: safe(item.description), full: true },
+      ];
 
-  const detailRow = `
+      const detailRow = `
     <tr class="detail-row" id="dr-${idx}">
       <td colspan="${cols.length}">
         <div class="detail-grid">
-          ${detailFields.map(f=>`
-            <div class="detail-field" ${f.full?'style="grid-column:1/-1;"':''}>
+          ${detailFields.map(f => `
+            <div class="detail-field" ${f.full ? 'style="grid-column:1/-1;"' : ''}>
               <label>${f.label}</label>
-              <span style="${f.full?'white-space:pre-wrap;':''}">${f.val}</span>
+              <span style="${f.full ? 'white-space:pre-wrap;' : ''}">${f.val}</span>
             </div>`).join('')}
         </div>
       </td>
     </tr>`;
 
-  return mainRow + detailRow;
-}
+      return mainRow + detailRow;
+    }
 
-function toggleDetail(idx){
-  const dr = byId('dr-'+idx);
-  if(!dr) return;
-  const open = dr.classList.contains('open');
-  if(expandedRow !== null && expandedRow !== idx) byId('dr-'+expandedRow)?.classList.remove('open');
-  dr.classList.toggle('open', !open);
-  expandedRow = open ? null : idx;
-}
+    function toggleDetail(idx) {
+      const dr = byId('dr-' + idx);
+      if (!dr) return;
+      const open = dr.classList.contains('open');
+      if (expandedRow !== null && expandedRow !== idx) byId('dr-' + expandedRow)?.classList.remove('open');
+      dr.classList.toggle('open', !open);
+      expandedRow = open ? null : idx;
+    }
 
-function emptyRow(msg, colspan){
-  return `<tr><td colspan="${colspan}" style="padding:44px 20px;text-align:center;color:var(--muted);font-style:italic;font-size:14px;">
+    function emptyRow(msg, colspan) {
+      return `<tr><td colspan="${colspan}" style="padding:44px 20px;text-align:center;color:var(--muted);font-style:italic;font-size:14px;">
     <div style="font-size:34px;margin-bottom:10px;">🔍</div>${msg}
   </td></tr>`;
-}
+    }
 
-// ── Render ───────────────────────────────────────────────
-function renderAll(){
-  rowIdx = 0;
-  const col     = getCols().length;
-  const lostArr = doSort(filtered.filter(isLost));
-  const foundArr= doSort(filtered.filter(i=>!isLost(i)));
-  const pendArr = doSort(filtered.filter(i=>!isDone(i)));
-  const collArr = doSort(filtered.filter(isDone));
-  const allArr  = doSort(filtered);
+    // ── Render ───────────────────────────────────────────────
+    function renderAll() {
+      rowIdx = 0;
+      const col = getCols().length;
+      const lostArr = doSort(filtered.filter(isLost));
+      const foundArr = doSort(filtered.filter(i => !isLost(i)));
+      const pendArr = doSort(filtered.filter(i => !isDone(i)));
+      const collArr = doSort(filtered.filter(isDone));
+      const allArr = doSort(filtered);
 
-  byId('tc-all').textContent       = filtered.length;
-  byId('tc-lost').textContent      = lostArr.length;
-  byId('tc-found').textContent     = foundArr.length;
-  byId('tc-pending').textContent   = pendArr.length;
-  byId('tc-collected').textContent = collArr.length;
+      byId('tc-all').textContent = filtered.length;
+      byId('tc-lost').textContent = lostArr.length;
+      byId('tc-found').textContent = foundArr.length;
+      byId('tc-pending').textContent = pendArr.length;
+      byId('tc-collected').textContent = collArr.length;
 
-  const render = (bodyId, headId, items, msg) => {
-    buildHead(byId(headId));
-    byId(bodyId).innerHTML = items.length ? items.map(buildRow).join('') : emptyRow(msg, col);
-    byId('cnt'+bodyId.replace('body','')).textContent = items.length;
-    rowIdx = 0; // reset per-table so idx is table-scoped
-  };
+      const render = (bodyId, headId, items, msg) => {
+        buildHead(byId(headId));
+        byId(bodyId).innerHTML = items.length ? items.map(buildRow).join('') : emptyRow(msg, col);
+        byId('cnt' + bodyId.replace('body', '')).textContent = items.length;
+        rowIdx = 0; // reset per-table so idx is table-scoped
+      };
 
-  // Reset global rowIdx and render each table with fresh indices
-  rowIdx=0; buildHead(byId('headAll'));
-  byId('bodyAll').innerHTML = allArr.length ? allArr.map(buildRow).join('') : emptyRow('No items match your filters.', col);
-  byId('cntAll').textContent = allArr.length;
+      // Reset global rowIdx and render each table with fresh indices
+      rowIdx = 0; buildHead(byId('headAll'));
+      byId('bodyAll').innerHTML = allArr.length ? allArr.map(buildRow).join('') : emptyRow('No items match your filters.', col);
+      byId('cntAll').textContent = allArr.length;
 
-  rowIdx=0; buildHead(byId('headLost'));
-  byId('bodyLost').innerHTML = lostArr.length ? lostArr.map(buildRow).join('') : emptyRow('No lost items match your filters.', col);
-  byId('cntLost').textContent = lostArr.length;
+      rowIdx = 0; buildHead(byId('headLost'));
+      byId('bodyLost').innerHTML = lostArr.length ? lostArr.map(buildRow).join('') : emptyRow('No lost items match your filters.', col);
+      byId('cntLost').textContent = lostArr.length;
 
-  rowIdx=0; buildHead(byId('headFound'));
-  byId('bodyFound').innerHTML = foundArr.length ? foundArr.map(buildRow).join('') : emptyRow('No found items match.', col);
-  byId('cntFound').textContent = foundArr.length;
+      rowIdx = 0; buildHead(byId('headFound'));
+      byId('bodyFound').innerHTML = foundArr.length ? foundArr.map(buildRow).join('') : emptyRow('No found items match.', col);
+      byId('cntFound').textContent = foundArr.length;
 
-  rowIdx=0; buildHead(byId('headPending'));
-  byId('bodyPending').innerHTML = pendArr.length ? pendArr.map(buildRow).join('') : emptyRow('No pending items.', col);
-  byId('cntPending').textContent = pendArr.length;
+      rowIdx = 0; buildHead(byId('headPending'));
+      byId('bodyPending').innerHTML = pendArr.length ? pendArr.map(buildRow).join('') : emptyRow('No pending items.', col);
+      byId('cntPending').textContent = pendArr.length;
 
-  rowIdx=0; buildHead(byId('headCollected'));
-  byId('bodyCollected').innerHTML = collArr.length ? collArr.map(buildRow).join('') : emptyRow('No collected items yet.', col);
-  byId('cntCollected').textContent = collArr.length;
+      rowIdx = 0; buildHead(byId('headCollected'));
+      byId('bodyCollected').innerHTML = collArr.length ? collArr.map(buildRow).join('') : emptyRow('No collected items yet.', col);
+      byId('cntCollected').textContent = collArr.length;
 
-  expandedRow = null;
-}
+      expandedRow = null;
+    }
 
-// ── Image modal ──────────────────────────────────────────
-function openImgModal(src, name, desc){
-  byId('modalImg').src = src;
-  byId('modalName').textContent = name;
-  byId('modalDesc').textContent = desc;
-  byId('imgModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeImgModal(e){
-  if(!e || e.target===byId('imgModal')){ byId('imgModal').classList.remove('open'); document.body.style.overflow=''; }
-}
+    // ── Image modal ──────────────────────────────────────────
+    function openImgModal(src, name, desc) {
+      byId('modalImg').src = src;
+      byId('modalImg').onerror = function () {
+        this.onerror = null;
+        this.src = '/images/placeholder.png';
+      };
+      byId('modalName').textContent = name;
+      byId('modalDesc').textContent = desc;
+      byId('imgModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeImgModal(e) {
+      if (!e || e.target === byId('imgModal')) { byId('imgModal').classList.remove('open'); document.body.style.overflow = ''; }
+    }
 
-// ── Confirm collect (manager/admin only) ─────────────────
-function openConfirm(itemId, itemName){
-  if(!isPrivileged) return;
-  byId('confirmItemName').textContent = itemName;
-  byId('confirmOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  byId('btnDoCollect').onclick = ()=>{ closeConfirm(); submitCollect(itemId); };
-}
-function closeConfirm(e){
-  if(!e || e.target===byId('confirmOverlay')){ byId('confirmOverlay').classList.remove('open'); document.body.style.overflow=''; }
-}
-function submitCollect(itemId){
-  const form = document.createElement('form');
-  form.method='POST'; form.action='/mark-collected';
-  const inp = document.createElement('input');
-  inp.type='hidden'; inp.name='itemId'; inp.value=itemId;
-  form.appendChild(inp);
-  document.body.appendChild(form);
-  form.submit();
-}
+    // ── Confirm collect (manager/admin only) ─────────────────
+    function openConfirm(itemId, itemName) {
+      if (!isPrivileged) return;
+      byId('confirmItemName').textContent = itemName;
+      byId('confirmOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      byId('btnDoCollect').onclick = () => { closeConfirm(); submitCollect(itemId); };
+    }
+    function closeConfirm(e) {
+      if (!e || e.target === byId('confirmOverlay')) { byId('confirmOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+    }
+    function submitCollect(itemId) {
+      const form = document.createElement('form');
+      form.method = 'POST'; form.action = '/mark-collected';
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = 'itemId'; inp.value = itemId;
+      form.appendChild(inp);
+      document.body.appendChild(form);
+      form.submit();
+    }
 
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape'){ closeImgModal(); closeConfirm(); }
-});
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeImgModal(); closeConfirm(); }
+    });
 
-// ── Start ─────────────────────────────────────────────────
-init();
-</script>
+    // ── Start ─────────────────────────────────────────────────
+    init();
+  </script>
 
-<script src="/js/navbar.js"></script>
-<script src="/js/translate.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/translate.js"></script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
+
 </html>
