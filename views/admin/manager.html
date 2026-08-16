@@ -1,332 +1,797 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manager Panel - FindMyThing</title>
+    <title>Manager Panel - FindMyThing</title>
 
-<link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
 
-<style>
+    <style>
+        /* ================= GLOBAL ================= */
 
-/* ================= GLOBAL ================= */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+        }
 
-body{
-font-family: Arial, sans-serif;
-background:#f4f7fb;
-margin:0;
-}
+        /* ================= NAVBAR ================= */
 
-/* ================= NAVBAR ================= */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: #2c3e50;
+            color: white;
+            flex-wrap: wrap;
+        }
 
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px 20px;
-background:#2c3e50;
-color:white;
-flex-wrap:wrap;
-}
+        .navbar h2 {
+            margin: 5px 0;
+        }
 
-.navbar h2{
-margin:5px 0;
-}
+        .nav-links a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: 500;
+        }
 
-.nav-links a{
-color:white;
-margin:0 10px;
-text-decoration:none;
-font-weight:500;
-}
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
 
-.nav-links a:hover{
-text-decoration:underline;
-}
+        /* ================= TITLE ================= */
 
-/* ================= TITLE ================= */
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
 
-h1{
-text-align:center;
-margin:20px 0;
-}
+        /* ================= TABLE ================= */
 
-/* ================= TABLE ================= */
+        .table-container {
+            width: 95%;
+            margin: 20px auto;
+            overflow-x: auto;
+        }
 
-.table-container{
-width:95%;
-margin:20px auto;
-overflow-x:auto;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
 
-table{
-width:100%;
-border-collapse:collapse;
-background:white;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 3px 10px rgba(0,0,0,0.08);
-}
+        th {
+            background: #34495e;
+            color: white;
+            padding: 12px;
+            position: sticky;
+            top: 0;
+        }
 
-th{
-background:#34495e;
-color:white;
-padding:12px;
-position:sticky;
-top:0;
-}
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
 
-td{
-padding:10px;
-border-bottom:1px solid #eee;
-text-align:center;
-}
+        tr:hover {
+            background: #f9f9f9;
+        }
 
-tr:hover{
-background:#f9f9f9;
-}
+        /* ================= BUTTON ================= */
 
-/* ================= BUTTON ================= */
+        .collect-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-.collect-btn{
-background:#27ae60;
-color:white;
-border:none;
-padding:6px 12px;
-border-radius:6px;
-cursor:pointer;
-transition:0.3s;
-}
+        .collect-btn:hover {
+            background: #1e8449;
+        }
 
-.collect-btn:hover{
-background:#1e8449;
-}
+        /* ================= IMAGE ================= */
 
-/* ================= IMAGE ================= */
+        .table-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #ddd;
+            display: block;
+            margin: auto;
+        }
 
-.table-img{
-width:60px;
-border-radius:6px;
-cursor:pointer;
-transition:0.3s;
-}
+        .table-img:hover {
+            transform: scale(1.1);
+        }
 
-.table-img:hover{
-transform:scale(1.1);
-}
+        /* Image loading error */
 
-/* ================= EMAIL ================= */
+        .image-error {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #999;
+            font-size: 12px;
+            background: #f5f5f5;
+        }
 
-.email-link{
-color:#2980b9;
-text-decoration:none;
-}
+        /* ================= EMAIL ================= */
 
-.email-link:hover{
-text-decoration:underline;
-}
+        .email-link {
+            color: #2980b9;
+            text-decoration: none;
+        }
 
-/* ================= MODAL ================= */
+        .email-link:hover {
+            text-decoration: underline;
+        }
 
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-justify-content:center;
-align-items:center;
-z-index:1000;
-}
+        /* ================= MODAL ================= */
 
-.modal img{
-max-width:85%;
-max-height:85%;
-border-radius:10px;
-}
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
-/* ================= GOOGLE ================= */
+        .modal img {
+            max-width: 85%;
+            max-height: 85%;
+            border-radius: 10px;
+        }
 
-#google_translate_element{
-margin-right:10px;
-}
+        /* ================= GOOGLE ================= */
 
-.goog-te-combo{
-padding:5px;
-border-radius:5px;
-border:none;
-}
+        #google_translate_element {
+            margin-right: 10px;
+        }
 
-/* ================= MOBILE ================= */
+        .goog-te-combo {
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+        }
 
-@media(max-width:768px){
+        /* ================= MOBILE ================= */
 
-.navbar{
-flex-direction:column;
-align-items:flex-start;
-}
+        @media(max-width:768px) {
 
-.nav-links{
-margin-top:10px;
-}
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-}
+            .nav-links {
+                margin-top: 10px;
+            }
 
-</style>
+            .table-container {
+                width: 98%;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+
+        }
+    </style>
 
 </head>
 
+
 <body>
 
-<nav class="navbar" id="mainNavbar"></nav>
 
-<h1>Manage & Verify Items</h1>
+    <!-- ================= NAVBAR ================= -->
 
-<div class="table-container">
+    <nav class="navbar" id="mainNavbar"></nav>
 
-<table>
 
-<thead>
-<tr id="tableHead">
-<!-- dynamic -->
-</tr>
-</thead>
+    <!-- ================= TITLE ================= -->
 
-<tbody id="itemsTable"></tbody>
+    <h1>Manage & Verify Items</h1>
 
-</table>
 
-</div>
+    <!-- ================= TABLE ================= -->
 
-<div id="imageModal" class="modal" onclick="closeImage()">
-<img id="modalImage">
-</div>
+    <div class="table-container">
 
-<script>
+        <table>
 
-/* ================= HELPERS ================= */
+            <thead>
 
-function safe(val){
-return val ? val : "N/A";
-}
+                <tr id="tableHead">
+                    <!-- Dynamic headers -->
+                </tr>
 
-/* ================= LOAD ITEMS ================= */
+            </thead>
 
-async function loadItems(){
+            <tbody id="itemsTable">
+                <!-- Dynamic items -->
+            </tbody>
 
-try{
+        </table>
 
-const res = await fetch("/api/items");
-const data = await res.json();
+    </div>
 
-const showHandover = data.some(item => item.handedBy || item.handedTo);
 
-/* HEADER */
+    <!-- ================= IMAGE MODAL ================= -->
 
-document.getElementById("tableHead").innerHTML = showHandover ? `
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Original Location</th>
-<th>Submit Location</th>
-<th>Date</th>
-<th>Submitted By</th>
-<th>Email</th>
-<th>Handed By</th>
-<th>Handed To</th>
-<th>Image</th>
-<th>Action</th>
-` : `
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Original Location</th>
-<th>Submit Location</th>
-<th>Date</th>
-<th>Submitted By</th>
-<th>Email</th>
-<th>Image</th>
-<th>Action</th>
-`;
+    <div id="imageModal" class="modal" onclick="closeImage()">
 
-/* ROWS */
+        <img id="modalImage" alt="Item Image">
 
-let html = "";
+    </div>
 
-data.forEach(item=>{
 
-const originalLocation = item.lostLocation || item.foundLocation;
 
-const imageHTML = item.image
-? `<img class="table-img" src="/uploads/${item.image}" onclick="showImage('/uploads/${item.image}')">`
-: "No Image";
+    <script>
 
-const handoverHTML = showHandover ? `
-<td>${safe(item.handedBy)}</td>
-<td>${safe(item.handedTo)}</td>
-` : "";
+        /* =========================================================
+           HELPERS
+        ========================================================= */
 
-html += `
-<tr>
-<td>${safe(item.name)}</td>
-<td>${safe(item.type)}</td>
-<td>${safe(item.description)}</td>
-<td>${safe(originalLocation)}</td>
-<td>${safe(item.location)}</td>
-<td>${safe(item.dateLost || item.dateFound)}</td>
-<td>${safe(item.userName)}</td>
-<td>
-<a class="email-link" href="mailto:${safe(item.userEmail)}">
-${safe(item.userEmail)}
-</a>
-</td>
-${handoverHTML}
-<td>${imageHTML}</td>
-<td>
-<form action="/mark-collected" method="POST"
-onsubmit="return confirm('Confirm item collection?')">
-<input type="hidden" name="itemId" value="${item._id}">
-<button class="collect-btn">Collected</button>
-</form>
-</td>
-</tr>
-`;
+        function safe(val) {
 
-});
+            if (
+                val === null ||
+                val === undefined ||
+                val === ""
+            ) {
+                return "N/A";
+            }
 
-document.getElementById("itemsTable").innerHTML = html;
+            return val;
 
-}catch(err){
-console.error("Error loading items:", err);
-}
+        }
 
-}
 
-/* ================= IMAGE MODAL ================= */
+        /* =========================================================
+           IMAGE URL HANDLER
+        ========================================================= */
 
-function showImage(src){
-document.getElementById("imageModal").style.display = "flex";
-document.getElementById("modalImage").src = src;
-}
+        function getImageUrl(image) {
 
-function closeImage(){
-document.getElementById("imageModal").style.display = "none";
-}
+            if (!image) {
+                return "";
+            }
 
-/* ================= INIT ================= */
+            image = String(image).trim();
 
-loadItems();
+            if (!image) {
+                return "";
+            }
 
-</script>
 
-<script src="/js/navbar.js"></script>
-<script src="/js/translate.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            /*
+             * NEW CLOUDINARY IMAGE
+             *
+             * Example:
+             * https://res.cloudinary.com/xxxxx/image/upload/xxxxx.jpg
+             *
+             * Use it directly.
+             */
+
+            if (
+                image.startsWith("https://") ||
+                image.startsWith("http://")
+            ) {
+
+                return image;
+
+            }
+
+
+            /*
+             * OLD LOCAL UPLOAD
+             *
+             * This keeps old images working if
+             * your database still contains filenames.
+             */
+
+            if (image.startsWith("/uploads/")) {
+
+                return image;
+
+            }
+
+            return "/uploads/" + encodeURIComponent(image);
+
+        }
+
+
+        /* =========================================================
+           IMAGE ERROR HANDLER
+        ========================================================= */
+
+        function imageLoadError(img) {
+
+            console.error(
+                "Image failed to load:",
+                img.src
+            );
+
+            const errorBox = document.createElement("div");
+
+            errorBox.className = "image-error";
+
+            errorBox.textContent = "No Image";
+
+            img.replaceWith(errorBox);
+
+        }
+
+
+        /* =========================================================
+           LOAD ITEMS
+        ========================================================= */
+
+        async function loadItems() {
+
+            try {
+
+                const res = await fetch("/api/items", {
+                    credentials: "include"
+                });
+
+
+                if (!res.ok) {
+
+                    throw new Error(
+                        "Failed to fetch items. Status: " +
+                        res.status
+                    );
+
+                }
+
+
+                const data = await res.json();
+
+
+                console.log("Manager items:", data);
+
+
+                /*
+                 * Check whether any item contains
+                 * handedBy or handedTo.
+                 */
+
+                const showHandover =
+                    data.some(
+                        item =>
+                            item.handedBy ||
+                            item.handedTo
+                    );
+
+
+                /* =================================================
+                   TABLE HEADER
+                ================================================= */
+
+                document.getElementById("tableHead").innerHTML =
+                    showHandover
+
+                        ?
+
+                        `
+
+            <th>Name</th>
+
+            <th>Type</th>
+
+            <th>Description</th>
+
+            <th>Original Location</th>
+
+            <th>Submit Location</th>
+
+            <th>Date</th>
+
+            <th>Submitted By</th>
+
+            <th>Email</th>
+
+            <th>Handed By</th>
+
+            <th>Handed To</th>
+
+            <th>Image</th>
+
+            <th>Action</th>
+
+            `
+
+                        :
+
+                        `
+
+            <th>Name</th>
+
+            <th>Type</th>
+
+            <th>Description</th>
+
+            <th>Original Location</th>
+
+            <th>Submit Location</th>
+
+            <th>Date</th>
+
+            <th>Submitted By</th>
+
+            <th>Email</th>
+
+            <th>Image</th>
+
+            <th>Action</th>
+
+            `;
+
+
+                /* =================================================
+                   TABLE ROWS
+                ================================================= */
+
+                let html = "";
+
+
+                data.forEach(item => {
+
+
+                    const originalLocation =
+                        item.lostLocation ||
+                        item.foundLocation;
+
+
+                    /* =============================================
+                       IMAGE
+                    ============================================= */
+
+                    let imageHTML = "No Image";
+
+
+                    if (item.image) {
+
+                        const imageUrl =
+                            getImageUrl(item.image);
+
+
+                        imageHTML = `
+
+                    <img
+
+                        class="table-img"
+
+                        src="${imageUrl}"
+
+                        alt="${safe(item.name)}"
+
+                        loading="lazy"
+
+                        onclick="showImage('${imageUrl.replace(/'/g, "\\'")}')"
+
+                        onerror="imageLoadError(this)"
+
+                    >
+
+                `;
+
+                    }
+
+
+                    /* =============================================
+                       HANDOVER
+                    ============================================= */
+
+                    const handoverHTML =
+                        showHandover
+
+                            ?
+
+                            `
+
+                <td>
+                    ${safe(item.handedBy)}
+                </td>
+
+                <td>
+                    ${safe(item.handedTo)}
+                </td>
+
+                `
+
+                            :
+
+                            "";
+
+
+                    /* =============================================
+                       ROW
+                    ============================================= */
+
+                    html += `
+
+            <tr>
+
+
+                <td>
+                    ${safe(item.name)}
+                </td>
+
+
+                <td>
+                    ${safe(item.type)}
+                </td>
+
+
+                <td>
+                    ${safe(item.description)}
+                </td>
+
+
+                <td>
+                    ${safe(originalLocation)}
+                </td>
+
+
+                <td>
+                    ${safe(item.location)}
+                </td>
+
+
+                <td>
+                    ${safe(
+                        item.dateLost ||
+                        item.dateFound
+                    )}
+                </td>
+
+
+                <td>
+                    ${safe(item.userName)}
+                </td>
+
+
+                <td>
+
+                    <a
+
+                        class="email-link"
+
+                        href="mailto:${safe(item.userEmail)}"
+
+                    >
+
+                        ${safe(item.userEmail)}
+
+                    </a>
+
+                </td>
+
+
+                ${handoverHTML}
+
+
+                <td>
+
+                    ${imageHTML}
+
+                </td>
+
+
+                <td>
+
+                    <form
+
+                        action="/mark-collected"
+
+                        method="POST"
+
+                        onsubmit="return confirm('Confirm item collection?')"
+
+                    >
+
+                        <input
+
+                            type="hidden"
+
+                            name="itemId"
+
+                            value="${item._id}"
+
+                        >
+
+
+                        <button
+
+                            type="submit"
+
+                            class="collect-btn"
+
+                        >
+
+                            Collected
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+
+            </tr>
+
+            `;
+
+                });
+
+
+                document.getElementById(
+                    "itemsTable"
+                ).innerHTML = html;
+
+
+            }
+
+            catch (err) {
+
+                console.error(
+                    "Error loading manager items:",
+                    err
+                );
+
+                document.getElementById(
+                    "itemsTable"
+                ).innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="12"
+                    style="padding:30px;color:red;"
+                >
+
+                    Failed to load items.
+
+                </td>
+
+            </tr>
+
+        `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           IMAGE MODAL
+        ========================================================= */
+
+        function showImage(src) {
+
+            if (!src) {
+                return;
+            }
+
+
+            const modal =
+                document.getElementById(
+                    "imageModal"
+                );
+
+
+            const image =
+                document.getElementById(
+                    "modalImage"
+                );
+
+
+            image.src = src;
+
+            modal.style.display = "flex";
+
+        }
+
+
+        /* =========================================================
+           CLOSE IMAGE MODAL
+        ========================================================= */
+
+        function closeImage() {
+
+            const modal =
+                document.getElementById(
+                    "imageModal"
+                );
+
+
+            const image =
+                document.getElementById(
+                    "modalImage"
+                );
+
+
+            modal.style.display = "none";
+
+            image.src = "";
+
+        }
+
+
+        /* =========================================================
+           ESC KEY TO CLOSE IMAGE
+        ========================================================= */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Escape") {
+
+                    closeImage();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           INITIALIZE
+        ========================================================= */
+
+        loadItems();
+
+    </script>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <script src="/js/navbar.js"></script>
+
+    <script src="/js/translate.js"></script>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
+
 
 </body>
+
 </html>
