@@ -1,907 +1,2603 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Collected Items — MITS FindMyThing Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/navbar.css">
-<style>
-:root {
-  --navy:      #1a2744;
-  --navy2:     #243058;
-  --gold:      #c9a84c;
-  --gold2:     #e8c97a;
-  --cream:     #faf7f0;
-  --white:     #ffffff;
-  --muted:     #6b7280;
-  --border:    #e2e8f0;
-  --lost:      #e74c3c;
-  --lost-bg:   #fef2f0;
-  --found:     #2980b9;
-  --found-bg:  #eef6fc;
-  --green:     #1a6b3a;
-  --green-bg:  #ecfdf5;
-  --green2:    #22c55e;
-  --shadow:    0 4px 24px rgba(26,39,68,0.10);
-}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--cream);
-  color: var(--navy);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+  <title>Collected Items — MITS FindMyThing Portal</title>
 
-/* ── Background ── */
-.bg-layer {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none; overflow: hidden;
-}
-.bg-layer::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 5% 10%, rgba(201,168,76,0.07) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 70% at 95% 90%, rgba(26,107,58,0.05) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 65%);
-}
-.bg-dots {
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(201,168,76,0.10) 1px, transparent 1px);
-  background-size: 38px 38px;
-  animation: dotsShift 60s linear infinite;
-}
-@keyframes dotsShift { 0%{background-position:0 0} 100%{background-position:38px 38px} }
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
 
-.bg-ring {
-  position: absolute; border-radius: 50%;
-  border: 1px solid rgba(201,168,76,0.09);
-}
-.br1 { width:680px; height:680px; top:-240px; right:-180px; animation: spin 70s linear infinite; }
-.br2 { width:460px; height:460px; bottom:-40px; left:-140px; animation: spin 92s linear infinite reverse; }
-.br3 { width:300px; height:300px; top:40%; right:6%; border-color: rgba(26,107,58,0.07); animation: spin 110s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
+  <link rel="stylesheet" href="/css/navbar.css">
 
-.bg-line {
-  position: absolute; width:1px; height:200%;
-  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.18), transparent);
-  animation: lineDrift 14s ease-in-out infinite;
-}
-.bl1 { left:20%; top:-50%; animation-delay:0s; }
-.bl2 { left:78%; top:-50%; animation-delay:7s; }
-@keyframes lineDrift {
-  0%,100% { transform:translateY(-10%) rotate(8deg); opacity:0; }
-  30%      { opacity:0.8; }
-  70%      { opacity:0.4; }
-}
+  <style>
+    :root {
+      --navy: #1a2744;
+      --navy2: #243058;
+      --gold: #c9a84c;
+      --gold2: #e8c97a;
+      --cream: #faf7f0;
+      --white: #fff;
+      --muted: #6b7280;
+      --border: #e2e8f0;
+      --lost: #e74c3c;
+      --found: #2980b9;
+      --green: #1a6b3a;
+      --green-bg: #ecfdf5;
+      --shadow: 0 4px 24px rgba(26, 39, 68, .10);
+    }
 
-/* ── Navbar ── */
-.navbar {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(26,39,68,0.97);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(201,168,76,0.25);
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 0 36px; height: 64px;
-  animation: slideDown 0.6s ease both;
-}
-.navbar::after {
-  content: '';
-  position: absolute; bottom:-1px; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 4s linear infinite;
-}
-@keyframes slideDown { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
-@keyframes shimmer   { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-.nav-left { display:flex; flex-direction:column; justify-content:center; }
-.nav-brand { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--white); }
-.nav-brand span { color:var(--gold); }
-.nav-brand-sub { font-size:11px; color:var(--gold); letter-spacing:2px; text-transform:uppercase; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-.nav-links { display:flex; gap:4px; align-items:center; }
-.nav-links a {
-  color:rgba(255,255,255,0.72); text-decoration:none;
-  font-size:13px; font-weight:400;
-  padding:7px 14px; border-radius:7px;
-  border:1px solid transparent; transition:all 0.2s;
-}
-.nav-links a:hover { color:var(--gold2); border-color:rgba(201,168,76,0.28); background:rgba(201,168,76,0.07); }
-.nav-links a.active { background:var(--gold); color:var(--navy); font-weight:600; border-color:var(--gold); }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-#google_translate_element { background:rgba(255,255,255,0.08); padding:3px 8px; border-radius:5px; font-size:11px; border:1px solid rgba(201,168,76,0.2); }
-.goog-logo-link, .goog-te-gadget span { display:none !important; }
-.goog-te-gadget { color:transparent !important; }
+    /* ================= BACKGROUND ================= */
 
-/* ── Page ── */
-.page { position:relative; z-index:1; padding:36px 40px 60px; max-width:1500px; margin:0 auto; }
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
 
-/* ── Page header ── */
-.page-header {
-  display:flex; align-items:flex-start; justify-content:space-between;
-  flex-wrap:wrap; gap:20px; margin-bottom:28px;
-  animation: fadeUp 0.6s ease both;
-}
-.page-header-left .breadcrumb {
-  font-size:12px; color:var(--muted); margin-bottom:8px;
-  display:flex; align-items:center; gap:6px;
-}
-.page-header-left .breadcrumb a { color:var(--gold); text-decoration:none; }
-.page-header-left h1 {
-  font-family:'Playfair Display',serif;
-  font-size:28px; font-weight:700; color:var(--navy);
-}
-.page-header-left p { font-size:13.5px; color:var(--muted); margin-top:4px; max-width:520px; }
+    .bg-layer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 5% 10%,
+          rgba(201, 168, 76, .07),
+          transparent 55%),
+        radial-gradient(ellipse 60% 70% at 95% 90%,
+          rgba(26, 107, 58, .05),
+          transparent 55%);
+    }
 
-/* ── Header stats ── */
-.header-stats { display:flex; gap:12px; flex-wrap:wrap; }
-.hstat {
-  background:var(--white); border:1px solid var(--border);
-  border-radius:12px; padding:12px 20px; text-align:center;
-  box-shadow:0 2px 12px rgba(26,39,68,0.06); min-width:90px;
-}
-.hstat .snum { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; display:block; color:var(--navy); }
-.hstat .slbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
-.hstat.s-total     { border-top:2px solid var(--gold); }
-.hstat.s-total     .snum { color:var(--navy); }
-.hstat.s-lost      { border-top:2px solid var(--lost); }
-.hstat.s-lost      .snum { color:var(--lost); }
-.hstat.s-found     { border-top:2px solid var(--found); }
-.hstat.s-found     .snum { color:var(--found); }
-.hstat.s-collected { border-top:2px solid var(--green); }
-.hstat.s-collected .snum { color:var(--green); }
+    .bg-dots {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle,
+          rgba(201, 168, 76, .10) 1px,
+          transparent 1px);
+      background-size: 38px 38px;
+    }
 
-/* ── Success notice ── */
-.success-notice {
-  background: linear-gradient(135deg, rgba(26,107,58,0.08), rgba(26,107,58,0.03));
-  border: 1px solid rgba(26,107,58,0.25);
-  border-left: 4px solid var(--green);
-  border-radius: 12px; padding: 13px 20px;
-  margin-bottom: 24px;
-  display: flex; gap: 12px; align-items: center;
-  animation: fadeUp 0.6s 0.05s ease both;
-}
-.success-notice-text { font-size:13px; color:var(--navy); line-height:1.65; }
-.success-notice-text strong { color:var(--green); font-weight:600; }
+    /* ================= NAVBAR ================= */
 
-/* ── Filters card ── */
-.filters-card {
-  background:var(--white); border:1px solid var(--border);
-  border-radius:16px; padding:22px 26px;
-  margin-bottom:24px; box-shadow:var(--shadow);
-  animation: fadeUp 0.6s 0.1s ease both;
-}
-.filters-label {
-  font-size:11px; font-weight:700;
-  letter-spacing:1.5px; text-transform:uppercase;
-  color:var(--muted); margin-bottom:14px;
-  display:flex; align-items:center; gap:8px;
-}
-.filters-label::after { content:''; flex:1; height:1px; background:var(--border); }
-.filters-row { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; }
-.filter-group { display:flex; flex-direction:column; gap:5px; flex:1; min-width:155px; }
-.filter-group label { font-size:11.5px; font-weight:600; color:var(--navy); letter-spacing:0.4px; text-transform:uppercase; }
-.filter-group input,
-.filter-group select {
-  padding:9px 13px; border:1.5px solid var(--border); border-radius:9px;
-  font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--navy);
-  background:#f8fafc; outline:none;
-  transition:border-color 0.2s, box-shadow 0.2s;
-}
-.filter-group input:focus,
-.filter-group select:focus {
-  border-color:var(--navy); background:var(--white);
-  box-shadow:0 0 0 3px rgba(26,39,68,0.07);
-}
-.filter-group input::placeholder { color:#b0b8c9; }
-.btn-reset {
-  padding:9px 20px; background:transparent;
-  border:1.5px solid var(--border); border-radius:9px;
-  font-family:'DM Sans',sans-serif; font-size:13px; color:var(--muted);
-  cursor:pointer; transition:all 0.2s; white-space:nowrap;
-}
-.btn-reset:hover { border-color:var(--navy); color:var(--navy); background:rgba(26,39,68,0.04); }
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(26, 39, 68, .97);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201, 168, 76, .25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      height: 64px;
+    }
 
-.active-filters { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-.filter-pill {
-  display:inline-flex; align-items:center; gap:6px;
-  background:rgba(26,107,58,0.08); border:1px solid rgba(26,107,58,0.25);
-  border-radius:100px; padding:4px 12px;
-  font-size:12px; color:var(--green); font-weight:500;
-}
-.filter-pill button {
-  background:none; border:none; cursor:pointer;
-  color:var(--green); font-size:14px; line-height:1; padding:0; transition:color 0.2s;
-}
-.filter-pill button:hover { color:var(--lost); }
+    /* ================= PAGE ================= */
 
-/* ── Tab bar ── */
-.tab-bar {
-  display:flex; gap:0; background:var(--white);
-  border:1px solid var(--border); border-radius:14px;
-  padding:5px; margin-bottom:24px;
-  box-shadow:0 2px 12px rgba(26,39,68,0.06);
-  animation: fadeUp 0.6s 0.15s ease both;
-  width:fit-content; flex-wrap:wrap;
-}
-.tab-btn {
-  display:flex; align-items:center; gap:8px;
-  padding:10px 24px; border-radius:10px; border:none;
-  font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500;
-  cursor:pointer; transition:all 0.25s;
-  background:transparent; color:var(--muted);
-}
-.tab-btn:hover { color:var(--navy); }
-.tab-btn.active-all   { background:linear-gradient(135deg,var(--navy),var(--navy2));  color:var(--white); box-shadow:0 4px 14px rgba(26,39,68,0.3); }
-.tab-btn.active-lost  { background:linear-gradient(135deg,var(--lost),#c0392b);         color:var(--white); box-shadow:0 4px 14px rgba(231,76,60,0.3); }
-.tab-btn.active-found { background:linear-gradient(135deg,var(--found),#1a6fa8);        color:var(--white); box-shadow:0 4px 14px rgba(41,128,185,0.3); }
-.tab-count {
-  font-size:11px; font-weight:700; padding:2px 8px;
-  border-radius:100px; background:rgba(255,255,255,0.25);
-}
+    .page {
+      position: relative;
+      z-index: 1;
+      padding: 36px 40px 60px;
+      max-width: 1500px;
+      margin: auto;
+    }
 
-/* ── Table section ── */
-.table-section { animation: fadeUp 0.6s 0.2s ease both; }
-.table-section-title { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-.tsect-icon {
-  width:36px; height:36px; border-radius:10px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:16px; flex-shrink:0;
-}
-.tsect-icon.i-all   { background:rgba(26,107,58,0.1); color:var(--green); }
-.tsect-icon.i-lost  { background:rgba(231,76,60,0.1);  color:var(--lost); }
-.tsect-icon.i-found { background:rgba(41,128,185,0.1); color:var(--found); }
-.tsect-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; color:var(--navy); }
-.tsect-sub   { font-size:12px; color:var(--muted); margin-top:1px; }
+    /* ================= HEADER ================= */
 
-.table-card {
-  background:var(--white); border-radius:16px;
-  box-shadow:var(--shadow); border:1px solid var(--border);
-  overflow:hidden; margin-bottom:36px;
-}
-.table-card.c-all   { border-top:3px solid var(--green); }
-.table-card.c-lost  { border-top:3px solid var(--lost); }
-.table-card.c-found { border-top:3px solid var(--found); }
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
 
-.table-scroll { overflow-x:auto; }
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 6px;
+    }
 
-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .breadcrumb a {
+      color: var(--gold);
+      text-decoration: none;
+    }
 
-thead th {
-  background:#f8fafc; color:var(--navy);
-  padding:11px 14px; font-weight:600;
-  font-size:11px; letter-spacing:0.5px;
-  text-transform:uppercase; border-bottom:1px solid var(--border);
-  white-space:nowrap; position:sticky; top:0; z-index:2;
-  cursor:pointer; user-select:none; transition:background 0.2s;
-}
-thead th:hover { background:#f0f4f8; }
-thead th .sort-icon { margin-left:4px; opacity:0.35; font-size:9px; }
-thead th.sorted .sort-icon { opacity:1; color:var(--gold); }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--navy);
+    }
 
-tbody td {
-  padding:11px 14px; border-bottom:1px solid #f0f3f8;
-  color:var(--navy); vertical-align:middle; text-align:center;
-}
-tbody tr:last-child td { border-bottom:none; }
-tbody tr { transition:background 0.15s; cursor:pointer; }
-tbody tr:hover { background:#f8fafd; }
+    .page-header p {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 5px;
+      max-width: 560px;
+      line-height: 1.6;
+    }
 
-.count-bar {
-  padding:11px 20px; background:#f8fafc;
-  border-top:1px solid var(--border);
-  font-size:12px; color:var(--muted);
-  display:flex; align-items:center; justify-content:space-between;
-}
-.count-bar strong { color:var(--navy); }
+    /* ================= STATS ================= */
 
-/* ── Badges ── */
-.badge {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:4px 10px; border-radius:100px;
-  font-size:11px; font-weight:600; letter-spacing:0.3px;
-}
-.badge-lost      { background:var(--lost-bg);  color:#c0392b;    border:1px solid rgba(231,76,60,0.2); }
-.badge-found     { background:var(--found-bg); color:#1a6fa8;    border:1px solid rgba(41,128,185,0.2); }
-.badge-collected { background:var(--green-bg); color:var(--green); border:1px solid rgba(26,107,58,0.2); }
+    .header-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-/* ── Collected date chip ── */
-.date-chip {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:4px 10px; border-radius:100px;
-  font-size:11.5px; font-weight:500;
-  background:#f0faf5; color:var(--green);
-  border:1px solid rgba(26,107,58,0.18);
-  white-space:nowrap;
-}
+    .hstat {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 20px;
+      text-align: center;
+      min-width: 90px;
+      box-shadow: 0 2px 12px rgba(26, 39, 68, .06);
+    }
 
-/* ── Table image ── */
-.table-img {
-  width:50px; height:50px; border-radius:9px;
-  object-fit:cover; cursor:pointer;
-  border:2px solid var(--border); transition:all 0.2s;
-}
-.table-img:hover { transform:scale(1.14); border-color:var(--gold); box-shadow:0 4px 14px rgba(201,168,76,0.3); }
-.no-img {
-  width:50px; height:50px; border-radius:9px;
-  background:#f0f3f8; border:1px dashed var(--border);
-  display:inline-flex; align-items:center; justify-content:center;
-  font-size:18px; color:#cbd5e1;
-}
+    .snum {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      display: block;
+    }
 
-/* ── Email link ── */
-.email-link { color:var(--gold); text-decoration:none; font-size:12.5px; }
-.email-link:hover { color:var(--navy); text-decoration:underline; }
+    .slbl {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-/* ── Expand detail row ── */
-.detail-row { display:none; }
-.detail-row td {
-  background:linear-gradient(135deg,#f0faf5,#f8fafc);
-  padding:18px 22px; text-align:left;
-  border-bottom:1px solid var(--border);
-}
-.detail-row.open { display:table-row; animation:expandRow 0.2s ease both; }
-@keyframes expandRow { from{opacity:0} to{opacity:1} }
-.detail-grid {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:14px;
-}
-.detail-field label {
-  font-size:10.5px; font-weight:700; letter-spacing:1px;
-  text-transform:uppercase; color:var(--muted); display:block; margin-bottom:3px;
-}
-.detail-field span { font-size:13.5px; color:var(--navy); font-weight:500; }
+    .s-total {
+      border-top: 2px solid var(--gold);
+    }
 
-/* ── Image modal ── */
-.modal {
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,0.88);
-  justify-content:center; align-items:center;
-  z-index:9000; padding:24px; backdrop-filter:blur(6px);
-}
-.modal.open { display:flex; animation:modalIn 0.25s ease both; }
-@keyframes modalIn { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
-.modal-inner {
-  position:relative; max-width:720px; width:100%;
-  background:var(--white); border-radius:20px;
-  overflow:hidden; box-shadow:0 32px 80px rgba(0,0,0,0.5);
-}
-.modal-img-wrap { text-align:center; background:#0a0f1a; padding:20px; }
-.modal-img-wrap img { max-width:100%; max-height:460px; border-radius:10px; object-fit:contain; display:block; margin:0 auto; }
-.modal-info { padding:18px 24px; }
-.modal-item-name { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--navy); margin-bottom:4px; }
-.modal-item-desc { font-size:13.5px; color:var(--muted); line-height:1.65; }
-.modal-collected-date {
-  display:inline-flex; align-items:center; gap:6px; margin-top:10px;
-  font-size:12.5px; color:var(--green); font-weight:600;
-  background:var(--green-bg); padding:5px 14px; border-radius:100px;
-  border:1px solid rgba(26,107,58,0.2);
-}
-.modal-close {
-  position:absolute; top:14px; right:16px;
-  background:rgba(0,0,0,0.5); border:none; border-radius:50%;
-  width:34px; height:34px; font-size:18px;
-  color:white; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; transition:background 0.2s;
-}
-.modal-close:hover { background:rgba(0,0,0,0.8); }
+    .s-lost {
+      border-top: 2px solid var(--lost);
+    }
 
-/* ── Empty state ── */
-.empty-state { text-align:center; padding:52px 40px; }
-.empty-state-icon { font-size:48px; margin-bottom:14px; opacity:0.5; }
-.empty-state h3 { font-family:'Playfair Display',serif; font-size:20px; color:var(--navy); margin-bottom:6px; }
-.empty-state p  { font-size:13.5px; color:var(--muted); }
+    .s-found {
+      border-top: 2px solid var(--found);
+    }
 
-/* ── Animations ── */
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .s-collected {
+      border-top: 2px solid var(--green);
+    }
 
-/* ── Responsive ── */
-@media (max-width:900px) {
-  .page { padding:20px 16px 40px; }
-  .navbar { padding:0 16px; }
-  .filters-row { flex-direction:column; }
-  .header-stats { flex-wrap:wrap; }
-  .tab-btn { padding:9px 14px; font-size:12.5px; }
-}
-</style>
+    .s-lost .snum {
+      color: var(--lost);
+    }
+
+    .s-found .snum {
+      color: var(--found);
+    }
+
+    .s-collected .snum {
+      color: var(--green);
+    }
+
+    /* ================= SUCCESS ================= */
+
+    .success-notice {
+      background: linear-gradient(135deg,
+          rgba(26, 107, 58, .08),
+          rgba(26, 107, 58, .03));
+      border: 1px solid rgba(26, 107, 58, .25);
+      border-left: 4px solid var(--green);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .success-notice-text {
+      font-size: 13px;
+      color: var(--navy);
+      line-height: 1.6;
+    }
+
+    .success-notice-text strong {
+      color: var(--green);
+    }
+
+    /* ================= FILTERS ================= */
+
+    .filters-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 26px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .filters-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 155px;
+    }
+
+    .filter-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--navy);
+      text-transform: uppercase;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 9px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--navy);
+      background: #f8fafc;
+      outline: none;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: var(--navy);
+    }
+
+    .btn-reset {
+      padding: 9px 20px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .btn-reset:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
+
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(26, 107, 58, .08);
+      border: 1px solid rgba(26, 107, 58, .25);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--green);
+    }
+
+    /* ================= TABS ================= */
+
+    .tab-bar {
+      display: flex;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 24px;
+      width: max-content;
+      box-shadow: 0 2px 12px rgba(26, 39, 68, .06);
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active-all {
+      background: var(--navy);
+      color: white;
+    }
+
+    .tab-btn.active-lost {
+      background: var(--lost);
+      color: white;
+    }
+
+    .tab-btn.active-found {
+      background: var(--found);
+      color: white;
+    }
+
+    .tab-count {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, .25);
+    }
+
+    /* ================= SECTION ================= */
+
+    .table-section {
+      margin-bottom: 35px;
+    }
+
+    .table-section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tsect-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .i-all {
+      background: rgba(26, 107, 58, .1);
+    }
+
+    .i-lost {
+      background: rgba(231, 76, 60, .1);
+    }
+
+    .i-found {
+      background: rgba(41, 128, 185, .1);
+    }
+
+    .tsect-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .tsect-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ================= TABLE ================= */
+
+    .table-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .c-all {
+      border-top: 3px solid var(--green);
+    }
+
+    .c-lost {
+      border-top: 3px solid var(--lost);
+    }
+
+    .c-found {
+      border-top: 3px solid var(--found);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      background: #f8fafc;
+      color: var(--navy);
+      padding: 11px 14px;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    tbody td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #f0f3f8;
+      color: var(--navy);
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    tbody tr {
+      transition: .15s;
+      cursor: pointer;
+    }
+
+    tbody tr:hover {
+      background: #f8fafd;
+    }
+
+    /* ================= IMAGE ================= */
+
+    .table-img {
+      width: 55px;
+      height: 55px;
+      border-radius: 9px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      transition: .2s;
+      display: block;
+      margin: auto;
+      background: #f8fafc;
+    }
+
+    .table-img:hover {
+      transform: scale(1.1);
+      border-color: var(--gold);
+    }
+
+    .no-img {
+      width: 55px;
+      height: 55px;
+      border-radius: 9px;
+      background: #f0f3f8;
+      border: 1px dashed var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #cbd5e1;
+    }
+
+    /* ================= BADGES ================= */
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-lost {
+      background: #fef2f0;
+      color: #c0392b;
+      border: 1px solid rgba(231, 76, 60, .2);
+    }
+
+    .badge-found {
+      background: #eef6fc;
+      color: #1a6fa8;
+      border: 1px solid rgba(41, 128, 185, .2);
+    }
+
+    .date-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11.5px;
+      color: var(--green);
+      background: #f0faf5;
+      border: 1px solid rgba(26, 107, 58, .18);
+      white-space: nowrap;
+    }
+
+    /* ================= EMAIL ================= */
+
+    .email-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 12.5px;
+    }
+
+    .email-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ================= DETAILS ================= */
+
+    .detail-row {
+      display: none;
+    }
+
+    .detail-row.open {
+      display: table-row;
+    }
+
+    .detail-row td {
+      background: #f0faf5;
+      padding: 18px 22px;
+      text-align: left;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .detail-field label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .detail-field span {
+      font-size: 13.5px;
+      color: var(--navy);
+    }
+
+    /* ================= COUNT ================= */
+
+    .count-bar {
+      padding: 11px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ================= MODAL ================= */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .88);
+      justify-content: center;
+      align-items: center;
+      z-index: 9000;
+      padding: 24px;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-inner {
+      position: relative;
+      max-width: 750px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .modal-img-wrap {
+      text-align: center;
+      background: #0a0f1a;
+      padding: 20px;
+    }
+
+    .modal-img-wrap img {
+      max-width: 100%;
+      max-height: 500px;
+      border-radius: 10px;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+    }
+
+    .modal-info {
+      padding: 18px 24px;
+    }
+
+    .modal-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .modal-item-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .modal-collected-date {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: rgba(0, 0, 0, .6);
+      border: none;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media(max-width:900px) {
+
+      .page {
+        padding: 20px 16px 40px;
+      }
+
+      .navbar {
+        padding: 0 16px;
+      }
+
+      .filters-row {
+        flex-direction: column;
+      }
+
+      .filter-group {
+        width: 100%;
+      }
+
+      .tab-bar {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .tab-btn {
+        white-space: nowrap;
+        padding: 9px 14px;
+      }
+
+    }
+  </style>
+
 </head>
+
 <body>
 
-<div class="bg-layer">
-  <div class="bg-dots"></div>
-  <div class="bg-ring br1"></div>
-  <div class="bg-ring br2"></div>
-  <div class="bg-ring br3"></div>
-  <div class="bg-line bl1"></div>
-  <div class="bg-line bl2"></div>
-</div>
-
-<!-- Navbar -->
-<nav class="navbar" id="mainNavbar"></nav>
-
-<!-- Page -->
-<div class="page">
-
-  <!-- Header -->
-  <div class="page-header">
-    <div class="page-header-left">
-      <div class="breadcrumb">
-        <a href="/">Portal Home</a> <span>›</span>
-        <a href="/items.html">All Items</a> <span>›</span>
-        <span>Collected Items</span>
-      </div>
-      <h1>Collected Items</h1>
-      <p>A complete archive of all items that have been successfully verified and returned to their rightful owners. Sorted by collection date.</p>
-    </div>
-    <div class="header-stats">
-      <div class="hstat s-total">
-        <span class="snum" id="statTotal">—</span><span class="slbl">Total</span>
-      </div>
-      <div class="hstat s-lost">
-        <span class="snum" id="statLost">—</span><span class="slbl">Lost</span>
-      </div>
-      <div class="hstat s-found">
-        <span class="snum" id="statFound">—</span><span class="slbl">Found</span>
-      </div>
-      <div class="hstat s-collected">
-        <span class="snum" id="statToday">—</span><span class="slbl">Today</span>
-      </div>
-    </div>
+  <div class="bg-layer">
+    <div class="bg-dots"></div>
   </div>
 
-  <!-- Success notice -->
-  <div class="success-notice">
-    <span style="font-size:22px;">🎉</span>
-    <div class="success-notice-text">
-      <strong>Successfully Reunited:</strong>
-      All items on this page have been collected by their verified owners at the MITS Administrative Office.
-      Records are maintained for audit and reference purposes as per institutional policy.
+  <nav class="navbar" id="mainNavbar"></nav>
+
+  <div class="page">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="page-header">
+
+      <div>
+
+        <div class="breadcrumb">
+          <a href="/">Portal Home</a>
+          <span>›</span>
+          <a href="/items.html">All Items</a>
+          <span>›</span>
+          <span>Collected Items</span>
+        </div>
+
+        <h1>Collected Items</h1>
+
+        <p>
+          A complete archive of all items that have been
+          successfully verified and returned to their rightful
+          owners. Sorted by collection date.
+        </p>
+
+      </div>
+
+      <div class="header-stats">
+
+        <div class="hstat s-total">
+          <span class="snum" id="statTotal">0</span>
+          <span class="slbl">Total</span>
+        </div>
+
+        <div class="hstat s-lost">
+          <span class="snum" id="statLost">0</span>
+          <span class="slbl">Lost</span>
+        </div>
+
+        <div class="hstat s-found">
+          <span class="snum" id="statFound">0</span>
+          <span class="slbl">Found</span>
+        </div>
+
+        <div class="hstat s-collected">
+          <span class="snum" id="statToday">0</span>
+          <span class="slbl">Today</span>
+        </div>
+
+      </div>
+
     </div>
-  </div>
 
-  <!-- Filters -->
-  <div class="filters-card">
-    <div class="filters-label">Search &amp; Filter Collected Items</div>
-    <div class="filters-row">
-      <div class="filter-group" style="flex:2;min-width:220px;">
-        <label>Search Name / Description / Submitter</label>
-        <input type="text" id="fSearch" placeholder="e.g. Laptop, Samsung, Ravi Kumar...">
+
+    <!-- ================= SUCCESS MESSAGE ================= -->
+
+    <div class="success-notice">
+
+      <span style="font-size:22px;">🎉</span>
+
+      <div class="success-notice-text">
+
+        <strong>Successfully Reunited:</strong>
+
+        All items on this page have been collected by their
+        verified owners at the MITS Administrative Office.
+        Records are maintained for audit and reference purposes.
+
       </div>
-      <div class="filter-group">
-        <label>Item Type</label>
-        <select id="fType"><option value="">All Types</option></select>
-      </div>
-      <div class="filter-group">
-        <label>Report Type</label>
-        <select id="fReport">
-          <option value="">All</option>
-          <option value="lost">Lost</option>
-          <option value="found">Found</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Collected On (Exact)</label>
-        <input type="date" id="fDate">
-      </div>
-      <div class="filter-group">
-        <label>Date Range — From</label>
-        <input type="date" id="fDateFrom">
-      </div>
-      <div class="filter-group">
-        <label>Date Range — To</label>
-        <input type="date" id="fDateTo">
-      </div>
-      <div style="padding-top:20px;">
-        <button class="btn-reset" id="btnReset">✕ Reset</button>
-      </div>
+
     </div>
-    <div class="active-filters" id="activePills"></div>
-  </div>
 
-  <!-- Tabs -->
-  <div class="tab-bar">
-    <button class="tab-btn active-all"  id="tabAll"   onclick="setTab('all')">✅ All Collected <span class="tab-count" id="tc-all">0</span></button>
-    <button class="tab-btn"             id="tabLost"  onclick="setTab('lost')">😞 Lost Items <span class="tab-count" id="tc-lost">0</span></button>
-    <button class="tab-btn"             id="tabFound" onclick="setTab('found')">😀 Found Items <span class="tab-count" id="tc-found">0</span></button>
-  </div>
 
-  <!-- ALL view -->
-  <div id="view-all">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-all">✅</div>
+    <!-- ================= FILTERS ================= -->
+
+    <div class="filters-card">
+
+      <div class="filters-label">
+        Search & Filter Collected Items
+      </div>
+
+      <div class="filters-row">
+
+        <div class="filter-group" style="flex:2;min-width:220px;">
+
+          <label>
+            Search Name / Description / Submitter
+          </label>
+
+          <input type="text" id="fSearch" placeholder="e.g. Laptop, Samsung, Ravi Kumar...">
+
+        </div>
+
+
+        <div class="filter-group">
+
+          <label>Item Type</label>
+
+          <select id="fType">
+            <option value="">All Types</option>
+          </select>
+
+        </div>
+
+
+        <div class="filter-group">
+
+          <label>Report Type</label>
+
+          <select id="fReport">
+
+            <option value="">All</option>
+            <option value="lost">Lost</option>
+            <option value="found">Found</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="filter-group">
+
+          <label>Collected On</label>
+
+          <input type="date" id="fDate">
+
+        </div>
+
+
+        <div class="filter-group">
+
+          <label>Date From</label>
+
+          <input type="date" id="fDateFrom">
+
+        </div>
+
+
+        <div class="filter-group">
+
+          <label>Date To</label>
+
+          <input type="date" id="fDateTo">
+
+        </div>
+
+
         <div>
-          <div class="tsect-title">All Collected Items</div>
-          <div class="tsect-sub">Lost and found combined — click any row to expand full details</div>
+
+          <button class="btn-reset" id="btnReset">
+            ✕ Reset
+          </button>
+
         </div>
+
       </div>
-      <div class="table-card c-all">
-        <div class="table-scroll"><table><thead><tr id="headAll"></tr></thead><tbody id="bodyAll"></tbody></table></div>
-        <div class="count-bar">
-          <span>Showing <strong id="cntAll">0</strong> collected items</span>
-          <span style="font-size:11px;color:#94a3b8;">Click row to expand · Click header to sort</span>
-        </div>
-      </div>
+
+      <div class="active-filters" id="activePills"></div>
+
     </div>
+
+
+    <!-- ================= TABS ================= -->
+
+    <div class="tab-bar">
+
+      <button class="tab-btn active-all" id="tabAll" onclick="setTab('all')">
+        ✅ All Collected
+        <span class="tab-count" id="tc-all">0</span>
+      </button>
+
+
+      <button class="tab-btn" id="tabLost" onclick="setTab('lost')">
+        😞 Lost Items
+        <span class="tab-count" id="tc-lost">0</span>
+      </button>
+
+
+      <button class="tab-btn" id="tabFound" onclick="setTab('found')">
+        😀 Found Items
+        <span class="tab-count" id="tc-found">0</span>
+      </button>
+
+    </div>
+
+
+    <!-- ================= ALL ITEMS ================= -->
+
+    <div id="view-all">
+
+      <div class="table-section">
+
+        <div class="table-section-title">
+
+          <div class="tsect-icon i-all">
+            ✅
+          </div>
+
+          <div>
+
+            <div class="tsect-title">
+              All Collected Items
+            </div>
+
+            <div class="tsect-sub">
+              Lost and found combined — click any row
+              to expand full details
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="table-card c-all">
+
+          <div class="table-scroll">
+
+            <table>
+
+              <thead>
+                <tr id="headAll"></tr>
+              </thead>
+
+              <tbody id="bodyAll"></tbody>
+
+            </table>
+
+          </div>
+
+          <div class="count-bar">
+
+            Showing
+            <strong id="cntAll">0</strong>
+            collected items
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= LOST ITEMS ================= -->
+
+    <div id="view-lost" style="display:none;">
+
+      <div class="table-section">
+
+        <div class="table-section-title">
+
+          <div class="tsect-icon i-lost">
+            😞
+          </div>
+
+          <div>
+
+            <div class="tsect-title">
+              Collected — Lost Items
+            </div>
+
+            <div class="tsect-sub">
+              Previously lost items returned to their owners
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="table-card c-lost">
+
+          <div class="table-scroll">
+
+            <table>
+
+              <thead>
+                <tr id="headLost"></tr>
+              </thead>
+
+              <tbody id="bodyLost"></tbody>
+
+            </table>
+
+          </div>
+
+          <div class="count-bar">
+
+            Showing
+            <strong id="cntLost">0</strong>
+            items
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= FOUND ITEMS ================= -->
+
+    <div id="view-found" style="display:none;">
+
+      <div class="table-section">
+
+        <div class="table-section-title">
+
+          <div class="tsect-icon i-found">
+            😀
+          </div>
+
+          <div>
+
+            <div class="tsect-title">
+              Collected — Found Items
+            </div>
+
+            <div class="tsect-sub">
+              Found items claimed and collected
+              by verified owners
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="table-card c-found">
+
+          <div class="table-scroll">
+
+            <table>
+
+              <thead>
+                <tr id="headFound"></tr>
+              </thead>
+
+              <tbody id="bodyFound"></tbody>
+
+            </table>
+
+          </div>
+
+          <div class="count-bar">
+
+            Showing
+            <strong id="cntFound">0</strong>
+            items
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
-  <!-- LOST view -->
-  <div id="view-lost" style="display:none">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-lost">😞</div>
-        <div>
-          <div class="tsect-title">Collected — Lost Items</div>
-          <div class="tsect-sub">Previously lost items returned to their owners</div>
-        </div>
+
+  <!-- ================= IMAGE MODAL ================= -->
+
+  <div id="imgModal" class="modal" onclick="closeModal(event)">
+
+    <div class="modal-inner" onclick="event.stopPropagation()">
+
+      <button class="modal-close" onclick="closeModal()">
+        ✕
+      </button>
+
+      <div class="modal-img-wrap">
+
+        <img id="modalImg" src="" alt="Item Image">
+
       </div>
-      <div class="table-card c-lost">
-        <div class="table-scroll"><table><thead><tr id="headLost"></tr></thead><tbody id="bodyLost"></tbody></table></div>
-        <div class="count-bar"><span>Showing <strong id="cntLost">0</strong> items</span></div>
+
+      <div class="modal-info">
+
+        <div class="modal-item-name" id="modalName"></div>
+
+        <div class="modal-item-desc" id="modalDesc"></div>
+
+        <div class="modal-collected-date" id="modalDate"></div>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- FOUND view -->
-  <div id="view-found" style="display:none">
-    <div class="table-section">
-      <div class="table-section-title">
-        <div class="tsect-icon i-found">😀</div>
-        <div>
-          <div class="tsect-title">Collected — Found Items</div>
-          <div class="tsect-sub">Found items claimed and collected by verified owners</div>
+
+  <script>
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let allItems = [];
+    let filtered = [];
+
+    let currentRole = "user";
+    let currentTab = "all";
+
+    let sortCol = "";
+    let sortDir = 1;
+
+    let expandedRow = null;
+    let rowIndex = 0;
+
+
+    /* =========================================================
+       HELPERS
+    ========================================================= */
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+
+    function safe(value) {
+
+      if (
+        value === null ||
+        value === undefined ||
+        String(value).trim() === ""
+      ) {
+        return "N/A";
+      }
+
+      return String(value).trim();
+
+    }
+
+
+    /*
+    =========================================================
+    IMPORTANT IMAGE FIX
+    
+    Cloudinary:
+    https://res.cloudinary.com/....jpg
+    
+    Old local image:
+    filename.jpg
+    
+    If Cloudinary URL is already stored,
+    USE IT DIRECTLY.
+    
+    Do NOT add /uploads/ before it.
+    =========================================================
+    */
+
+    function getImageUrl(image) {
+
+      if (!image) {
+        return "";
+      }
+
+      image = String(image).trim();
+
+      /* Cloudinary or any complete URL */
+      if (
+        image.startsWith("http://") ||
+        image.startsWith("https://")
+      ) {
+        return image;
+      }
+
+      /* Old locally stored images */
+      return "/uploads/" + encodeURIComponent(image);
+
+    }
+
+
+    function escapeHtml(value) {
+
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function isLost(item) {
+
+      return !!item.lostLocation;
+
+    }
+
+
+    function formatDate(date) {
+
+      if (!date) {
+        return "N/A";
+      }
+
+      try {
+
+        return new Date(date).toLocaleDateString(
+          "en-IN",
+          {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          }
+        );
+
+      } catch (error) {
+
+        return date;
+
+      }
+
+    }
+
+
+    function isoDate(date) {
+
+      if (!date) {
+        return "";
+      }
+
+      try {
+
+        return new Date(date)
+          .toISOString()
+          .split("T")[0];
+
+      } catch (error) {
+
+        return "";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       IMAGE ERROR HANDLER
+    ========================================================= */
+
+    function imageError(img) {
+
+      console.error(
+        "Image failed to load:",
+        img.src
+      );
+
+      img.style.display = "none";
+
+      const parent = img.parentElement;
+
+      if (parent) {
+
+        parent.innerHTML = `
+            <div class="no-img"
+                 title="Image could not be loaded">
+                📷
+            </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       LOAD DATA
+    ========================================================= */
+
+    async function init() {
+
+      try {
+
+        const responses = await Promise.all([
+          fetch("/api/user"),
+          fetch("/api/collected")
+        ]);
+
+        const userResponse = responses[0];
+        const itemsResponse = responses[1];
+
+        if (!userResponse.ok) {
+
+          throw new Error(
+            "Unable to load user information"
+          );
+
+        }
+
+        if (!itemsResponse.ok) {
+
+          throw new Error(
+            "Unable to load collected items"
+          );
+
+        }
+
+        const user = await userResponse.json();
+        const items = await itemsResponse.json();
+
+        currentRole = user.role || "user";
+
+        allItems = Array.isArray(items)
+          ? items
+          : [];
+
+        populateTypeFilter();
+
+        updateStats(allItems);
+
+        applyFilters();
+
+      } catch (error) {
+
+        console.error(
+          "Collected page error:",
+          error
+        );
+
+        byId("bodyAll").innerHTML = `
+            <tr>
+                <td colspan="11"
+                    style="
+                        padding:50px;
+                        color:#e74c3c;
+                        text-align:center;
+                    ">
+                    Failed to load collected items.
+                    Please refresh the page.
+                </td>
+            </tr>
+        `;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       STATS
+    ========================================================= */
+
+    function updateStats(items) {
+
+      const today =
+        new Date().toISOString().split("T")[0];
+
+      byId("statTotal").textContent =
+        items.length;
+
+      byId("statLost").textContent =
+        items.filter(isLost).length;
+
+      byId("statFound").textContent =
+        items.filter(item => !isLost(item)).length;
+
+      byId("statToday").textContent =
+        items.filter(
+          item =>
+            isoDate(item.collectedAt) === today
+        ).length;
+
+    }
+
+
+    /* =========================================================
+       TYPE FILTER
+    ========================================================= */
+
+    function populateTypeFilter() {
+
+      const select = byId("fType");
+
+      select.innerHTML =
+        `<option value="">All Types</option>`;
+
+      const types = [
+        ...new Set(
+          allItems
+            .map(item => item.type)
+            .filter(Boolean)
+        )
+      ].sort();
+
+      types.forEach(type => {
+
+        const option =
+          document.createElement("option");
+
+        option.value = type;
+        option.textContent = type;
+
+        select.appendChild(option);
+
+      });
+
+    }
+
+
+    /* =========================================================
+       FILTERS
+    ========================================================= */
+
+    function getFilters() {
+
+      return {
+
+        search:
+          byId("fSearch")
+            .value
+            .trim()
+            .toLowerCase(),
+
+        type:
+          byId("fType").value,
+
+        report:
+          byId("fReport").value,
+
+        date:
+          byId("fDate").value,
+
+        dateFrom:
+          byId("fDateFrom").value,
+
+        dateTo:
+          byId("fDateTo").value
+
+      };
+
+    }
+
+
+    function applyFilters() {
+
+      const filters = getFilters();
+
+      filtered = allItems.filter(item => {
+
+        const collectedDate =
+          isoDate(item.collectedAt);
+
+        const text = [
+
+          item.name,
+          item.type,
+          item.description,
+          item.lostLocation,
+          item.foundLocation,
+          item.location,
+          item.userName,
+          item.userEmail
+
+        ]
+          .map(value =>
+            String(value || "").toLowerCase()
+          )
+          .join(" ");
+
+        if (
+          filters.search &&
+          !text.includes(filters.search)
+        ) {
+          return false;
+        }
+
+        if (
+          filters.type &&
+          item.type !== filters.type
+        ) {
+          return false;
+        }
+
+        if (
+          filters.report === "lost" &&
+          !isLost(item)
+        ) {
+          return false;
+        }
+
+        if (
+          filters.report === "found" &&
+          isLost(item)
+        ) {
+          return false;
+        }
+
+        if (
+          filters.date &&
+          collectedDate !== filters.date
+        ) {
+          return false;
+        }
+
+        if (
+          filters.dateFrom &&
+          collectedDate &&
+          collectedDate < filters.dateFrom
+        ) {
+          return false;
+        }
+
+        if (
+          filters.dateTo &&
+          collectedDate &&
+          collectedDate > filters.dateTo
+        ) {
+          return false;
+        }
+
+        return true;
+
+      });
+
+      updateFilterPills(filters);
+
+      renderAll();
+
+    }
+
+
+    function updateFilterPills(filters) {
+
+      const container =
+        byId("activePills");
+
+      container.innerHTML = "";
+
+      function addPill(label, id) {
+
+        const pill =
+          document.createElement("span");
+
+        pill.className = "filter-pill";
+
+        pill.innerHTML = `
+            ${escapeHtml(label)}
+            <button
+                onclick="clearFilter('${id}')"
+                style="
+                    border:none;
+                    background:none;
+                    cursor:pointer;
+                    color:#1a6b3a;
+                "
+            >
+                ✕
+            </button>
+        `;
+
+        container.appendChild(pill);
+
+      }
+
+      if (filters.search) {
+        addPill(
+          `"${filters.search}"`,
+          "fSearch"
+        );
+      }
+
+      if (filters.type) {
+        addPill(
+          filters.type,
+          "fType"
+        );
+      }
+
+      if (filters.report) {
+        addPill(
+          filters.report === "lost"
+            ? "Lost only"
+            : "Found only",
+          "fReport"
+        );
+      }
+
+      if (filters.date) {
+        addPill(
+          "On: " + filters.date,
+          "fDate"
+        );
+      }
+
+      if (filters.dateFrom) {
+        addPill(
+          "From: " + filters.dateFrom,
+          "fDateFrom"
+        );
+      }
+
+      if (filters.dateTo) {
+        addPill(
+          "To: " + filters.dateTo,
+          "fDateTo"
+        );
+      }
+
+    }
+
+
+    function clearFilter(id) {
+
+      const element = byId(id);
+
+      if (element.tagName === "SELECT") {
+
+        element.selectedIndex = 0;
+
+      } else {
+
+        element.value = "";
+
+      }
+
+      applyFilters();
+
+    }
+
+
+    byId("btnReset")
+      .addEventListener("click", function () {
+
+        byId("fSearch").value = "";
+        byId("fType").selectedIndex = 0;
+        byId("fReport").selectedIndex = 0;
+        byId("fDate").value = "";
+        byId("fDateFrom").value = "";
+        byId("fDateTo").value = "";
+
+        applyFilters();
+
+      });
+
+
+    [
+      "fSearch",
+      "fType",
+      "fReport",
+      "fDate",
+      "fDateFrom",
+      "fDateTo"
+    ].forEach(id => {
+
+      byId(id).addEventListener(
+        "input",
+        applyFilters
+      );
+
+      byId(id).addEventListener(
+        "change",
+        applyFilters
+      );
+
+    });
+
+
+    /* =========================================================
+       TABS
+    ========================================================= */
+
+    function setTab(tab) {
+
+      currentTab = tab;
+
+      ["all", "lost", "found"]
+        .forEach(type => {
+
+          byId("view-" + type)
+            .style.display =
+            type === tab
+              ? "block"
+              : "none";
+
+          const button =
+            byId(
+              "tab" +
+              type.charAt(0).toUpperCase() +
+              type.slice(1)
+            );
+
+          button.className = "tab-btn";
+
+          if (type === tab) {
+
+            button.classList.add(
+              "active-" + type
+            );
+
+          }
+
+        });
+
+    }
+
+
+    /* =========================================================
+       SORTING
+    ========================================================= */
+
+    function sortBy(column) {
+
+      if (sortCol === column) {
+
+        sortDir *= -1;
+
+      } else {
+
+        sortCol = column;
+        sortDir = 1;
+
+      }
+
+      renderAll();
+
+    }
+
+
+    function sortItems(items) {
+
+      const result = [...items];
+
+      if (!sortCol) {
+
+        return result.sort(
+          (a, b) =>
+            isoDate(b.collectedAt)
+              .localeCompare(
+                isoDate(a.collectedAt)
+              )
+        );
+
+      }
+
+      return result.sort((a, b) => {
+
+        let va = "";
+        let vb = "";
+
+        if (sortCol === "name") {
+
+          va = a.name || "";
+          vb = b.name || "";
+
+        }
+
+        if (sortCol === "type") {
+
+          va = a.type || "";
+          vb = b.type || "";
+
+        }
+
+        if (sortCol === "date") {
+
+          va = isoDate(a.collectedAt);
+          vb = isoDate(b.collectedAt);
+
+        }
+
+        if (sortCol === "report") {
+
+          va = isLost(a) ? "lost" : "found";
+          vb = isLost(b) ? "lost" : "found";
+
+        }
+
+        if (sortCol === "by") {
+
+          va = a.userName || "";
+          vb = b.userName || "";
+
+        }
+
+        if (va < vb) {
+
+          return -sortDir;
+
+        }
+
+        if (va > vb) {
+
+          return sortDir;
+
+        }
+
+        return 0;
+
+      });
+
+    }
+
+
+    /* =========================================================
+       PRIVILEGED USER
+    ========================================================= */
+
+    function isPrivileged() {
+
+      return [
+        "admin",
+        "manager"
+      ].includes(
+        String(currentRole).toLowerCase()
+      );
+
+    }
+
+
+    /* =========================================================
+       COLUMNS
+    ========================================================= */
+
+    function getColumns() {
+
+      const columns = [
+
+        {
+          key: "name",
+          label: "Item Name",
+          sort: true
+        },
+
+        {
+          key: "type",
+          label: "Type",
+          sort: true
+        },
+
+        {
+          key: "desc",
+          label: "Description",
+          sort: false
+        },
+
+        {
+          key: "loc",
+          label: "Found/Lost At",
+          sort: false
+        },
+
+        {
+          key: "submit",
+          label: "Submit Location",
+          sort: false
+        },
+
+        {
+          key: "report",
+          label: "Report Type",
+          sort: true
+        },
+
+        {
+          key: "date",
+          label: "Collected On",
+          sort: true
+        }
+
+      ];
+
+
+      if (isPrivileged()) {
+
+        columns.push(
+          {
+            key: "by",
+            label: "Submitted By",
+            sort: true
+          },
+          {
+            key: "email",
+            label: "Email",
+            sort: false
+          },
+          {
+            key: "hby",
+            label: "Handed By",
+            sort: false
+          },
+          {
+            key: "hto",
+            label: "Handed To",
+            sort: false
+          }
+        );
+
+      }
+
+
+      columns.push({
+
+        key: "img",
+        label: "Image",
+        sort: false
+
+      });
+
+
+      return columns;
+
+    }
+
+
+    /* =========================================================
+       TABLE HEADER
+    ========================================================= */
+
+    function buildHeader(element) {
+
+      const columns =
+        getColumns();
+
+      element.innerHTML =
+        columns.map(column => {
+
+          const sorted =
+            sortCol === column.key;
+
+          const icon =
+            sorted
+              ? (
+                sortDir === 1
+                  ? "▲"
+                  : "▼"
+              )
+              : "↕";
+
+          return `
+                <th
+                    ${column.sort
+              ? `onclick="sortBy('${column.key}')"`
+              : ""
+            }
+                >
+                    ${column.label}
+
+                    ${column.sort
+              ? `<span
+                                style="
+                                    margin-left:4px;
+                                    opacity:.4;
+                                "
+                              >
+                                ${icon}
+                              </span>`
+              : ""
+            }
+
+                </th>
+            `;
+
+        })
+          .join("");
+
+    }
+
+
+    /* =========================================================
+       ROW
+    ========================================================= */
+
+    function buildRow(item) {
+
+      const index = rowIndex++;
+
+      const lost = isLost(item);
+
+      const location =
+        safe(
+          item.lostLocation ||
+          item.foundLocation
+        );
+
+      const collectedDate =
+        formatDate(
+          item.collectedAt
+        );
+
+      const columns =
+        getColumns();
+
+
+      const reportBadge = lost
+
+        ? `
+            <span class="badge badge-lost">
+                ● Lost
+            </span>
+          `
+
+        : `
+            <span class="badge badge-found">
+                ● Found
+            </span>
+          `;
+
+
+      /*
+      ========================================================
+      IMPORTANT IMAGE FIX
+      ========================================================
+      */
+
+      let imageHTML = `
+        <div class="no-img">
+            📷
         </div>
-      </div>
-      <div class="table-card c-found">
-        <div class="table-scroll"><table><thead><tr id="headFound"></tr></thead><tbody id="bodyFound"></tbody></table></div>
-        <div class="count-bar"><span>Showing <strong id="cntFound">0</strong> items</span></div>
-      </div>
-    </div>
-  </div>
+    `;
 
-</div><!-- /page -->
+      if (item.image) {
 
-<!-- Image modal -->
-<div id="imgModal" class="modal" onclick="closeModal(event)">
-  <div class="modal-inner" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-img-wrap"><img id="modalImg" src="" alt=""></div>
-    <div class="modal-info">
-      <div class="modal-item-name" id="modalName"></div>
-      <div class="modal-item-desc" id="modalDesc"></div>
-      <div class="modal-collected-date" id="modalDate"></div>
-    </div>
-  </div>
-</div>
+        const imageUrl =
+          getImageUrl(item.image);
 
-<script>
-// ── State ──────────────────────────────────────────────
-let allItems    = [];
-let filtered    = [];
-let currentRole = '';
-let currentTab  = 'all';
-let sortCol = '', sortDir = 1;
-let expandedRow = null;
-let rowIdx = 0;
+        imageHTML = `
+            <div
+                style="
+                    width:55px;
+                    height:55px;
+                    margin:auto;
+                "
+            >
 
-// ── Helpers ────────────────────────────────────────────
-const safe    = v => (v && String(v).trim()) ? String(v).trim() : 'N/A';
-const byId    = id => document.getElementById(id);
-const isLost  = item => !!item.lostLocation;
-const fmtDate = raw => {
-  if(!raw) return 'N/A';
-  try { return new Date(raw).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'}); }
-  catch(e){ return raw; }
-};
-const isoDate = raw => {
-  if(!raw) return '';
-  try { return new Date(raw).toISOString().split('T')[0]; }
-  catch(e){ return ''; }
-};
+                <img
+                    class="table-img"
+                    src="${escapeHtml(imageUrl)}"
+                    alt="${escapeHtml(item.name || "Item Image")}"
+                    loading="lazy"
+                    onclick="
+                        event.stopPropagation();
+                        openModal(
+                            this.src,
+                            ${JSON.stringify(item.name || "Item Image")},
+                            ${JSON.stringify(item.description || "")},
+                            ${JSON.stringify("Collected: " + collectedDate)}
+                        )
+                    "
+                    onerror="imageError(this)"
+                >
 
-// ── Init ───────────────────────────────────────────────
-async function init(){
-  try{
-    const [uRes, iRes] = await Promise.all([fetch('/api/user'), fetch('/api/collected')]);
-    const user  = await uRes.json();
-    const items = await iRes.json();
-    currentRole = user.role || 'user';
-    allItems = items;
-    populateTypeFilter();
-    applyFilters();
-    updateStats(items);
-  } catch(e){ console.error(e); }
-}
+            </div>
+        `;
 
-// ── Stats ──────────────────────────────────────────────
-function updateStats(items){
-  const today = new Date().toISOString().split('T')[0];
-  byId('statTotal').textContent = items.length;
-  byId('statLost').textContent  = items.filter(isLost).length;
-  byId('statFound').textContent = items.filter(i=>!isLost(i)).length;
-  byId('statToday').textContent = items.filter(i => isoDate(i.collectedAt) === today).length;
-}
+      }
 
-// ── Type filter populate ───────────────────────────────
-function populateTypeFilter(){
-  const types = [...new Set(allItems.map(i=>i.type).filter(Boolean))].sort();
-  const sel = byId('fType');
-  types.forEach(t=>{ const o=document.createElement('option'); o.value=t; o.textContent=t; sel.appendChild(o); });
-}
 
-// ── Filters ─────────────────────────────────────────────
-function getFilters(){
-  return {
-    search:   byId('fSearch').value.trim().toLowerCase(),
-    type:     byId('fType').value,
-    report:   byId('fReport').value,
-    date:     byId('fDate').value,
-    dateFrom: byId('fDateFrom').value,
-    dateTo:   byId('fDateTo').value,
-  };
-}
+      const cells = {
 
-function applyFilters(){
-  const f = getFilters();
-  filtered = allItems.filter(item => {
-    const d   = isoDate(item.collectedAt);
-    const txt = [item.name, item.type, item.description,
-                 item.lostLocation, item.foundLocation,
-                 item.location, item.userName, item.userEmail]
-                .map(v=>(v||'').toLowerCase()).join(' ');
-    if(f.search   && !txt.includes(f.search))      return false;
-    if(f.type     && item.type !== f.type)          return false;
-    if(f.report==='lost'  && !isLost(item))         return false;
-    if(f.report==='found' &&  isLost(item))         return false;
-    if(f.date     && d !== f.date)                  return false;
-    if(f.dateFrom && d && d < f.dateFrom)           return false;
-    if(f.dateTo   && d && d > f.dateTo)             return false;
-    return true;
-  });
-  updatePills(f);
-  renderAll();
-}
+        name: `
+            <td>
+                <strong>
+                    ${escapeHtml(
+          safe(item.name)
+        )}
+                </strong>
+            </td>
+        `,
 
-function updatePills(f){
-  const el = byId('activePills'); el.innerHTML='';
-  const add = (key,lbl) => {
-    const p = document.createElement('span');
-    p.className='filter-pill';
-    p.innerHTML=`${lbl} <button onclick="clearFilter('${key}')">✕</button>`;
-    el.appendChild(p);
-  };
-  if(f.search)  add('fSearch',  `"${f.search}"`);
-  if(f.type)    add('fType',    f.type);
-  if(f.report)  add('fReport',  f.report==='lost'?'Lost only':'Found only');
-  if(f.date)    add('fDate',    `On: ${f.date}`);
-  if(f.dateFrom)add('fDateFrom',`From: ${f.dateFrom}`);
-  if(f.dateTo)  add('fDateTo',  `To: ${f.dateTo}`);
-}
+        type: `
+            <td>
+                ${escapeHtml(
+          safe(item.type)
+        )}
+            </td>
+        `,
 
-function clearFilter(id){
-  const el=byId(id); el.tagName==='SELECT'?(el.selectedIndex=0):(el.value='');
-  applyFilters();
-}
+        desc: `
+            <td
+                style="
+                    max-width:180px;
+                    text-align:left;
+                    white-space:normal;
+                    font-size:12px;
+                    color:var(--muted);
+                "
+            >
+                ${escapeHtml(
+          safe(item.description)
+        )}
+            </td>
+        `,
 
-byId('btnReset').addEventListener('click',()=>{
-  ['fSearch','fType','fReport','fDate','fDateFrom','fDateTo'].forEach(id=>{
-    const el=byId(id); el.tagName==='SELECT'?(el.selectedIndex=0):(el.value='');
-  }); applyFilters();
-});
-['fSearch','fType','fReport','fDate','fDateFrom','fDateTo'].forEach(id=>{
-  byId(id).addEventListener('input',applyFilters);
-  byId(id).addEventListener('change',applyFilters);
-});
+        loc: `
+            <td style="font-size:12px;">
+                ${escapeHtml(location)}
+            </td>
+        `,
 
-// ── Tab ─────────────────────────────────────────────────
-function setTab(tab){
-  currentTab=tab;
-  ['all','lost','found'].forEach(t=>{
-    byId('view-'+t).style.display=t===tab?'block':'none';
-    const btn=byId('tab'+t.charAt(0).toUpperCase()+t.slice(1));
-    btn.className='tab-btn';
-    if(t===tab) btn.classList.add('active-'+t);
-  });
-}
+        submit: `
+            <td style="font-size:12px;">
+                ${escapeHtml(
+          safe(item.location)
+        )}
+            </td>
+        `,
 
-// ── Sort ─────────────────────────────────────────────────
-function sortBy(col){
-  if(sortCol===col) sortDir*=-1; else { sortCol=col; sortDir=1; }
-  renderAll();
-}
-function doSort(items){
-  if(!sortCol) return [...items].sort((a,b)=>{
-    // Default: newest collected first
-    const da=isoDate(a.collectedAt)||'';
-    const db=isoDate(b.collectedAt)||'';
-    return db.localeCompare(da);
-  });
-  return [...items].sort((a,b)=>{
-    const maps={
-      name:      [a.name||'',        b.name||''],
-      type:      [a.type||'',        b.type||''],
-      date:      [isoDate(a.collectedAt), isoDate(b.collectedAt)],
-      report:    [isLost(a)?'l':'f', isLost(b)?'l':'f'],
-      by:        [a.userName||'',    b.userName||''],
-    };
-    const [va,vb]=maps[sortCol]||['',''];
-    return va<vb?-sortDir:va>vb?sortDir:0;
-  });
-}
+        report: `
+            <td>
+                ${reportBadge}
+            </td>
+        `,
 
-// ── Column definitions ─────────────────────────────────
-const isPriv = ()=>['admin','manager'].includes(currentRole);
+        date: `
+            <td>
+                <span class="date-chip">
+                    📅 ${escapeHtml(
+          collectedDate
+        )}
+                </span>
+            </td>
+        `,
 
-function getCols(){
-  const base=[
-    {key:'name',   label:'Item Name',      sort:true},
-    {key:'type',   label:'Type',           sort:true},
-    {key:'desc',   label:'Description',    sort:false},
-    {key:'loc',    label:'Found/Lost At',  sort:false},
-    {key:'submit', label:'Submit Location',sort:false},
-    {key:'report', label:'Report Type',    sort:true},
-    {key:'date',   label:'Collected On',   sort:true},
-  ];
-  const priv=isPriv()?[
-    {key:'by',      label:'Submitted By',  sort:true},
-    {key:'email',   label:'Email',         sort:false},
-    {key:'hby',     label:'Handed By',     sort:false},
-    {key:'hto',     label:'Handed To',     sort:false},
-  ]:[];
-  return [...base,...priv,{key:'img',label:'Image',sort:false}];
-}
+        by: `
+            <td>
+                ${escapeHtml(
+          safe(item.userName)
+        )}
+            </td>
+        `,
 
-function buildHead(trEl){
-  const cols=getCols();
-  trEl.innerHTML=cols.map(c=>{
-    const sorted=sortCol===c.key;
-    const icon=sorted?(sortDir===1?'▲':'▼'):'↕';
-    const click=c.sort?`onclick="sortBy('${c.key}')"`:'';
-    const cur=c.sort?'':'style="cursor:default"';
-    return `<th class="${sorted?'sorted':''}" ${click} ${cur}>
-      ${c.label}${c.sort?`<span class="sort-icon">${icon}</span>`:''}
-    </th>`;
-  }).join('');
-}
+        email: `
+            <td>
 
-// ── Row builder ─────────────────────────────────────────
-function buildRow(item){
-  const idx   = rowIdx++;
-  const lost  = isLost(item);
-  const loc   = safe(item.lostLocation || item.foundLocation);
-  const cdate = fmtDate(item.collectedAt);
-  const cols  = getCols();
+                <a
+                    class="email-link"
+                    href="mailto:${escapeHtml(
+          safe(item.userEmail)
+        )}"
+                    onclick="event.stopPropagation()"
+                >
+                    ${escapeHtml(
+          safe(item.userEmail)
+        )}
+                </a>
 
-  const reportBadge = lost
-    ? `<span class="badge badge-lost">● Lost</span>`
-    : `<span class="badge badge-found">● Found</span>`;
+            </td>
+        `,
 
-  const imgHTML = item.image
-    ? `<img class="table-img" src="/uploads/${item.image}" alt="${safe(item.name)}"
-         onclick="event.stopPropagation();openModal('/uploads/${item.image}','${safe(item.name)}','${safe(item.description).replace(/'/g,"\\'")}',' Collected: ${cdate}')">`
-    : `<div class="no-img">📷</div>`;
+        hby: `
+            <td>
+                ${escapeHtml(
+          safe(item.handedBy)
+        )}
+            </td>
+        `,
 
-  const cells={
-    name:   `<td><strong style="font-weight:600;">${safe(item.name)}</strong></td>`,
-    type:   `<td>${safe(item.type)}</td>`,
-    desc:   `<td style="max-width:180px;text-align:left;white-space:normal;font-size:12px;color:var(--muted);">${safe(item.description)}</td>`,
-    loc:    `<td style="font-size:12px;">${loc}</td>`,
-    submit: `<td style="font-size:12px;">${safe(item.location)}</td>`,
-    report: `<td>${reportBadge}</td>`,
-    date:   `<td><span class="date-chip">📅 ${cdate}</span></td>`,
-    by:     `<td>${safe(item.userName)}</td>`,
-    email:  `<td><a class="email-link" href="mailto:${safe(item.userEmail)}" onclick="event.stopPropagation()">${safe(item.userEmail)}</a></td>`,
-    hby:    `<td>${safe(item.handedBy)}</td>`,
-    hto:    `<td>${safe(item.handedTo)}</td>`,
-    img:    `<td>${imgHTML}</td>`,
-  };
+        hto: `
+            <td>
+                ${escapeHtml(
+          safe(item.handedTo)
+        )}
+            </td>
+        `,
 
-  const mainRow=`
-    <tr onclick="toggleDetail(${idx})" id="mr-${idx}">
-      ${cols.map(c=>cells[c.key]||'').join('')}
-    </tr>`;
+        img: `
+            <td>
+                ${imageHTML}
+            </td>
+        `
 
-  const fields=[
-    {label:'Item Name',      val:safe(item.name)},
-    {label:'Type',           val:safe(item.type)},
-    {label:'Report Type',    val:lost?'Lost':'Found'},
-    {label:'Collected On',   val:cdate},
-    {label:'Found/Lost At',  val:loc},
-    {label:'Submit Location',val:safe(item.location)},
-    ...(isPriv()?[
-      {label:'Submitted By', val:safe(item.userName)},
-      {label:'Email',        val:safe(item.userEmail)},
-      {label:'Handed By',    val:safe(item.handedBy)},
-      {label:'Handed To',    val:safe(item.handedTo)},
-    ]:[]),
-    {label:'Full Description',val:safe(item.description),full:true},
-  ];
+      };
 
-  const detailRow=`
-    <tr class="detail-row" id="dr-${idx}">
-      <td colspan="${cols.length}">
-        <div class="detail-grid">
-          ${fields.map(f=>`
-            <div class="detail-field" ${f.full?'style="grid-column:1/-1"':''}>
-              <label>${f.label}</label>
-              <span style="${f.full?'white-space:pre-wrap;':''}">${f.val}</span>
-            </div>`).join('')}
-        </div>
-      </td>
-    </tr>`;
 
-  return mainRow+detailRow;
-}
+      const mainRow = `
+        <tr
+            onclick="toggleDetail(${index})"
+            id="main-${index}"
+        >
+            ${columns
+          .map(
+            column =>
+              cells[column.key] || ""
+          )
+          .join("")
+        }
+        </tr>
+    `;
 
-function toggleDetail(idx){
-  const dr=byId('dr-'+idx); if(!dr) return;
-  const open=dr.classList.contains('open');
-  if(expandedRow!==null&&expandedRow!==idx) byId('dr-'+expandedRow)?.classList.remove('open');
-  dr.classList.toggle('open',!open);
-  expandedRow=open?null:idx;
-}
 
-function emptyRow(msg,colspan){
-  return `<tr><td colspan="${colspan}" style="padding:52px 20px;text-align:center;color:var(--muted);font-size:14px;">
-    <div style="font-size:42px;margin-bottom:14px;">📭</div>
-    <div style="font-weight:600;margin-bottom:4px;">No items found</div>
-    <div style="font-size:13px;">${msg}</div>
-  </td></tr>`;
-}
+      const details = [
 
-// ── Render ───────────────────────────────────────────────
-function renderAll(){
-  const col      = getCols().length;
-  const lostArr  = doSort(filtered.filter(isLost));
-  const foundArr = doSort(filtered.filter(i=>!isLost(i)));
-  const allArr   = doSort(filtered);
+        {
+          label: "Item Name",
+          value: safe(item.name)
+        },
 
-  byId('tc-all').textContent   = filtered.length;
-  byId('tc-lost').textContent  = lostArr.length;
-  byId('tc-found').textContent = foundArr.length;
+        {
+          label: "Type",
+          value: safe(item.type)
+        },
 
-  const render=(bodyId,headId,items,msg)=>{
-    rowIdx=0; buildHead(byId(headId));
-    byId(bodyId).innerHTML=items.length?items.map(buildRow).join(''):emptyRow(msg,col);
-    byId('cnt'+bodyId.replace('body','')).textContent=items.length;
-  };
+        {
+          label: "Report Type",
+          value: lost
+            ? "Lost"
+            : "Found"
+        },
 
-  render('bodyAll',  'headAll',   allArr,  'No collected items match your filters.');
-  render('bodyLost', 'headLost',  lostArr, 'No collected lost items match your filters.');
-  render('bodyFound','headFound', foundArr,'No collected found items match your filters.');
+        {
+          label: "Collected On",
+          value: collectedDate
+        },
 
-  expandedRow=null;
-}
+        {
+          label: "Found/Lost At",
+          value: location
+        },
 
-// ── Image modal ──────────────────────────────────────────
-function openModal(src,name,desc,date){
-  byId('modalImg').src=src;
-  byId('modalName').textContent=name;
-  byId('modalDesc').textContent=desc;
-  byId('modalDate').textContent=date;
-  byId('imgModal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(e){
-  if(!e||e.target===byId('imgModal')){
-    byId('imgModal').classList.remove('open');
-    document.body.style.overflow='';
-  }
-}
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+        {
+          label: "Submit Location",
+          value: safe(item.location)
+        },
 
-// ── Start ─────────────────────────────────────────────────
-init();
-</script>
+        {
+          label: "Submitted By",
+          value: safe(item.userName)
+        },
 
-<script src="/js/navbar.js"></script>
-<script src="/js/translate.js"></script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        {
+          label: "Email",
+          value: safe(item.userEmail)
+        },
+
+        {
+          label: "Handed By",
+          value: safe(item.handedBy)
+        },
+
+        {
+          label: "Handed To",
+          value: safe(item.handedTo)
+        },
+
+        {
+          label: "Description",
+          value: safe(item.description),
+          full: true
+        }
+
+      ];
+
+
+      const detailRow = `
+        <tr
+            class="detail-row"
+            id="detail-${index}"
+        >
+
+            <td colspan="${columns.length}">
+
+                <div class="detail-grid">
+
+                    ${details.map(detail => `
+
+                        <div
+                            class="detail-field"
+                            ${detail.full
+          ? `style="grid-column:1/-1"`
+          : ""
+        }
+                        >
+
+                            <label>
+                                ${escapeHtml(
+          detail.label
+        )}
+                            </label>
+
+                            <span
+                                ${detail.full
+          ? `style="white-space:pre-wrap"`
+          : ""
+        }
+                            >
+                                ${escapeHtml(
+          detail.value
+        )}
+                            </span>
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+
+            </td>
+
+        </tr>
+    `;
+
+
+      return mainRow + detailRow;
+
+    }
+
+
+    /* =========================================================
+       ROW EXPAND
+    ========================================================= */
+
+    function toggleDetail(index) {
+
+      const row =
+        byId("detail-" + index);
+
+      if (!row) {
+        return;
+      }
+
+      const isOpen =
+        row.classList.contains("open");
+
+      if (
+        expandedRow !== null &&
+        expandedRow !== index
+      ) {
+
+        byId(
+          "detail-" + expandedRow
+        )?.classList.remove("open");
+
+      }
+
+      row.classList.toggle(
+        "open",
+        !isOpen
+      );
+
+      expandedRow =
+        isOpen
+          ? null
+          : index;
+
+    }
+
+
+    /* =========================================================
+       EMPTY
+    ========================================================= */
+
+    function emptyRow(message, columnCount) {
+
+      return `
+
+        <tr>
+
+            <td
+                colspan="${columnCount}"
+                style="
+                    padding:55px;
+                    text-align:center;
+                    color:var(--muted);
+                "
+            >
+
+                <div
+                    style="
+                        font-size:42px;
+                        margin-bottom:12px;
+                    "
+                >
+                    📭
+                </div>
+
+                <strong>
+                    No items found
+                </strong>
+
+                <div
+                    style="
+                        margin-top:5px;
+                        font-size:13px;
+                    "
+                >
+                    ${escapeHtml(message)}
+                </div>
+
+            </td>
+
+        </tr>
+
+    `;
+
+    }
+
+
+    /* =========================================================
+       RENDER
+    ========================================================= */
+
+    function renderTable(
+      bodyId,
+      headId,
+      items,
+      message
+    ) {
+
+      const columns =
+        getColumns();
+
+      rowIndex = 0;
+
+      buildHeader(
+        byId(headId)
+      );
+
+      const sorted =
+        sortItems(items);
+
+      byId(bodyId).innerHTML =
+        sorted.length
+
+          ? sorted
+            .map(buildRow)
+            .join("")
+
+          : emptyRow(
+            message,
+            columns.length
+          );
+
+    }
+
+
+    /* =========================================================
+       RENDER ALL
+    ========================================================= */
+
+    function renderAll() {
+
+      const lostItems =
+        filtered.filter(isLost);
+
+      const foundItems =
+        filtered.filter(
+          item => !isLost(item)
+        );
+
+
+      byId("tc-all").textContent =
+        filtered.length;
+
+      byId("tc-lost").textContent =
+        lostItems.length;
+
+      byId("tc-found").textContent =
+        foundItems.length;
+
+
+      renderTable(
+        "bodyAll",
+        "headAll",
+        filtered,
+        "No collected items match your filters."
+      );
+
+
+      renderTable(
+        "bodyLost",
+        "headLost",
+        lostItems,
+        "No collected lost items match your filters."
+      );
+
+
+      renderTable(
+        "bodyFound",
+        "headFound",
+        foundItems,
+        "No collected found items match your filters."
+      );
+
+
+      expandedRow = null;
+
+    }
+
+
+    /* =========================================================
+       IMAGE MODAL
+    ========================================================= */
+
+    function openModal(
+      src,
+      name,
+      description,
+      date
+    ) {
+
+      byId("modalImg").src = src;
+
+      byId("modalName").textContent =
+        name;
+
+      byId("modalDesc").textContent =
+        description;
+
+      byId("modalDate").textContent =
+        date;
+
+      byId("imgModal")
+        .classList
+        .add("open");
+
+      document.body.style.overflow =
+        "hidden";
+
+    }
+
+
+    function closeModal(event) {
+
+      if (
+        !event ||
+        event.target === byId("imgModal")
+      ) {
+
+        byId("imgModal")
+          .classList
+          .remove("open");
+
+        document.body.style.overflow =
+          "";
+
+      }
+
+    }
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Escape") {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       START
+    ========================================================= */
+
+    init();
+
+  </script>
+
+
+  <script src="/js/navbar.js"></script>
+
+  <script src="/js/translate.js"></script>
+
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
+
 </html>
